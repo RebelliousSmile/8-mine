@@ -1,0 +1,262 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/SystemsDebugScene.gd" id="1_sds"]
+
+[node name="SystemsDebugScene" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_sds")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.08, 0.09, 0.12, 1)
+
+[node name="Layout" type="HBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+theme_override_constants/separation = 16
+
+[node name="LeftPane" type="VBoxContainer" parent="Layout"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="Titre" type="Label" parent="Layout/LeftPane"]
+layout_mode = 2
+text = "SYSTEMS DEBUG — 8-MINE"
+theme_override_font_sizes/font_size = 22
+
+[node name="GlobalGroup" type="VBoxContainer" parent="Layout/LeftPane"]
+layout_mode = 2
+
+[node name="Boutons" type="HBoxContainer" parent="Layout/LeftPane/GlobalGroup"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NewGame" type="Button" parent="Layout/LeftPane/GlobalGroup/Boutons"]
+layout_mode = 2
+text = "New Game"
+
+[node name="Save0" type="Button" parent="Layout/LeftPane/GlobalGroup/Boutons"]
+layout_mode = 2
+text = "Save 0"
+
+[node name="Load0" type="Button" parent="Layout/LeftPane/GlobalGroup/Boutons"]
+layout_mode = 2
+text = "Load 0"
+
+[node name="Save1" type="Button" parent="Layout/LeftPane/GlobalGroup/Boutons"]
+layout_mode = 2
+text = "Save 1"
+
+[node name="Load1" type="Button" parent="Layout/LeftPane/GlobalGroup/Boutons"]
+layout_mode = 2
+text = "Load 1"
+
+[node name="ExGroup" type="VBoxContainer" parent="Layout/LeftPane"]
+layout_mode = 2
+
+[node name="ExLabel" type="Label" parent="Layout/LeftPane/ExGroup"]
+layout_mode = 2
+text = "── Ex Profile ──"
+
+[node name="ExStatus" type="Label" parent="Layout/LeftPane/ExGroup"]
+layout_mode = 2
+text = "(en attente)"
+
+[node name="NameRow" type="HBoxContainer" parent="Layout/LeftPane/ExGroup"]
+layout_mode = 2
+
+[node name="ExNameInput" type="LineEdit" parent="Layout/LeftPane/ExGroup/NameRow"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+placeholder_text = "nom de l'ex"
+
+[node name="SetExName" type="Button" parent="Layout/LeftPane/ExGroup/NameRow"]
+layout_mode = 2
+text = "Set name"
+
+[node name="GenderRow" type="HBoxContainer" parent="Layout/LeftPane/ExGroup"]
+layout_mode = 2
+
+[node name="GenderMasc" type="Button" parent="Layout/LeftPane/ExGroup/GenderRow"]
+layout_mode = 2
+text = "masculin"
+
+[node name="GenderFem" type="Button" parent="Layout/LeftPane/ExGroup/GenderRow"]
+layout_mode = 2
+text = "feminin"
+
+[node name="GenderNB" type="Button" parent="Layout/LeftPane/ExGroup/GenderRow"]
+layout_mode = 2
+text = "non_binaire"
+
+[node name="GenderUnspec" type="Button" parent="Layout/LeftPane/ExGroup/GenderRow"]
+layout_mode = 2
+text = "unspecified"
+
+[node name="TraitRow" type="HBoxContainer" parent="Layout/LeftPane/ExGroup"]
+layout_mode = 2
+
+[node name="TraitSelect" type="OptionButton" parent="Layout/LeftPane/ExGroup/TraitRow"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+
+[node name="AddTrait" type="Button" parent="Layout/LeftPane/ExGroup/TraitRow"]
+layout_mode = 2
+text = "Add trait"
+
+[node name="SurvGroup" type="VBoxContainer" parent="Layout/LeftPane"]
+layout_mode = 2
+
+[node name="SurvLabel" type="Label" parent="Layout/LeftPane/SurvGroup"]
+layout_mode = 2
+text = "── Surveillance ──"
+
+[node name="SurvLevel" type="Label" parent="Layout/LeftPane/SurvGroup"]
+layout_mode = 2
+text = "Surveillance : 0 / 100"
+
+[node name="SurvButtons" type="HBoxContainer" parent="Layout/LeftPane/SurvGroup"]
+layout_mode = 2
+
+[node name="SurvInc10" type="Button" parent="Layout/LeftPane/SurvGroup/SurvButtons"]
+layout_mode = 2
+text = "+10"
+
+[node name="SurvInc25" type="Button" parent="Layout/LeftPane/SurvGroup/SurvButtons"]
+layout_mode = 2
+text = "+25"
+
+[node name="SurvDec10" type="Button" parent="Layout/LeftPane/SurvGroup/SurvButtons"]
+layout_mode = 2
+text = "-10"
+
+[node name="MirrorGroup" type="VBoxContainer" parent="Layout/LeftPane"]
+layout_mode = 2
+
+[node name="MirrorLabel" type="Label" parent="Layout/LeftPane/MirrorGroup"]
+layout_mode = 2
+text = "── Mirror Status ──"
+
+[node name="MirrorLevel" type="Label" parent="Layout/LeftPane/MirrorGroup"]
+layout_mode = 2
+text = "Mirror : 0 / 100"
+
+[node name="MirrorButtons" type="HBoxContainer" parent="Layout/LeftPane/MirrorGroup"]
+layout_mode = 2
+
+[node name="MirrorInc10" type="Button" parent="Layout/LeftPane/MirrorGroup/MirrorButtons"]
+layout_mode = 2
+text = "+10"
+
+[node name="MirrorInc30" type="Button" parent="Layout/LeftPane/MirrorGroup/MirrorButtons"]
+layout_mode = 2
+text = "+30"
+
+[node name="MirrorMax" type="Button" parent="Layout/LeftPane/MirrorGroup/MirrorButtons"]
+layout_mode = 2
+text = "→ Game Over Mirror"
+
+[node name="CountGroup" type="VBoxContainer" parent="Layout/LeftPane"]
+layout_mode = 2
+
+[node name="CountLabel" type="Label" parent="Layout/LeftPane/CountGroup"]
+layout_mode = 2
+text = "── Countdowns ──"
+
+[node name="AuditLabel" type="Label" parent="Layout/LeftPane/CountGroup"]
+layout_mode = 2
+text = "audit_marine : 0 / 15"
+
+[node name="NettoyageLabel" type="Label" parent="Layout/LeftPane/CountGroup"]
+layout_mode = 2
+text = "equipe_nettoyage : 0 / 14"
+
+[node name="CountButtons" type="HBoxContainer" parent="Layout/LeftPane/CountGroup"]
+layout_mode = 2
+
+[node name="TickAudit" type="Button" parent="Layout/LeftPane/CountGroup/CountButtons"]
+layout_mode = 2
+text = "Tick audit"
+
+[node name="TickNettoyage" type="Button" parent="Layout/LeftPane/CountGroup/CountButtons"]
+layout_mode = 2
+text = "Tick nettoyage"
+
+[node name="RelRepGroup" type="VBoxContainer" parent="Layout/LeftPane"]
+layout_mode = 2
+
+[node name="RRLabel" type="Label" parent="Layout/LeftPane/RelRepGroup"]
+layout_mode = 2
+text = "── Relations & Réputation ──"
+
+[node name="RRButtons" type="HBoxContainer" parent="Layout/LeftPane/RelRepGroup"]
+layout_mode = 2
+
+[node name="SaraPlus" type="Button" parent="Layout/LeftPane/RelRepGroup/RRButtons"]
+layout_mode = 2
+text = "Sara +10"
+
+[node name="SaraMinus" type="Button" parent="Layout/LeftPane/RelRepGroup/RRButtons"]
+layout_mode = 2
+text = "Sara -10"
+
+[node name="StratomMinus" type="Button" parent="Layout/LeftPane/RelRepGroup/RRButtons"]
+layout_mode = 2
+text = "Stratom -15"
+
+[node name="RightPane" type="VBoxContainer" parent="Layout"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SignalLog" type="VBoxContainer" parent="Layout/RightPane"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LogTitle" type="Label" parent="Layout/RightPane/SignalLog"]
+layout_mode = 2
+text = "── Signaux émis ──"
+
+[node name="TextEdit" type="TextEdit" parent="Layout/RightPane/SignalLog"]
+layout_mode = 2
+size_flags_vertical = 3
+editable = false
+scroll_fit_content_height = false
+placeholder_text = "Les signaux apparaîtront ici…"
+
+[connection signal="pressed" from="Layout/LeftPane/GlobalGroup/Boutons/NewGame" to="." method="on_new_game"]
+[connection signal="pressed" from="Layout/LeftPane/GlobalGroup/Boutons/Save0" to="." method="on_save_slot" binds=[0]]
+[connection signal="pressed" from="Layout/LeftPane/GlobalGroup/Boutons/Load0" to="." method="on_load_slot" binds=[0]]
+[connection signal="pressed" from="Layout/LeftPane/GlobalGroup/Boutons/Save1" to="." method="on_save_slot" binds=[1]]
+[connection signal="pressed" from="Layout/LeftPane/GlobalGroup/Boutons/Load1" to="." method="on_load_slot" binds=[1]]
+
+[connection signal="pressed" from="Layout/LeftPane/ExGroup/NameRow/SetExName" to="." method="on_set_ex_name"]
+[connection signal="pressed" from="Layout/LeftPane/ExGroup/GenderRow/GenderMasc" to="." method="on_set_ex_gender" binds=["masculin"]]
+[connection signal="pressed" from="Layout/LeftPane/ExGroup/GenderRow/GenderFem" to="." method="on_set_ex_gender" binds=["feminin"]]
+[connection signal="pressed" from="Layout/LeftPane/ExGroup/GenderRow/GenderNB" to="." method="on_set_ex_gender" binds=["non_binaire"]]
+[connection signal="pressed" from="Layout/LeftPane/ExGroup/GenderRow/GenderUnspec" to="." method="on_set_ex_gender" binds=["unspecified"]]
+[connection signal="pressed" from="Layout/LeftPane/ExGroup/TraitRow/AddTrait" to="." method="on_add_trait"]
+
+[connection signal="pressed" from="Layout/LeftPane/SurvGroup/SurvButtons/SurvInc10" to="." method="on_surv_inc" binds=[10]]
+[connection signal="pressed" from="Layout/LeftPane/SurvGroup/SurvButtons/SurvInc25" to="." method="on_surv_inc" binds=[25]]
+[connection signal="pressed" from="Layout/LeftPane/SurvGroup/SurvButtons/SurvDec10" to="." method="on_surv_dec" binds=[10]]
+
+[connection signal="pressed" from="Layout/LeftPane/MirrorGroup/MirrorButtons/MirrorInc10" to="." method="on_mirror_inc" binds=[10]]
+[connection signal="pressed" from="Layout/LeftPane/MirrorGroup/MirrorButtons/MirrorInc30" to="." method="on_mirror_inc" binds=[30]]
+[connection signal="pressed" from="Layout/LeftPane/MirrorGroup/MirrorButtons/MirrorMax" to="." method="on_trigger_game_over_mirror"]
+
+[connection signal="pressed" from="Layout/LeftPane/CountGroup/CountButtons/TickAudit" to="." method="on_tick_audit"]
+[connection signal="pressed" from="Layout/LeftPane/CountGroup/CountButtons/TickNettoyage" to="." method="on_tick_nettoyage"]
+
+[connection signal="pressed" from="Layout/LeftPane/RelRepGroup/RRButtons/SaraPlus" to="." method="on_modify_sara" binds=[10]]
+[connection signal="pressed" from="Layout/LeftPane/RelRepGroup/RRButtons/SaraMinus" to="." method="on_modify_sara" binds=[-10]]
+[connection signal="pressed" from="Layout/LeftPane/RelRepGroup/RRButtons/StratomMinus" to="." method="on_modify_stratom" binds=[-15]]

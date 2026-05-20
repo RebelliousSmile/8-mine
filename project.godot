@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 ; les autres peuvent l'appeler pendant leur _ready().
 ; DialogicBridge doit être DERNIER (après l'installation de Dialogic,
 ; pour que l'autoload "Dialogic" existe déjà).
+Config="*res://scripts/config.gd"
 SaveManager="*res://scripts/managers/SaveManager.gd"
 GameStateManager="*res://scripts/managers/GameStateManager.gd"
 RelationManager="*res://scripts/managers/RelationManager.gd"
