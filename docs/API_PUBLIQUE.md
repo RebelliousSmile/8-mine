@@ -122,9 +122,9 @@ const FACTION_DEFINITIONS := {
 
 const SEUILS := [
     [-100, "ennemi_jure"],
-    [-60,  "hostile"],
-    [-25,  "mefiant"],
-    [-5,   "indifferent"],
+    [-85,  "hostile"],
+    [-50,  "mefiant"],
+    [-20,  "indifferent"],
     [5,    "favorable"],
     [25,   "allie"],
     [60,   "champion"],

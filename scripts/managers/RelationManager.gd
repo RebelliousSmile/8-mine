@@ -30,8 +30,17 @@ const SEUILS := [
 	[85,   "intime"],
 ]
 
-## STUB phase 2 — sera peuplé phase 3 avec les 9 PNJs 8-MINE.
-const NPC_DEFINITIONS := {}
+const NPC_DEFINITIONS := {
+	"sara":   { "label": "Sara",   "faction": "presse",     "init": 0   },
+	"kaizen": { "label": "Kaizen", "faction": "marine",     "init": -10 },
+	"lior":   { "label": "Lior",   "faction": "activistes", "init": 5   },
+	"marl":   { "label": "Marl",   "faction": "stratom",    "init": 0   },
+	"tess":   { "label": "Tess",   "faction": "police",     "init": 0   },
+	"viktor": { "label": "Viktor", "faction": "stratom",    "init": -20 },
+	"mira":   { "label": "Mira",   "faction": "presse",     "init": 15  },
+	"aslan":  { "label": "Aslan",  "faction": "activistes", "init": 0   },
+	"nadia":  { "label": "Nadia",  "faction": "marine",     "init": 0   },
+}
 
 var _relations: Dictionary = {}       ## { "alex": 25, "sam": -12, ... }
 var _historique: Array = []           ## Liste de modifications horodatées
@@ -120,26 +129,27 @@ func appliquer_etat(etat: Dictionary) -> void:
 	_historique = etat.get("historique", []).duplicate(true)
 
 
-# --- API 8-MINE phase 4a (stubs phase 2) ----------------------------------
+# --- API 8-MINE phase 4a -------------------------------------------------
 
 func save_state() -> Dictionary:
-	# STUB. Phase 3 → renvoie collecter_etat()
-	return {}
+	return collecter_etat()
 
 
-func load_state(_data: Dictionary) -> void:
-	# STUB. Phase 3 → appliquer_etat(_data)
-	pass
+func load_state(data: Dictionary) -> void:
+	appliquer_etat(data)
 
 
+## Vide tout et repose les 9 PNJs canon à leur valeur init.
 func reset_all_for_new_game() -> void:
-	# STUB. Phase 3 → vide et repose les 9 PNJs canon.
-	pass
+	_relations.clear()
+	_historique.clear()
+	for personnage in NPC_DEFINITIONS.keys():
+		_relations[personnage] = NPC_DEFINITIONS[personnage]["init"]
 
 
-func get_label(_personnage: String) -> String:
-	# STUB. Phase 3 → NPC_DEFINITIONS[_personnage].label
-	return ""
+func get_label(personnage: String) -> String:
+	var def: Dictionary = NPC_DEFINITIONS.get(personnage, {})
+	return String(def.get("label", personnage.capitalize()))
 
 
 # --- Interne ---------------------------------------------------------------
