@@ -18,10 +18,43 @@ extends Node
 signal flag_modifie(cle: String, ancienne_valeur: Variant, nouvelle_valeur: Variant)
 signal decision_enregistree(decision: Dictionary)
 signal chapitre_change(ancien: String, nouveau: String)
+signal personal_danger_changed(ancien: int, nouveau: int)
+signal evidence_value_changed(ancien: int, nouveau: int)
+
+## Variables canon 8-MINE exposées par GameStateManager :
+## - personal_danger (PD) : incidents où Margot a été repérée
+## - evidence_value  (EV) : valeur cumulée des preuves accumulées
+## - mirror_status   (MS) : déléguée à MirrorStatusManager (autoload séparé)
+##                          accessible via get_mirror_status() ci-dessous.
+var personal_danger: int = 0 : set = _set_personal_danger
+var evidence_value: int = 0  : set = _set_evidence_value
 
 var _flags: Dictionary = {}
 var _decisions: Array = []   ## Liste de Dictionary { id, libelle, timestamp, contexte }
 var _chapitre: String = ""
+
+
+func _set_personal_danger(nouveau: int) -> void:
+	var ancien := personal_danger
+	personal_danger = maxi(0, nouveau)
+	if personal_danger != ancien:
+		personal_danger_changed.emit(ancien, personal_danger)
+
+
+func _set_evidence_value(nouveau: int) -> void:
+	var ancien := evidence_value
+	evidence_value = maxi(0, nouveau)
+	if evidence_value != ancien:
+		evidence_value_changed.emit(ancien, evidence_value)
+
+
+## Proxy vers MirrorStatusManager pour les consommateurs qui pensent
+## en termes "GameStateManager.mirror_status".
+func get_mirror_status() -> int:
+	var m := get_node_or_null("/root/MirrorStatusManager")
+	if m and m.has_method("get_status"):
+		return m.get_status()
+	return 0
 
 
 # --- Flags -----------------------------------------------------------------
@@ -106,12 +139,16 @@ func collecter_etat() -> Dictionary:
 		"flags": _flags.duplicate(true),
 		"decisions": _decisions.duplicate(true),
 		"chapitre": _chapitre,
+		"personal_danger": personal_danger,
+		"evidence_value": evidence_value,
 	}
 
 
 func appliquer_etat(etat: Dictionary) -> void:
 	_flags = etat.get("flags", {}).duplicate(true)
 	_decisions = etat.get("decisions", []).duplicate(true)
+	personal_danger = int(etat.get("personal_danger", 0))
+	evidence_value = int(etat.get("evidence_value", 0))
 	var nouveau_chap: String = etat.get("chapitre", "")
 	if nouveau_chap != _chapitre:
 		var ancien := _chapitre
@@ -120,6 +157,23 @@ func appliquer_etat(etat: Dictionary) -> void:
 	# Re-pousse tout dans Dialogic après chargement
 	for cle in _flags.keys():
 		_synchroniser_dialogic(cle, _flags[cle])
+
+
+## Pour SaveManager (équivalent collecter_etat / appliquer_etat).
+func save_state() -> Dictionary:
+	return collecter_etat()
+
+
+func load_state(data: Dictionary) -> void:
+	appliquer_etat(data)
+
+
+func reset_all_for_new_game() -> void:
+	_flags.clear()
+	_decisions.clear()
+	_chapitre = ""
+	personal_danger = 0
+	evidence_value = 0
 
 
 # --- Pont Dialogic ---------------------------------------------------------

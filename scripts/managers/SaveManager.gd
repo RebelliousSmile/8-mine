@@ -195,11 +195,10 @@ func _appliquer_etat_global(etat: Dictionary) -> void:
 				continue
 		match cle:
 			"_inline_":
-				node.call(charge_method, {
-					"flags": etat.get("flags", {}),
-					"decisions": etat.get("decisions", []),
-					"chapitre": etat.get("chapitre", ""),
-				})
+				# On passe l'etat complet : GameStateManager.load_state
+				# pioche les clés qu'il connaît (flags, decisions,
+				# chapitre, personal_danger, evidence_value...).
+				node.call(charge_method, etat)
 			"_inline_lieu_":
 				node.call(charge_method, {
 					"lieu_actuel": etat.get("lieu", ""),

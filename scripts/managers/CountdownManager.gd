@@ -127,6 +127,21 @@ func load_state(data: Dictionary) -> void:
 	_countdowns = data.get("countdowns", {}).duplicate(true)
 
 
+# --- Alias 8-MINE ---------------------------------------------------------
+
+## Alias pratique pour `tick("equipe_nettoyage", amount)`.
+## Utilisé par SurveillanceManager quand une zone alerte se déclenche.
+func avancer_nettoyage(amount: int = 1) -> void:
+	if exists("equipe_nettoyage"):
+		tick("equipe_nettoyage", amount)
+
+
+## Alias pratique pour `tick("audit_marine", amount)`.
+func avancer_audit(amount: int = 1) -> void:
+	if exists("audit_marine"):
+		tick("audit_marine", amount)
+
+
 # --- Interne --------------------------------------------------------------
 
 ## Seuils par défaut : 1/3 et 2/3 du max.

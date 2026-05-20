@@ -1,0 +1,107 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/NavigableRoom.gd" id="1_nr"]
+[ext_resource type="PackedScene" path="res://scenes/player/Margot.tscn" id="2_margot"]
+[ext_resource type="PackedScene" path="res://scenes/base/Hotspot.tscn" id="3_hot"]
+[ext_resource type="PackedScene" path="res://scenes/base/CameraZone.tscn" id="4_cz"]
+[ext_resource type="PackedScene" path="res://scenes/base/NPC.tscn" id="5_npc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_couloir"]
+size = Vector2(220, 320)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_zone"]
+size = Vector2(1600, 700)
+
+[node name="ProZoneCommune" type="Node2D"]
+script = ExtResource("1_nr")
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(960, 540)
+modulate = Color(0.18, 0.22, 0.28, 1)
+; bg_zone_commune_soir.jpg — placeholder uniform color jusqu'à
+; livraison de l'asset (1920×1080)
+
+[node name="BackgroundPlaceholder" type="ColorRect" parent="."]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.12, 0.16, 0.22, 1)
+
+[node name="CameraZones" type="Node2D" parent="."]
+
+[node name="ZoneCommune_Cam" parent="CameraZones" instance=ExtResource("4_cz")]
+position = Vector2(960, 540)
+surveillance_level = 3
+is_active = true
+
+[node name="CollisionShape2D" parent="CameraZones/ZoneCommune_Cam" index="0"]
+shape = SubResource("RectangleShape2D_zone")
+
+[node name="Characters" type="Node2D" parent="."]
+
+; Frank côté canapé gauche
+[node name="Frank" parent="Characters" instance=ExtResource("5_npc")]
+position = Vector2(420, 780)
+pnj_id = "frank"
+interaction_offset = Vector2(80, 50)
+
+[node name="Sprite2D" parent="Characters/Frank" index="0"]
+modulate = Color(0.85, 0.6, 0.45, 1)
+
+; Sofia côté comptoir droit
+[node name="Sofia" parent="Characters" instance=ExtResource("5_npc")]
+position = Vector2(1480, 760)
+pnj_id = "sofia"
+interaction_offset = Vector2(-80, 50)
+
+[node name="Sprite2D" parent="Characters/Sofia" index="0"]
+modulate = Color(0.55, 0.75, 0.95, 1)
+
+[node name="Hotspots" type="Node2D" parent="."]
+
+; Hotspot DIALOGUE Frank — désactivé tant que flag_emma_a_reveele
+; n'est pas posé. Sofia idem.
+[node name="HotspotFrank" parent="Hotspots" instance=ExtResource("3_hot")]
+position = Vector2(420, 760)
+hotspot_type = 0
+libelle = "Parler à Frank"
+dialogic_timeline = ""
+required_flag = "flag_emma_a_reveele"
+required_flag_value = true
+
+[node name="CollisionShape2D" parent="Hotspots/HotspotFrank" index="0"]
+shape = SubResource("RectangleShape2D_couloir")
+
+; Hotspot NAVIGATE vers couloir résidentiel (toujours actif)
+[node name="HotspotCouloir" parent="Hotspots" instance=ExtResource("3_hot")]
+position = Vector2(1820, 540)
+hotspot_type = 1
+libelle = "Couloir résidentiel"
+target_scene = "res://scenes/base/NavigableRoom.tscn"
+interaction_offset = Vector2(-80, 200)
+
+[node name="CollisionShape2D" parent="Hotspots/HotspotCouloir" index="0"]
+shape = SubResource("RectangleShape2D_couloir")
+
+[node name="Margot" parent="." instance=ExtResource("2_margot")]
+position = Vector2(960, 920)
+
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="Cursor" type="TextureRect" parent="UI"]
+mouse_filter = 2
+custom_minimum_size = Vector2(24, 24)
+visible = false
+
+[node name="ExamineLabel" type="Label" parent="UI"]
+offset_left = 200.0
+offset_top = 880.0
+offset_right = 1720.0
+offset_bottom = 980.0
+horizontal_alignment = 1
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 22
+visible = false
+modulate = Color(0.95, 0.92, 0.85, 1)
