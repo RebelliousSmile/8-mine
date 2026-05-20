@@ -23,6 +23,7 @@ const VERSION_FORMAT := 2
 ##   "_inline_lieu_" : map lieu_actuel/historique vers lieu/historique_lieux
 const MANAGERS_ENREGISTRES := [
 	["RelationManager",      "relations"],
+	["CharacterRegistry",    "characters"],
 	["GameStateManager",     "_inline_"],
 	["LocationManager",      "_inline_lieu_"],
 	["CountdownManager",     "countdowns"],

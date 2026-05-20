@@ -147,7 +147,13 @@ func reset_all_for_new_game() -> void:
 		_relations[personnage] = NPC_DEFINITIONS[personnage]["init"]
 
 
+## Renvoie le nom à afficher. Délègue à CharacterRegistry si un
+## override y est posé, sinon retourne le label canonical des
+## NPC_DEFINITIONS.
 func get_label(personnage: String) -> String:
+	var cr := get_node_or_null("/root/CharacterRegistry")
+	if cr and cr.has_method("has_npc_override") and cr.has_npc_override(personnage):
+		return cr.get_npc_display_name(personnage)
 	var def: Dictionary = NPC_DEFINITIONS.get(personnage, {})
 	return String(def.get("label", personnage.capitalize()))
 

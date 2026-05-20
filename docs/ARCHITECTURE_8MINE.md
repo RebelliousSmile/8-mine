@@ -16,6 +16,7 @@ Six domaines distincts, chacun encapsulé dans un autoload :
 | État psychique | `MirrorStatusManager` | Dette d'authenticité — déclenche le game over miroir |
 | Surveillance | `SurveillanceManager` | Pression externe — déclenche le game over surveillance |
 | Profil ex | `ExProfileManager` | Caractérisation de l'ex référencé (nom, genre, traits) |
+| Identités | `CharacterRegistry` | Nom du PJ, renames des PNJ principaux, PNJ secondaires cités |
 
 Deux orchestrateurs :
 
@@ -27,18 +28,20 @@ Deux orchestrateurs :
 ## Ordre d'autoload (project.godot)
 
 ```
-1. SaveManager           ; existant
-2. GameStateManager      ; existant
-3. RelationManager       ; existant, étendu phase 3
-4. LocationManager       ; existant
-5. CountdownManager
-6. ExProfileManager
-7. SurveillanceManager
-8. MirrorStatusManager
-9. ReputationManager
-10. SurveillanceHUD      ; CanvasLayer (autoload de scène)
-11. GameOverHandler
-12. DialogicBridge       ; existant (à laisser après le tout)
+1. Config                ; DEBUG_MODE + presets
+2. SaveManager           ; existant
+3. GameStateManager      ; existant
+4. RelationManager       ; existant, étendu phase 3
+5. CharacterRegistry     ; renames PJ/PNJ + secondaires
+6. LocationManager       ; existant
+7. CountdownManager
+8. ExProfileManager
+9. SurveillanceManager
+10. MirrorStatusManager
+11. ReputationManager
+12. SurveillanceHUD      ; CanvasLayer (autoload de scène)
+13. GameOverHandler
+14. DialogicBridge       ; existant (à laisser après le tout)
 ```
 
 Justification de l'ordre :

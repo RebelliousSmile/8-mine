@@ -281,6 +281,70 @@ Scène autoload (CanvasLayer, layer=50). API publique pour
 
 ---
 
+## CharacterRegistry
+
+Source de vérité des noms : PJ (`pc_name`), overrides des PNJ
+principaux (au-dessus de `RelationManager.NPC_DEFINITIONS`), et
+PNJ secondaires (cités sans relation propre).
+
+### Constantes
+
+```gdscript
+const DEFAUT_PC_NAME := "Margot"
+const VALID_ROLES := ["collegue", "membre_corp", "famille", "voisin", "anonyme"]
+```
+
+### État interne (lecture publique)
+
+| Champ | Type | Défaut |
+|---|---|---|
+| `pc_name` | String | `"Margot"` |
+| `is_pc_name_overridden` | bool | `false` |
+
+### Signaux
+
+- `pc_name_set(new_name: String)`
+- `npc_renamed(id: String, new_name: String)`
+- `secondary_added(id: String, data: Dictionary)`
+- `secondary_renamed(id: String, new_name: String)`
+- `secondary_removed(id: String)`
+
+### Méthodes
+
+#### PC
+| Méthode | Notes |
+|---|---|
+| `set_pc_name(name)` → bool | false si déjà override (immuable, pattern ex_name) |
+| `get_pc_name()` → String | |
+
+#### PNJ principaux (renames)
+| Méthode | Notes |
+|---|---|
+| `set_npc_display_name(id, name)` → bool | false si id hors `NPC_DEFINITIONS` ou si override déjà posé |
+| `get_npc_display_name(id)` → String | override > label canonical > capitalize(id) |
+| `has_npc_override(id)` → bool | |
+
+> `RelationManager.get_label(id)` consulte automatiquement le
+> registry : si un override existe, il est renvoyé en priorité.
+
+#### PNJ secondaires (CRUD libre)
+| Méthode | Notes |
+|---|---|
+| `add_secondary(id, name, role, faction = "", description = "")` → bool | false si id déjà utilisé ; assert role ∈ VALID_ROLES |
+| `get_secondary(id)` → Dictionary | renvoie `{}` si absent, sinon dict avec id inclus |
+| `rename_secondary(id, new_name)` | no-op silencieux si inconnu |
+| `remove_secondary(id)` | |
+| `list_secondaries()` → Array[Dictionary] | tous, avec id inclus |
+| `list_by_faction(faction)` → Array | filtre |
+| `list_by_role(role)` → Array | filtre |
+
+#### Save/load
+| Méthode | |
+|---|---|
+| `save_state() / load_state() / reset_all_for_new_game()` | |
+
+---
+
 ## SaveManager (étendu v2)
 
 API du Prompt 1 conservée. Ajouts :

@@ -21,6 +21,7 @@ func _reset_all_managers() -> void:
 		"MirrorStatusManager",
 		"ReputationManager",
 		"ExProfileManager",
+		"CharacterRegistry",
 		"RelationManager",
 	]:
 		var node := get_node_or_null("/root/" + nom)

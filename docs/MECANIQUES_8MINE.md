@@ -152,9 +152,62 @@ non — c'est au scénario d'orienter, pas au manager.
 
 ---
 
+## Identités configurables (CharacterRegistry)
+
+Trois axes de personnalisation par le joueur :
+
+- **PJ** : `set_pc_name(name)` une seule fois (immuable après).
+  Défaut `"Margot"`. Le dialogue d'introduction (futur) propose la
+  saisie.
+- **PNJ principaux** : `set_npc_display_name(id, name)` une seule
+  fois par id, parmi les 9 PNJ canon (sara, kaizen, lior, marl,
+  tess, viktor, mira, aslan, nadia). Permet d'humaniser un nom
+  abstrait (« V. Stratom » plutôt que « Viktor »). Le label
+  canonical reste accessible via `NPC_DEFINITIONS[id].label`.
+- **PNJ secondaires** : ajoutés dynamiquement avec
+  `add_secondary(id, name, role, faction = "", description = "")`.
+  Ils sont **cités** dans les dialogues (« je l'ai croisé à la
+  cantine ») mais n'ont **ni relation ni réputation propre** —
+  pas d'entrée dans `RelationManager`, pas d'effet sur
+  `ReputationManager`. Cas d'usage typiques :
+  - Collègues de Margot à la rédaction
+  - Membres lambdas de Stratom (« Yaël, cheffe produit »)
+  - Famille (frère, mère)
+  - Voisins du PJ
+  - Anonymes mentionnés en passant
+
+Rôles valides : `collegue`, `membre_corp`, `famille`, `voisin`,
+`anonyme`.
+
+Tous ces champs sont sauvegardés/restaurés par `SaveManager` via
+la clé `"characters"` dans le JSON v2.
+
+### Convention d'usage côté dialogue
+
+Quand un dialogue veut afficher le nom d'un PNJ :
+
+```gdscript
+# Bon — passe par get_label, qui consulte le registry
+$Label.text = RelationManager.get_label("sara")
+
+# Bon aussi — direct registry, équivalent
+$Label.text = CharacterRegistry.get_npc_display_name("sara")
+
+# À éviter — bypasse les renames
+$Label.text = RelationManager.NPC_DEFINITIONS["sara"].label
+```
+
+Pour un secondaire :
+
+```gdscript
+var paul := CharacterRegistry.get_secondary("paul")
+if paul.size() > 0:
+    $Label.text = paul.name
+```
+
 ## Roster
 
-### PNJs (9)
+### PNJs principaux (9, dans RelationManager)
 
 | ID | Faction | Init relation | Rôle narratif |
 |---|---|---|---|
