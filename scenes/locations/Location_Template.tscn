@@ -1,0 +1,59 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/Location.gd" id="1_loc"]
+[ext_resource type="PackedScene" path="res://scenes/ui/RelationHUD.tscn" id="2_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Hotspot.tscn" id="3_hotspot"]
+
+[node name="Location" type="Node2D"]
+script = ExtResource("1_loc")
+titre = "Lieu Template"
+personnages_presents = Array[String](["alex", "sam"])
+
+[node name="Background" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+expand_mode = 1
+stretch_mode = 6
+modulate = Color(0.18, 0.20, 0.28, 1)
+
+[node name="Dialogue" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="HUD" parent="." instance=ExtResource("2_hud")]
+
+[node name="Hotspots" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 1
+
+[node name="HotspotPorte" parent="Hotspots" instance=ExtResource("3_hotspot")]
+offset_left = 120.0
+offset_top = 700.0
+offset_right = 380.0
+offset_bottom = 820.0
+id_hotspot = "porte"
+libelle = "Porte d'entrée"
+lieu_cible = "template"
+
+[node name="HotspotBureau" parent="Hotspots" instance=ExtResource("3_hotspot")]
+offset_left = 760.0
+offset_top = 600.0
+offset_right = 1020.0
+offset_bottom = 720.0
+id_hotspot = "bureau"
+libelle = "Bureau"
+timeline = "res://dialogues/exemple_relation.dtl"
+
+[node name="HotspotFenetre" parent="Hotspots" instance=ExtResource("3_hotspot")]
+offset_left = 1450.0
+offset_top = 280.0
+offset_right = 1710.0
+offset_bottom = 400.0
+id_hotspot = "fenetre"
+libelle = "Fenêtre"

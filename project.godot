@@ -1,0 +1,76 @@
+; Fichier de configuration Godot 4
+;
+; Les "_" préfixant les noms de section sont des commentaires Godot.
+; Pour éditer la config dans l'éditeur :
+;   Projet > Paramètres du projet
+;
+; Référence : https://docs.godotengine.org/fr/stable/classes/class_projectsettings.html
+
+config_version=5
+
+[application]
+
+config/name="8-mine"
+config/description="Jeu narratif type Life is Strange — dialogues branchés, relations, conséquences."
+run/main_scene="res://scenes/core/Main.tscn"
+config/features=PackedStringArray("4.3", "C#", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+; L'ordre est important : SaveManager n'a pas de dépendance,
+; les autres peuvent l'appeler pendant leur _ready().
+; DialogicBridge doit être DERNIER (après l'installation de Dialogic,
+; pour que l'autoload "Dialogic" existe déjà).
+SaveManager="*res://scripts/managers/SaveManager.gd"
+GameStateManager="*res://scripts/managers/GameStateManager.gd"
+RelationManager="*res://scripts/managers/RelationManager.gd"
+LocationManager="*res://scripts/managers/LocationManager.gd"
+DialogicBridge="*res://scripts/managers/DialogicBridge.gd"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[dotnet]
+
+project/assembly_name="8-mine"
+
+[input]
+
+; Clic principal (interaction hotspot, validation dialogue)
+click={
+"deadzone": 0.5,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":1,"canceled":false,"pressed":true,"double_click":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194309,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+
+; Échap : pause, retour menu
+ui_cancel_custom={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194305,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+
+; Sauvegarde rapide (F5)
+quick_save={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194336,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+
+; Chargement rapide (F9)
+quick_load={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194340,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+
+[rendering]
+
+renderer/rendering_method="forward_plus"
+environment/defaults/default_clear_color=Color(0.094, 0.094, 0.118, 1)

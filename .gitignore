@@ -1,0 +1,24 @@
+# Godot 4 spécifique
+.godot/
+.import/
+*.translation
+
+# Mono / .NET
+.mono/
+data_*/
+mono_crash.*.json
+bin/
+obj/
+*.user
+
+# Exports
+build/
+export/
+*.pck
+*.zip
+
+# Système
+.DS_Store
+*.swp
+*.swo
+Thumbs.db

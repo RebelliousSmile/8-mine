@@ -1,0 +1,41 @@
+# Exemple de timeline Dialogic 2 montrant l'intégration avec
+# RelationManager / GameStateManager via DialogicBridge.
+#
+# Pour utiliser : ouvrir ce fichier dans l'éditeur Dialogic
+# (Dialogic > Timelines), il sera reconverti en .dtl au format
+# binaire ou texte selon vos préférences.
+#
+# La syntaxe ci-dessous est le format texte (.dtl) lisible par
+# Dialogic 2. Si Godot vous propose de l'importer/convertir,
+# acceptez : Dialogic comprend les deux formats.
+
+alex: Tiens, tu es venu·e. Je ne pensais pas te revoir si tôt.
+
+- Je suis content·e de te voir.
+    [signal arg="relation:alex:+8:retrouvailles_chaleureuses"]
+    alex: ... Moi aussi. Vraiment.
+- J'avais oublié quelque chose, c'est tout.
+    [signal arg="relation:alex:-5:froideur"]
+    alex: D'accord. Comme tu voudras.
+- (Mentir) Je passais par là.
+    [signal arg="relation:alex:-3:mensonge_leger"]
+    [signal arg="flag:chapitre_1.a_menti_a_alex:true"]
+    alex: Hmm. Bon.
+
+alex: Tu as vu Sam aujourd'hui ?
+
+- Oui, on a parlé. {chapitre_1_a_menti_a_alex == false}
+    alex: Bien. Il avait l'air comment ?
+- Non, pas encore.
+    alex: Tu devrais aller le voir.
+
+# Décision narrative qui sera relue plus tard dans le scénario
+- (Lui parler de l'incident d'hier) [if chapitre_1_a_menti_a_alex == false]
+    [signal arg="decision:revelation_incident:Avouer l'incident à Alex"]
+    alex: Quoi ?! Tu aurais dû me le dire avant !
+    [signal arg="relation:alex:-15:revelation_tardive"]
+
+alex: Bon, à plus tard.
+
+# Fin de la timeline — DialogicBridge.dialogue_termine sera émis,
+# Location.gd réactivera les hotspots.

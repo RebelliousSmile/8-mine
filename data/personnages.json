@@ -1,0 +1,15 @@
+{
+  "_commentaire": "Fiche descriptive des personnages. Lu par les écrans de bio, le HUD avancé, etc. RelationManager n'a pas besoin d'une entrée préalable ici : il crée le personnage à la première interaction (valeur 0).",
+  "alex": {
+    "nom_complet": "Alex Mercier",
+    "age": 17,
+    "description": "Ami·e d'enfance. Loyal·e mais rancunier·e quand on lui ment.",
+    "portrait": "res://assets/characters/alex.png"
+  },
+  "sam": {
+    "nom_complet": "Sam Okoye",
+    "age": 18,
+    "description": "Plus distant·e. Difficile à conquérir mais d'une fidélité absolue ensuite.",
+    "portrait": "res://assets/characters/sam.png"
+  }
+}
