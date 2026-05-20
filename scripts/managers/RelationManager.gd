@@ -30,6 +30,9 @@ const SEUILS := [
 	[85,   "intime"],
 ]
 
+## STUB phase 2 — sera peuplé phase 3 avec les 9 PNJs 8-MINE.
+const NPC_DEFINITIONS := {}
+
 var _relations: Dictionary = {}       ## { "alex": 25, "sam": -12, ... }
 var _historique: Array = []           ## Liste de modifications horodatées
 
@@ -115,6 +118,28 @@ func collecter_etat() -> Dictionary:
 func appliquer_etat(etat: Dictionary) -> void:
 	_relations = etat.get("valeurs", {}).duplicate(true)
 	_historique = etat.get("historique", []).duplicate(true)
+
+
+# --- API 8-MINE phase 4a (stubs phase 2) ----------------------------------
+
+func save_state() -> Dictionary:
+	# STUB. Phase 3 → renvoie collecter_etat()
+	return {}
+
+
+func load_state(_data: Dictionary) -> void:
+	# STUB. Phase 3 → appliquer_etat(_data)
+	pass
+
+
+func reset_all_for_new_game() -> void:
+	# STUB. Phase 3 → vide et repose les 9 PNJs canon.
+	pass
+
+
+func get_label(_personnage: String) -> String:
+	# STUB. Phase 3 → NPC_DEFINITIONS[_personnage].label
+	return ""
 
 
 # --- Interne ---------------------------------------------------------------

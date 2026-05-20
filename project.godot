@@ -26,6 +26,13 @@ SaveManager="*res://scripts/managers/SaveManager.gd"
 GameStateManager="*res://scripts/managers/GameStateManager.gd"
 RelationManager="*res://scripts/managers/RelationManager.gd"
 LocationManager="*res://scripts/managers/LocationManager.gd"
+CountdownManager="*res://scripts/managers/CountdownManager.gd"
+ExProfileManager="*res://scripts/managers/ExProfileManager.gd"
+SurveillanceManager="*res://scripts/managers/SurveillanceManager.gd"
+MirrorStatusManager="*res://scripts/managers/MirrorStatusManager.gd"
+ReputationManager="*res://scripts/managers/ReputationManager.gd"
+SurveillanceHUD="*res://scenes/ui/SurveillanceHUDAutoload.tscn"
+GameOverHandler="*res://scripts/managers/GameOverHandler.gd"
 DialogicBridge="*res://scripts/managers/DialogicBridge.gd"
 
 [display]

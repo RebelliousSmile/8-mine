@@ -19,7 +19,14 @@ signal sauvegarde_echec(slot: int, raison: String)
 
 const NB_SLOTS := 3
 const DOSSIER_SAUVE := "user://saves/"
+
+## STUB phase 2 : on garde VERSION_FORMAT=1.
+## Phase 3 bumpera à 2 et ajoutera la migration.
 const VERSION_FORMAT := 1
+
+## STUB phase 2 — sera peuplé phase 3.
+## Liste explicite (autoload, key JSON).
+const MANAGERS_ENREGISTRES := []
 
 
 func _ready() -> void:
@@ -159,6 +166,19 @@ func _appliquer_etat_global(etat: Dictionary) -> void:
 			"lieu_actuel": etat.get("lieu", ""),
 			"historique": etat.get("historique_lieux", []),
 		})
+
+
+# --- API 8-MINE phase 4a (stubs phase 2) ----------------------------------
+
+## STUB phase 2. Phase 3 → reset_all_for_new_game sur chaque manager
+## de MANAGERS_ENREGISTRES.
+func new_game() -> void:
+	pass
+
+
+## STUB phase 2. Phase 3 → comble les clés manquantes par défauts.
+func migrer_v1_vers_v2(data: Dictionary) -> Dictionary:
+	return data
 
 
 # --- Raccourcis globaux (utilisables depuis n'importe où) ------------------
