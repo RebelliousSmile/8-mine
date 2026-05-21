@@ -69,6 +69,11 @@ func retour_arriere() -> bool:
 
 # --- Sérialisation ---------------------------------------------------------
 
+func reset_all_for_new_game() -> void:
+	_lieu_actuel = ""
+	_historique = []
+
+
 func collecter_etat() -> Dictionary:
 	return {
 		"lieu_actuel": _lieu_actuel,

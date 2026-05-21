@@ -40,5 +40,5 @@ func _on_menu() -> void:
 
 # Esc ne ferme pas l'écran (G7 dans MANUAL_VALIDATION)
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("ui_cancel_custom"):
 		get_viewport().set_input_as_handled()

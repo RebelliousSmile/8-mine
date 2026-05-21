@@ -59,7 +59,7 @@ Chaque manager implémente `save_state()`, `load_state(data)`, `reset_all_for_ne
 
 `SurveillanceManager` et `MirrorStatusManager` émettent `threshold_crossed(level)` **une seule fois par partie, uniquement vers le haut**. Implémenté via `_thresholds_already_crossed: Array[int]` persisté en save.
 
-**Seuils Surveillance :** 25 (HUD visible), 50 (alerte), 75 (cinematic + auto-tick nettoyage), 90 (auto-tick nettoyage), 100 (game over)  
+**Seuils Surveillance :** 25 (HUD visible), 50 (alerte), 75 (cinematic + auto-tick nettoyage), 90 (palier avancé, sans couplage hardcodé), 100 (game over)  
 **Seuils Mirror :** 30 (flashback), 60 (hésitation), 90 (option verrouillée), 100 (game over)
 
 ### Coroutine critique

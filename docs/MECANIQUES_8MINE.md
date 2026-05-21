@@ -89,8 +89,8 @@ Pression externe (Stratom, Marine, drones, écoutes). Valeur `[0, 100]`.
 |---|---|
 | 25 | HUD passe en mode visible permanent |
 | 50 | bandeau « écoute active » apparaît |
-| 75 | scène cinématique « tu es suivie » force déclenche |
-| 90 | tick automatique sur countdown `equipe_nettoyage` |
+| 75 | scène cinématique « tu es suivie » + tick `equipe_nettoyage` |
+| 90 | palier avancé (`threshold_crossed(90)` — effet narratif à câbler) |
 | 100 | **Game Over Surveillance** |
 
 ### Couplages
