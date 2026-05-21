@@ -5,7 +5,7 @@ argument-hint: [--dry-run] [--force]
 version: 1.1
 ---
 
-# Init Bank — memory/ → bank.yml
+# Init Bank — memory/ → bank.yml (+ scaffold overview.md si absent)
 
 ## Goal
 
@@ -41,6 +41,52 @@ aidd_docs/aiw/8mine/bank.yml
 ```
 
 ## Process
+
+### Step 0 — Scaffold `overview.md` si absent
+
+Vérifier l'existence de `aidd_docs/memory/external/overview.md`.
+
+**Si absent** (et `--dry-run` non passé) → créer un squelette minimal pour que `brainstorm` /
+`upgrade` / `arc-spec` aient une cible existante. Contenu du squelette :
+
+```markdown
+# 8-MINE — Overview projet
+
+> Synthèse 400-500 lignes. Source de vérité macroscopique pour `arc-spec`.
+> Construit et entretenu par `brainstorm` + `upgrade` (workshop AIW).
+> Ne pas écrire d'arc complet ici — les arcs vivent dans `memory/external/arcs/`.
+
+## Pitch (1 paragraphe)
+
+`<À remplir via brainstorm.>`
+
+## Cast principal
+
+`<PJ + 17 PNJ principaux. Renvoyer vers bible-jeu.md pour le détail.>`
+
+## Jauges et stakes joueur
+
+- **Mental Stability (MS)** [0-6] · **Personal Danger (PD)** [0-∞]
+- **Surveillance externe** [0-100] · **Mirror (dette psychologique)** [0-100]
+- **Réputation** : 8 factions (stratom, marine, presse, police, activistes, memorize, nexus, kaizen)
+
+Renvoi détaillé : `memory/internal/variables-register.md`.
+
+## Arcs et arborescence
+
+`<Liste des arcs (PRO, A1, A2-romance-X, A3, A4) avec une ligne chacun.>`
+
+## Fins canoniques
+
+9 fins (A-I). Détail : `memory/external/history.md`.
+
+## Notes auteur
+
+`<…>`
+```
+
+Si présent → ne pas toucher. Si `--force` → ne pas écraser non plus (l'overview est précieux).
+Signaler la création dans le rapport final.
 
 ### Step 1 — Inventaire `memory/`
 
@@ -170,6 +216,7 @@ Si le fichier existe déjà et `--force` n'est pas passé → demander confirmat
 
 ```
 Bank généré : aidd_docs/aiw/8mine/bank.yml
+- Overview : <créé · présent · absent (dry-run)>
 - Lore : X fichiers (dont N nodes)
 - Code : Y fichiers
 - Personas : 6
@@ -179,6 +226,7 @@ Bank généré : aidd_docs/aiw/8mine/bank.yml
 ## Output
 
 - `aidd_docs/aiw/8mine/bank.yml` (sauf `--dry-run`)
+- `aidd_docs/memory/external/overview.md` (uniquement si absent, et hors `--dry-run`)
 - Rapport stdout
 
 ## Rules
