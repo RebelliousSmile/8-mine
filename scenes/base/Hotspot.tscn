@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/Hotspot.gd" id="1_h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h"]
+size = Vector2(120, 120)
+
+[node name="Hotspot" type="Area2D"]
+collision_layer = 2
+collision_mask = 0
+input_pickable = true
+script = ExtResource("1_h")
+hotspot_type = 2
+libelle = ""
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_h")

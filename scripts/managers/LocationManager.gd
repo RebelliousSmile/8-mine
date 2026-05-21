@@ -62,7 +62,7 @@ func retour_arriere() -> bool:
 	if _historique.size() < 2:
 		return false
 	_historique.pop_back()         # On retire le lieu courant
-	var precedent := _historique.pop_back()
+	var precedent: String = _historique.pop_back()
 	aller_a(precedent)
 	return true
 

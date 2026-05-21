@@ -30,6 +30,18 @@ const SEUILS := [
 	[85,   "intime"],
 ]
 
+const NPC_DEFINITIONS := {
+	"sara":   { "label": "Sara",   "faction": "presse",     "init": 0   },
+	"kaizen": { "label": "Kaizen", "faction": "marine",     "init": -10 },
+	"lior":   { "label": "Lior",   "faction": "activistes", "init": 5   },
+	"marl":   { "label": "Marl",   "faction": "stratom",    "init": 0   },
+	"tess":   { "label": "Tess",   "faction": "police",     "init": 0   },
+	"viktor": { "label": "Viktor", "faction": "stratom",    "init": -20 },
+	"mira":   { "label": "Mira",   "faction": "presse",     "init": 15  },
+	"aslan":  { "label": "Aslan",  "faction": "activistes", "init": 0   },
+	"nadia":  { "label": "Nadia",  "faction": "marine",     "init": 0   },
+}
+
 var _relations: Dictionary = {}       ## { "alex": 25, "sam": -12, ... }
 var _historique: Array = []           ## Liste de modifications horodatées
 
@@ -115,6 +127,35 @@ func collecter_etat() -> Dictionary:
 func appliquer_etat(etat: Dictionary) -> void:
 	_relations = etat.get("valeurs", {}).duplicate(true)
 	_historique = etat.get("historique", []).duplicate(true)
+
+
+# --- API 8-MINE phase 4a -------------------------------------------------
+
+func save_state() -> Dictionary:
+	return collecter_etat()
+
+
+func load_state(data: Dictionary) -> void:
+	appliquer_etat(data)
+
+
+## Vide tout et repose les 9 PNJs canon à leur valeur init.
+func reset_all_for_new_game() -> void:
+	_relations.clear()
+	_historique.clear()
+	for personnage in NPC_DEFINITIONS.keys():
+		_relations[personnage] = NPC_DEFINITIONS[personnage]["init"]
+
+
+## Renvoie le nom à afficher. Délègue à CharacterRegistry si un
+## override y est posé, sinon retourne le label canonical des
+## NPC_DEFINITIONS.
+func get_label(personnage: String) -> String:
+	var cr := get_node_or_null("/root/CharacterRegistry")
+	if cr and cr.has_method("has_npc_override") and cr.has_npc_override(personnage):
+		return cr.get_npc_display_name(personnage)
+	var def: Dictionary = NPC_DEFINITIONS.get(personnage, {})
+	return String(def.get("label", personnage.capitalize()))
 
 
 # --- Interne ---------------------------------------------------------------
