@@ -40,16 +40,21 @@ Dialogic 2 déclenché par interaction hotspot/NPC.
 
 ## Format de livraison — par NODE
 
-Chaque NODE produit **trois fichiers** :
+Chaque NODE produit **trois ou quatre fichiers** :
 
 ```
-dialogic/[node_id].dtl              ← dialogues, choix, events custom
-scenes/[acte]/[node_id].tscn        ← scène Godot navigable (backgrounds, sprites, hotspots)
-scenes/[acte]/[node_id]_init.gd     ← _ready : variables initiales (PRO-01 uniquement)
+dialogic/timelines/[node_id].dtl        ← dialogues, choix, events custom
+scenes/[acte]/[node_id].tscn            ← scène Godot (backgrounds, sprites, hotspots)
+scripts/[acte]/[node_id].gd             ← logique scène (signal handling, démarrage Dialogic)
+scripts/[acte]/[node_id]_init.gd        ← _ready : variables initiales (PRO-01 uniquement)
 ```
 
-> `_init.gd` uniquement pour PRO-01 (seul node qui pose MS/PD/EV).
+> `_init.gd` uniquement pour PRO-01 (seul node qui pose MS/PD/EV à zéro).
 > Les autres nodes héritent de l'état courant de `GameStateManager`.
+>
+> Le `.gd` de logique (signal handling, hooks NavigableRoom) est présent sur tous les
+> nodes point-and-click. Pour les nodes purement dialogiques, le `.tscn` peut être
+> autonome (Dialogic lancé directement depuis `LocationManager`).
 
 **Nœud racine PRO-01 :**
 `scenes/prologue/pro_arrivee.tscn` orchestre les sous-scènes 1→4 en séquence.

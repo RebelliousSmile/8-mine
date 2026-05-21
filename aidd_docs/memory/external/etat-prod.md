@@ -21,13 +21,14 @@
 
 | # | Priorité | Tâche |
 |---|----------|-------|
-| 1 | 🔴 | Implémenter scripts point-and-click (Claude Code) |
-| 2 | 🔴 | Implémenter `NameInputDialog` + custom event `[ask_name]` |
-| 3 | 🔴 | Écrire A1-03 (dîner — 5 micro-choix prénoms + ex_genre) |
-| 4 | 🟠 | Écrire A1-01-ethique · A1-04 |
-| 5 | 🟠 | Générer backgrounds Prologue (Flux.1 Dev) |
-| 6 | 🟠 | Pipeline LoRA Emma (première à apparaître) |
-| 7 | 🟡 | Sprites sans LoRA pour playtest rapide |
+| 1 | ✅ | Scripts point-and-click — NavigableRoom, Margot, Hotspot, CameraZone, NPC (Claude Code) |
+| 2 | ✅ | `NameInputDialog.tscn` + custom event `[ask_name]` (Dialogic) |
+| 3 | 🔴 | Écrire PRO-02 (`pro_cellule.dtl` + `.tscn` + `.gd`) — spec dans `nodes/02.md` |
+| 4 | 🔴 | Écrire A1-03 (dîner — 5 micro-choix prénoms + ex_genre) |
+| 5 | 🟠 | Écrire A1-01-ethique · A1-04 |
+| 6 | 🟠 | Générer backgrounds Prologue (Flux.1 Dev) |
+| 7 | 🟠 | Pipeline LoRA Emma (première à apparaître) |
+| 8 | 🟡 | Sprites sans LoRA pour playtest rapide |
 
 ---
 
@@ -98,33 +99,29 @@
 
 ## État de production — Scripts Godot
 
-### Autoloads
+### Autoloads (14 — tous implémentés ✅)
 
-| Script | État |
-|--------|------|
-| `GameStateManager.gd` | ❌ |
-| `MirrorStatusManager.gd` | ❌ |
-| `RelationManager.gd` | ❌ |
-| `SaveManager.gd` | ❌ |
-| `CountdownManager.gd` | ❌ |
+Config · SaveManager · GameStateManager · RelationManager · CharacterRegistry ·
+LocationManager · CountdownManager · ExProfileManager · SurveillanceManager ·
+MirrorStatusManager · ReputationManager · SurveillanceHUD · GameOverHandler · DialogicBridge
 
 ### Point-and-click
 
 | Script | État |
 |--------|------|
-| `NavigableRoom.gd` | ❌ |
-| `Margot.gd` | ❌ |
-| `Hotspot.gd` | ❌ |
-| `CameraZone.gd` | ❌ |
-| `SurveillanceManager.gd` | ❌ |
-| `NPC.gd` | ❌ |
+| `NavigableRoom.gd` | ✅ |
+| `Margot.gd` | ✅ |
+| `Hotspot.gd` | ✅ |
+| `CameraZone.gd` | ✅ |
+| `SurveillanceManager.gd` | ✅ |
+| `NPC.gd` | ✅ |
 
 ### Dialogic custom
 
 | Script / Scène | Rôle | État |
 |----------------|------|------|
-| `NameInputDialog.tscn` | Popup saisie prénom PNJ | ❌ |
-| `AskNameEvent.gd` | Custom event `[ask_name]` pour Dialogic | ❌ |
+| `NameInputDialog.tscn` | Popup saisie prénom PNJ | ✅ |
+| `AskNameEvent.gd` | Custom event `[ask_name]` pour Dialogic | ✅ |
 
 ---
 

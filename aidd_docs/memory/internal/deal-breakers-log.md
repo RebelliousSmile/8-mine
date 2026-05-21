@@ -5,16 +5,14 @@ Session d'audit : 2026-05-21.
 
 ---
 
-## ✅ DB-01 — `etat-prod.md` entièrement périmé
+## ✅ DB-01 — `etat-prod.md` section scripts périmée
 
-**Constat** : Tous les items marqués ❌ sont en réalité implémentés.
-- "5 autoloads ❌" → 14 autoloads dans `project.godot`
-- "6 scripts point-and-click ❌" → `NavigableRoom.gd`, `Hotspot.gd`, `CameraZone.gd`, `Margot.gd`, `NPC.gd`, `Location.gd` tous présents
-- "2 composants Dialogic ❌" → `NameInputDialog.tscn/.gd` + `addons/dialogic_additions/AskName/` implémentés
-- "PRO-01 ⏸" → PRO-01 complètement jouable (playtest 2025-11-21 validé)
+**Constat** : La section "Scripts Godot" listait tout à ❌, tâches 1 et 2 non barrées.
+- Les 14 autoloads, 6 scripts point-and-click, NameInputDialog et ask_name = tous implémentés.
+- Note : "PRO-01 ⏸" = en cours d'écriture .dtl (pas "non implémenté") — cohérent avec le playtest papier 2025-11-21.
+- Note : "PRO-02 ⏸ Playtest ✅" = joué en session papier, mais .dtl absent du projet Godot.
 
-**Résolution** : `etat-prod.md` reflète un snapshot très ancien (avant Prompt 4a/4b).
-**Action** : Ne pas utiliser `etat-prod.md` pour connaître l'état réel — utiliser `code-state.md` (ce dossier).
+**Résolution** : `etat-prod.md` mis à jour — scripts marqués ✅, tâches 1/2 cochées, tâche 3 (PRO-02) promue en priorité 🔴.
 
 ---
 
@@ -54,19 +52,15 @@ Syntaxe complète documentée dans `api-cheatsheet.md`.
 
 ---
 
-## ⚠️ DB-05 — Convention "3 fichiers par NODE" ≠ réalité
+## ✅ DB-05 — Convention "3 fichiers par NODE" ≠ réalité
 
-**Constat** : `architecture.md` (externe) dit "3 fichiers par scène (.dtl, .tscn, _init.gd)".
-Réalité pour PRO-01 : **4 fichiers**.
-- `dialogic/timelines/pro_arrivee.dtl` — timeline Dialogic
-- `scenes/prologue/pro_arrivee.tscn` — scène Godot (charge la timeline)
-- `scripts/prologue/pro_arrivee.gd` — logique de la scène (signal handling)
-- `scripts/prologue/pro_arrivee_init.gd` — init des variables au démarrage du NODE
+**Constat** : `architecture.md` disait "3 fichiers" et ne listait pas le `.gd` de logique de scène.
+PRO-01 en a 4 : `.dtl` + `.tscn` + `.gd` (logique/signals) + `_init.gd` (variables initiales).
 
-**Convention réelle** : `_init.gd` = fichier séparé pour l'état initial (isolé pour testabilité GUT).
-`architecture.md` doit être mis à jour par le game designer.
-
-**Action** : Ne pas créer de NODE avec 3 fichiers — toujours 4. Voir `code-state.md` pour la structure cible.
+**Résolution** : `architecture.md` mis à jour → "3 ou 4 fichiers", avec le `.gd` dans la liste et clarification :
+- `.gd` présent sur tous les nodes point-and-click (signal handling)
+- `_init.gd` uniquement PRO-01 (seul node qui pose MS/PD/EV à zéro)
+- Nodes purement dialogiques peuvent être `.tscn` autonome sans `.gd`
 
 ---
 
