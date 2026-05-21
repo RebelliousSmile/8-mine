@@ -128,6 +128,7 @@ Ces fichiers contiennent des règles d'écriture qui conditionnent **toute produ
 | Margot terrain neutre — défaut sans choix joueur = manipulation PNJ. Mirror = instrumentalisation subie | `aidd_docs/memory/internal/design-rules/margot-terrain-neutre.md` |
 | Margot documentariste sincère — registre sociologique, double instrumentalisation corpos (N2) × Witness (scoop) | `aidd_docs/memory/internal/design-rules/margot-documentariste-sincere.md` |
 | Corpos — job ordinaire, pas missions secrètes. Agents importants, fragilité quotidienne ≠ subalterne | `aidd_docs/memory/internal/design-rules/corpos-job-ordinaire.md` |
+| Pool A2-romance = tensions affectives ambiguës, pas drague. Initiative variable, motivation variable, aboutissement non garanti | `aidd_docs/memory/internal/design-rules/pool-romance-pas-drague.md` |
 
 ## Tracking interne Claude (état + structure technique)
 

@@ -46,7 +46,7 @@ Les 8 résidents sont des **agents importants avec responsabilités significativ
 ### Fiches synthétiques par PNJ
 
 #### Emma Castellane · MEMORIZE · 28 ans · femme · Tier 1
-*La cousine tiraillée*. Cousine de Margot (degré à préciser). Loyale au système qui l'emploie, coupable de ce qu'il fait. C'est elle qui a fait venir Margot — l'aide *« avant d'en avoir le courage de partir »*. Power Tags : accès flux Memorize, connaissance interne, liens familiaux activables. Couple : Emma × Léo (intime, acté).
+*La cousine tiraillée*. **Cousine germaine de Margot — éloignement vécu** *(tranché 2026-05-21)* : branches familiales coupées par brouille ancienne dans leur enfance, peu de souvenirs partagés robustes, reconnexion adulte tardive dont Julien (ex de Margot) fut le catalyseur. L'appel d'Emma à Saint-Michel = réparation de la brouille. Loyale au système qui l'emploie, coupable de ce qu'il fait. C'est elle qui a fait venir Margot — l'aide *« avant d'en avoir le courage de partir »*. Power Tags : accès flux Memorize, connaissance interne, liens familiaux activables. Couple : Emma × Léo (intime, acté).
 
 #### Léo Mars · MEMORIZE · ~30 ans · homme · Tier 2
 *Le saboteur silencieux*. **Agenda à trois couches** *(tranché 2026-05-21)* : (a) **surface publique** = lassitude esthétique cultivée pour passer sous radar ; (b) **couche 1** = protection d'Emma à son insu (il a compris ce que Memorize prépare pour sa cousine et sabote pour la couvrir) ; (c) **couche 2** = il monte aussi un coup structuré sur les flux vidéo Memorize, qu'il *justifie* par la protection d'Emma mais qui le sert lui-même. Le couple Emma/Léo gagne ainsi une asymétrie canon : elle aime ; il aime + il protège + il opère. Couche révélée selon EV + relation Léo. Couple : Emma × Léo.
@@ -135,6 +135,8 @@ Le NODE **A2-04** est le **point d'entrée romance** (un seul arc par run, premi
 
 **Pool romance complet — 8 PNJ accessibles, intrusion conjugale assumée :**
 
+> ⚠ **Pool de tensions affectives, pas menu de drague.** Initiative variable (PNJ ou Margot), motivation variable (attirance / calcul / désamorçage / besoin affectif), lisibilité variable (geste ambigu, jamais étiqueté), aboutissement non garanti. Pas d'écran « choisis ton partenaire ». Cf. `internal/design-rules/pool-romance-pas-drague.md`.
+
 | Arc | Statut | Particularité d'écriture |
 |---|---|---|
 | **A2-romance-frank** | ✅ documenté `history.md` | Verdict basculé : Frank cherche à se racheter via Margot |
@@ -142,7 +144,7 @@ Le NODE **A2-04** est le **point d'entrée romance** (un seul arc par run, premi
 | **A2-romance-sofia** | ✅ documenté `history.md` | Moteur éthique, pas séduction. Intrusion dans couple Sofia/Alex avec conséquences sur Alex |
 | **A2-romance-marine** | ✅ documenté `history.md` | Urgence, fragilité, livestream. Risque cascade |
 | **A2-romance-camille** | ✅ documenté `history.md` | Dark cogni-affectif. Margot retourne le profilage |
-| **A2-romance-emma** | ⏸ à brainstormer | Cousine — arc d'intimité fraternelle/cousinale, **charge érotique déplacée** (intensité affective, fidélité, sacrifice mutuel ; non sexuel) |
+| **A2-romance-emma** | ✅ tranché 2026-05-21 | **Fusion-confusion non consommée.** Cousines germaines avec éloignement vécu — l'absence d'histoire commune robuste surcharge les retrouvailles (intimité fantasmée par projection). Non-franchissement *cognitif* (« tu es ma moitié biographique, pas mon amante »), pas moral. Pas de variante FIN-E Emma — fins fraternelles : pacte scellé, sacrifice (FIN-C), rupture |
 | **A2-romance-alex** | ✅ tranché 2026-05-21 | **Romance refusée** (D) : alliance opérationnelle profonde + tension d'attirance jamais consommée — Sofia perçoit, n'est pas jalouse, Alex ne franchit pas. Branche **trahison opt-in** (B) verrouillée par choix joueur explicite à point de bascule : Alex bascule, Sofia très blessée *en intimité* (pas en posture pro) |
 | **A2-romance-leo** | ✅ tranché 2026-05-21 | Devient possible quand Margot perce la couche 1 (protection Emma) ou la couche 2 (coup personnel) de l'agenda Léo. Trois colorations selon la couche atteinte |
 
@@ -223,13 +225,15 @@ Rivales par essence, convergées par Nexus Social. Chaque corpo apporte une briq
 
 ### Threads ouverts résiduels (à arbitrer avant écriture des arcs concernés)
 
-1. **Emma — degré de cousinage et histoire commune.** Cousine germaine ? Par alliance ? 2e degré ? Enfance partagée ou retrouvailles tardives ? Affecte la nature de l'arc romance cousinale (A2-romance-emma).
+*Aucun thread narratif majeur ouvert à ce jour.* Cause de la brouille familiale Margot/Emma laissée variable libre (héritage, choix de vie, accident, conflit politique) — à arbitrer si un arc-spec a besoin de la fixer.
 
 ### Threads tranchés 2026-05-21 *(historique récent — pour mémoire)*
 
 - ~~Léo — agenda caché précis~~ → **hybride à 3 couches** : esthétique publique / protection Emma / coup personnel justifié. Cf. fiche Léo.
 - ~~Alex — condition de retournement contre Stratom~~ → **acte de couple** (Sofia & Alex ensemble) ; branche trahison opt-in à point de bascule. Cf. fiche Alex.
 - ~~Margot — orientation/genre~~ → **inférée par défaut, jamais thématisée** dans CP. Pool 8 PNJ reste accessible. Cohérent avec `ExProfileManager` (ex de tout genre).
+- ~~Emma — degré de cousinage et histoire commune~~ → **germaines + éloignement vécu** (brouille familiale ancienne, peu de souvenirs partagés, reconnexion adulte tardive via Julien). A2-romance-emma = **fusion-confusion non consommée** (bascule cognitive, pas morale). Cf. fiche Emma + `bible-jeu.md § 6`.
+- ~~Pool A2-romance — statut de jeu~~ → **tensions affectives ambiguës, pas drague**. Initiative variable, motivation variable, aboutissement non garanti. Cf. `internal/design-rules/pool-romance-pas-drague.md`.
 
 ### Décisions de design à respecter
 
@@ -238,7 +242,8 @@ Rivales par essence, convergées par Nexus Social. Chaque corpo apporte une briq
 - **Failles hybrides** : déclarer `transferable`/`anchored` dans chaque arc-spec.
 - **Identité trans Sofia** : intégrée, jamais plot-point, pronoms `elle`, vocabulaire actuel, pas d'outing involontaire. Vérification persona `playtester-lgbtqia`.
 - **Camille dark = cogni-affectif** : pas d'emprise physique. Le « dark » est dans le profilage et l'asymétrie d'information.
-- **Emma A2-romance = charge cousinale** : intensité affective, fidélité, sacrifice — pas sexuel.
+- **Emma A2-romance = fusion-confusion non consommée** : intensité affective surchargée par les retrouvailles tardives, bascule cognitive (« tu es ma moitié biographique »), pas franchie. Pas de FIN-E variante Emma — fins fraternelles uniquement. Cf. `pool-romance-pas-drague.md`.
+- **Pool A2-romance ≠ menu de drague** : initiative variable, motivation variable, aboutissement non garanti — règle transversale.
 - **Pas de chiffre affiché pour Mirror et Surveillance** au joueur — icônes/registres visuels (cohérence avec règle RÉSILIENCES, hérité via [[CLAUDE.md]] du repo).
 - **Tout dialogue contredisant le paradoxe éthique de Sofia est suspect** (si la romance lui fait lâcher sa posture d'autorité, personnage cassé).
 

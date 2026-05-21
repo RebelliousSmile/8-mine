@@ -43,6 +43,7 @@ design_rules:
   margot_terrain: aidd_docs/memory/internal/design-rules/margot-terrain-neutre.md
   margot_documentariste: aidd_docs/memory/internal/design-rules/margot-documentariste-sincere.md
   corpos: aidd_docs/memory/internal/design-rules/corpos-job-ordinaire.md
+  pool_romance: aidd_docs/memory/internal/design-rules/pool-romance-pas-drague.md
 
 # --- Output styles (rédactionnels) ---
 # Défaut consommé par write-dtl ; variantes déclarables par node-spec.

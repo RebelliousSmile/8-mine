@@ -276,7 +276,7 @@ Prototype de contrôle urbain que les 4 corporations veulent déployer dans **to
 - **Nom complet** : Margot Vanderberghe (nom de plume : **Sinclair**)
 - **Âge** : 26 ans
 - **Profession** : Journaliste culture/société freelance, documentariste
-- **Lien** : Cousine éloignée d'Emma Castellane
+- **Lien** : Cousine germaine d'Emma Castellane — *éloignement vécu, pas généalogique* (brouille familiale ancienne ayant coupé les deux branches dans leur enfance ; reconnexion adulte tardive)
 - **Situation** : Célibataire (rupture Julien, 3 mois)
 
 ### Intention initiale (canon)
@@ -401,7 +401,7 @@ Au lancement, une question détermine l'arc thématique :
 
 **Tier 2 · Ally/Betrayer · 28 ans · Data Analyst**
 
-Cousine éloignée de Margot. Elle a placé Margot dans l'expérience — et s'en repent immédiatement. Tiraillée entre loyauté familiale et survie corporatiste.
+**Cousine germaine de Margot, éloignement vécu** *(tranché 2026-05-21)* : leurs deux branches familiales ont été coupées par une brouille ancienne (cause exacte non tranchée — héritage, choix de vie, accident, conflit politique — variable libre). Peu de souvenirs partagés robustes : quelques événements familiaux résiduels (enterrement, mariage de civilité), pas de vacances communes. Reconnexion adulte tardive — Julien (l'ex de Margot) a été le catalyseur de cette reprise de contact (rencontré par Emma lors d'un de ces événements où les deux cousines se sont enfin reparlé). L'appel d'Emma à Saint-Michel est une **réparation de la brouille** : elle tend la main par-delà l'ancien conflit. Elle a placé Margot dans l'expérience — et s'en repent immédiatement. Tiraillée entre loyauté familiale et survie corporatiste.
 
 **Power Tags** : `Accès flux Memorize` · `Connaissance du système interne` · `Liens familiaux activables`
 
@@ -411,7 +411,9 @@ Cousine éloignée de Margot. Elle a placé Margot dans l'expérience — et s'e
 
 **Couple** : Emma × Léo — intimité audible, couple acté. Léo cultive une surface esthétique ; agenda réel caché qu'Emma ignore (à arbitrer).
 
-**Lien mécanique** : Emma a connu Julien. Elle est la SEULE qui peut nommer le pattern à Margot avant qu'il soit trop tard. La rendre muette = Margot perd sa boussole morale.
+**Lien mécanique** : Emma a connu Julien (pendant la phase de reconnexion adulte). Elle est la SEULE qui peut nommer le pattern à Margot avant qu'il soit trop tard — Julien est presque l'unique événement adulte partagé entre elles avant Saint-Michel, ce qui rend cette nomination doublement précieuse. La rendre muette = Margot perd sa boussole morale.
+
+**A2-romance-emma — fusion-confusion non consommée** *(tranché 2026-05-21)* : pas un arc de drague (cf. [[pool-romance-pas-drague]]). L'absence d'histoire commune robuste rend les retrouvailles surchargées — chacune projette sur l'autre une intimité fantasmée, faute de barrières d'enfance ordinaires. L'ADN + culture + traumatismes générationnels les rendent troublantement similaires. La charge n'est *pas* franchie — pas par interdit moral (elles sont adultes, urbaines, post-conservatrices), mais par **bascule cognitive** : quand l'une se révèle pleinement à l'autre, l'évidence arrive que « ce n'est pas ça » — l'attraction se retraduit en « tu es ma moitié manquante biographique, pas mon amante ». Aucune variante FIN-E Emma ; les fins Emma sont fraternelles (pacte scellé, sacrifice, rupture). Écriture : pas de « tu te souviens quand on… » de complicité d'enfance ; l'intimité se construit *à* Saint-Michel.
 
 > *« Tu es une variable de stress contrôlée. »* / *« Je ne sais plus si j'ai bien fait. »*
 
