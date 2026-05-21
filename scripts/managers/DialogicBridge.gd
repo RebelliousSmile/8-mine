@@ -23,6 +23,18 @@ extends Node
 ##   [signal arg="lieu:chambre_max"]
 ##       → LocationManager.aller_a("chambre_max")
 ##
+##   [signal arg="surveillance:+10:camera_repere"]
+##       → SurveillanceManager.increase(10, "camera_repere")
+##
+##   [signal arg="miroir:+5:mensonge_emma"]
+##       → MirrorStatusManager.increase(5, "mensonge_emma")
+##
+##   [signal arg="reputation:stratom:-20:fuite_documents"]
+##       → ReputationManager.modifier("stratom", -20, "fuite_documents")
+##
+##   [signal arg="countdown:equipe_nettoyage:1"]
+##       → CountdownManager.tick("equipe_nettoyage", 1)
+##
 ## Vous pouvez aussi appeler directement les autoloads via la syntaxe
 ## d'expression Dialogic : `{RelationManager.modifier("alex", 5, "")}`.
 ## Le format `signal` reste préférable car il documente l'effet
@@ -88,6 +100,14 @@ func _on_signal_event(argument: Variant) -> void:
 			_traiter_decision(morceaux)
 		"lieu":
 			_traiter_lieu(morceaux)
+		"surveillance":
+			_traiter_surveillance(morceaux)
+		"miroir":
+			_traiter_miroir(morceaux)
+		"reputation":
+			_traiter_reputation(morceaux)
+		"countdown":
+			_traiter_countdown(morceaux)
 		_:
 			push_warning("DialogicBridge : commande inconnue '%s'" % morceaux[0])
 
@@ -138,6 +158,55 @@ func _traiter_lieu(morceaux: PackedStringArray) -> void:
 	if morceaux.size() < 2:
 		return
 	LocationManager.aller_a(morceaux[1])
+
+
+func _traiter_surveillance(morceaux: PackedStringArray) -> void:
+	# surveillance:<delta>:<raison?>
+	# delta positif = increase, négatif = decrease
+	if morceaux.size() < 2:
+		return
+	var delta: int = int(morceaux[1])
+	var raison: String = morceaux[2] if morceaux.size() > 2 else ""
+	if delta > 0:
+		SurveillanceManager.increase(delta, raison)
+	elif delta < 0:
+		SurveillanceManager.decrease(-delta, raison)
+
+
+func _traiter_miroir(morceaux: PackedStringArray) -> void:
+	# miroir:<delta>:<raison?>
+	# delta positif = increase, négatif = decrease
+	if morceaux.size() < 2:
+		return
+	var delta: int = int(morceaux[1])
+	var raison: String = morceaux[2] if morceaux.size() > 2 else ""
+	if delta > 0:
+		MirrorStatusManager.increase(delta, raison)
+	elif delta < 0:
+		MirrorStatusManager.decrease(-delta, raison)
+
+
+func _traiter_reputation(morceaux: PackedStringArray) -> void:
+	# reputation:<faction>:<delta>:<raison?>
+	if morceaux.size() < 3:
+		return
+	var faction: String = morceaux[1]
+	var delta: int = int(morceaux[2])
+	var raison: String = morceaux[3] if morceaux.size() > 3 else ""
+	ReputationManager.modifier(faction, delta, raison)
+
+
+func _traiter_countdown(morceaux: PackedStringArray) -> void:
+	# countdown:<id>:<delta>
+	# delta positif = tick (avance), négatif = untick (recule)
+	if morceaux.size() < 3:
+		return
+	var id_cd: String = morceaux[1]
+	var delta: int = int(morceaux[2])
+	if delta > 0:
+		CountdownManager.tick(id_cd, delta)
+	elif delta < 0:
+		CountdownManager.untick(id_cd, -delta)
 
 
 ## Convertit un texte en bool/int/float si possible, sinon le laisse en String.

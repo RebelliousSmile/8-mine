@@ -46,7 +46,7 @@ L'ordre dans `project.godot [autoload]` est critique. Référence canonique : `d
 | 8 | `ExProfileManager` | Caractérisation de l'ex (nom, genre, traits) — **immutable après premier appel** |
 | 9 | `SurveillanceManager` | Pression externe [0-100], seuils automatiques |
 | 10 | `MirrorStatusManager` | Dette psychologique [0-100], game over miroir |
-| 11 | `ReputationManager` | Standing par faction [-100,+100] (5 factions) |
+| 11 | `ReputationManager` | Standing par faction [-100,+100] (8 factions : stratom, marine, presse, police, activistes, memorize, nexus, kaizen) |
 | 12 | `SurveillanceHUD` | CanvasLayer overlay (layer 50), affichage temps réel |
 | 13 | `GameOverHandler` | Coroutine : HUD animation → transition scène |
 | 14 | `DialogicBridge` | Dialogic events → appels managers |
@@ -102,7 +102,7 @@ Les mocks se trouvent dans `tests/mocks/`. Le `MockHud` émet ses signaux via `c
 
 4. **Dialogic non installé** : `GameOverHandler` et `DialogicBridge` warn mais ne crashent pas. Les hotspots de type DIALOGUE n'ont simplement aucun effet.
 
-5. **Maaack non installé** : le jeu démarre directement sur `Main.tscn` au lieu du menu titre. Pas d'erreur fatale.
+5. **Maaack supprimé** : le dossier `addons/maaacks_game_template/` a été retiré — Godot parse tous les `.gd` du projet même pour les plugins désactivés, ce qui causait des erreurs. Le jeu démarre directement sur `Main.tscn`.
 
 6. **`ExProfileManager` immutable** : tous les setters (`set_ex_name`, `set_ex_gender`, `add_trait`) ne fonctionnent qu'au premier appel. Prévu par design (engagement du joueur).
 

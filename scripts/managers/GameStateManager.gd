@@ -41,6 +41,15 @@ var _flags: Dictionary = {}
 var _decisions: Array = []   ## Liste de Dictionary { id, libelle, timestamp, contexte }
 var _chapitre: String = ""
 
+## Refs cachées — évitent les lookups répétés dans set_flag() et get_mirror_status()
+var _dialogic: Node = null
+var _mirror: Node = null
+
+
+func _ready() -> void:
+	_dialogic = get_node_or_null("/root/Dialogic")
+	_mirror   = get_node_or_null("/root/MirrorStatusManager")
+
 
 func _set_personal_danger(nouveau: int) -> void:
 	var ancien := personal_danger
@@ -66,9 +75,8 @@ func _set_mental_stability(nouveau: int) -> void:
 ## Proxy vers MirrorStatusManager pour les consommateurs qui pensent
 ## en termes "GameStateManager.mirror_status".
 func get_mirror_status() -> int:
-	var m := get_node_or_null("/root/MirrorStatusManager")
-	if m and m.has_method("get_status"):
-		return m.get_status()
+	if _mirror and _mirror.has_method("get_status"):
+		return _mirror.get_status()
 	return 0
 
 
@@ -201,16 +209,15 @@ func reset_all_for_new_game() -> void:
 ## Si Dialogic est installé, expose le flag comme variable Dialogic
 ## (transformée en nom plat compatible : "chapitre_1.cle" → "chapitre_1_cle").
 func _synchroniser_dialogic(cle: String, valeur: Variant) -> void:
-	var dialogic := get_node_or_null("/root/Dialogic")
-	if dialogic == null:
+	if _dialogic == null:
 		return
-	if not "VAR" in dialogic:
+	if not "VAR" in _dialogic:
 		return
 	var cle_plate := cle.replace(".", "_")
 	# L'accès direct VAR.X = ... n'est pas toujours scriptable :
 	# on passe par set_variable() quand disponible.
-	if dialogic.has_method("set_variable"):
-		dialogic.set_variable(cle_plate, valeur)
+	if _dialogic.has_method("set_variable"):
+		_dialogic.set_variable(cle_plate, valeur)
 	else:
 		# Fallback : assignation dynamique via Object.set()
-		dialogic.VAR.set(cle_plate, valeur)
+		_dialogic.VAR.set(cle_plate, valeur)

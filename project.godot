@@ -106,7 +106,6 @@ dialogic_default_action={
 ]
 }
 
-
 [rendering]
 
 environment/defaults/default_clear_color=Color(0.094, 0.094, 0.118, 1)
