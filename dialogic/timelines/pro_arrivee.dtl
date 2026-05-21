@@ -1,0 +1,136 @@
+# PRO-01 — Arrivée à la Tour Quadri-Corp
+# Timeline Dialogic 2 textuelle (.dtl)
+# Variables initiales posées par scenes/prologue/pro_arrivee_init.gd
+# au _ready de la scène-racine pro_arrivee.tscn.
+#
+# Convention de nommage :
+#   character: text       — réplique d'un personnage
+#   _: text               — narration (character nul = narrator par défaut)
+#   {var}                 — substitution variable Dialogic
+#   [signal arg="x:y:z"]  — événements custom interceptés par DialogicBridge
+#   [ask_name var=X default=Y]  — popup saisie prénom (custom 8-MINE)
+#   [portrait char=X portrait=Y] — change le portrait visible
+#   [wait time=X]         — pause
+
+# === SCÈNE 1 — Tramway ===
+
+[signal arg="bg:bg_tramway_jour"]
+
+_: Le tramway magnétique glisse sans bruit.
+
+_: Par la baie vitrée, Néo-Paris se stratifie sous tes yeux comme une coupe anatomique. Tout en bas, presque invisible dans la brume de particules, les canaux de Sous-Paris. Quelqu'un y vit. Des milliers de personnes. Tu ne les vois pas d'ici.
+
+_: Au niveau intermédiaire, les districts commerciaux — forêt d'enseignes holographiques qui clignotent même en plein jour, marchés couverts, flux piéton dense.
+
+_: Plus haut, là où l'air filtre mieux, les tours corporatistes. Verre intelligent, alliages composites, logos de couleur au sommet. Ce sont elles qu'on voit depuis les autres niveaux — constamment.
+
+_: Ta valise est entre tes pieds. Dedans : une caméra HD, des micros directionnels, un laptop, des vêtements pour trois mois. Et au fond, enveloppés dans une chemise, des équipements achetés dans un Ghost Market il y a dix jours. Tu n'as pas encore décidé si tu vas les utiliser.
+
+_: La station Tour Quadri-Corp s'annonce.
+
+# === SCÈNE 2 — Hall ===
+
+[signal arg="bg:bg_hall_tour"]
+
+_: Tu descends sur le quai. L'air est différent ici — filtré, presque neutre.
+
+_: La tour se révèle en entier.
+
+_: Vingt étages. Verre intelligent. Au sommet, quatre logos holographiques géants tournent lentement.
+
+_: MEMORIZE — bleu.
+_: KAIZEN — orange.
+_: NEXUS — vert.
+_: STRATOM — rouge.
+
+_: [i]Margot avance vers le sas. Scanners corporels. Détection d'implants. Vérification biométrique.[/i]
+
+voix_synthetique: [i]Bienvenue. Identité confirmée : Margot Sinclair. Statut : Invitée temporaire. Surveillance : Active.[/i]
+
+_: Le hall s'étend sur quinze mètres de hauteur. Sol en marbre synthétique blanc. Des cascades d'eau recyclée descendent le long des murs — le bruit est calculé pour couvrir les conversations sans les étouffer.
+
+_: Propre. Froid. Parfaitement conçu pour que tu te sentes petite.
+
+[signal arg="show_char:emma:neutre:center"]
+
+_: Ta cousine.
+
+[ask_name var="emma_prenom" default="Emma" npc_id="emma" prompt="Comment tu l'appelles..."]
+
+_: {emma_prenom} t'attend. Tailleur-pantalon gris Memorize. Posture qui ne laisse rien passer. Elle a les yeux de ta famille — mais avec quelque chose dedans que tu ne lui connaissais pas. Une tension permanente.
+
+_: Elle tend la main. Pas d'accolade.
+
+emma: Margot. Ponctuelle.
+
+emma: Suis-moi.
+
+# === SCÈNE 3 — Ascenseur ===
+
+[signal arg="bg:bg_ascenseur"]
+
+_: L'ascenseur n'a pas de boutons. Les parois sont transparentes. Néo-Paris s'étend derrière toi à mesure que tu montes.
+
+margot: Emma. Ça fait deux ans. Comment tu vas ?
+
+emma: [i]Ton neutre.[/i] Niveau huit. Zone Commune.
+
+_: Silence.
+
+_: Puis {emma_prenom} parle. Voix posée, normale — pas un chuchotement.
+
+emma: Ce que je vais te dire maintenant, les caméras l'enregistrent. Parler normalement — les algorithmes ignorent quatre-vingts pour cent des conversations de routine. Ne chuchote jamais. Ça active les alertes.
+
+[portrait char="emma" portrait="tension"]
+
+emma: Cet immeuble n'est pas un espace de coliving. C'est un laboratoire. Quatre corporations, huit employés, un crédit solidaire qui les lie pour vingt-cinq ans. Si l'un tombe, tous tombent.
+
+emma: L'objectif réel : tester des systèmes de contrôle social avant déploiement urbain massif. Si ça fonctionne, Néo-Paris entier ressemble à ça d'ici six ans.
+
+emma: Tu n'es pas une invitée. Tu es une variable de stress contrôlée.
+
+margot: Mais qu'est-ce que c'est que ce charabia —
+
+emma: Je t'ai recommandée parce que je pensais que ça t'aiderait. Un cadre. Loin de tout ça. Mais maintenant que tu es là... tu peux partir. Le contrat prévoit une résiliation sans pénalité dans la première semaine.
+
+_: Les portes s'ouvrent.
+
+emma: [i]Voix redevenue professionnelle.[/i] Ou tu restes. Il y a une équipe Stratom de maintenance prévue dans deux semaines. Officiellement pour les systèmes. Officieusement...
+
+_: Elle s'arrête. Sourire corporatiste.
+
+emma: Voici la Zone Commune.
+
+# === SCÈNE 4 — Zone commune (transition vers scène navigable) ===
+# La scène navigable scenes/prologue/pro_zone_commune.tscn prend le relai.
+# La timeline se termine ici ; le node racine pro_arrivee.tscn écoute
+# Dialogic.timeline_ended et fait la transition.
+
+[signal arg="bg:bg_zone_commune_soir"]
+[signal arg="show_char:frank:neutre:left"]
+[signal arg="show_char:sofia:neutre:right"]
+
+_: Deux cents mètres carrés. Baies vitrées panoramiques sur Néo-Paris. Mobilier design — mais le sol synthétique trahit les positions réelles. Les gens reviennent toujours au même endroit.
+
+_: Et partout, au plafond, des petits dômes noirs.
+
+_: Tu en comptes. Douze. Quinze. Dix-sept.
+
+_: {emma_prenom} se penche légèrement vers toi en avançant.
+
+emma: [i]Voix tout juste audible.[/i] Dosière, Stratom.
+
+[ask_name var="frank_prenom" default="Frank" npc_id="frank" prompt="Tu retiendras son prénom comme..."]
+
+emma: Kessler, Nexus.
+
+[ask_name var="sofia_prenom" default="Sofia" npc_id="sofia" prompt="Tu retiendras son prénom comme..."]
+
+_: [i]Un battement.[/i]
+
+emma: Je te montrerai ta cellule d'abord.
+
+_: [i]{frank_prenom} ne détache pas les yeux de toi jusqu'à ce que tu disparaisses dans le couloir.[/i]
+
+[signal arg="flag:flag_emma_a_reveele:true"]
+[signal arg="goto_scene:pro_zone_commune"]

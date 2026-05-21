@@ -1,0 +1,36 @@
+{
+"@path": "res://addons/dialogic/Resources/character.gd",
+"@subpath": NodePath(""),
+"_translation_id": "",
+"color": Color(1, 1, 1, 1),
+"custom_info": {
+"sound_mood_default": "",
+"sound_moods": {},
+"style": ""
+},
+"default_portrait": "neutre",
+"description": "Emma — cousine de Margot, employée Memorize.",
+"display_name": "{emma_prenom}",
+"mirror": false,
+"nicknames": [""],
+"offset": Vector2(0, 0),
+"portraits": {
+"neutre": {
+"scene": "",
+"image": "res://assets/characters/char_emma_neutre.png",
+"scale": 1.0,
+"offset": Vector2(0, 0),
+"mirror": false,
+"export_data": {}
+},
+"tension": {
+"scene": "",
+"image": "res://assets/characters/char_emma_tension.png",
+"scale": 1.0,
+"offset": Vector2(0, 0),
+"mirror": false,
+"export_data": {}
+}
+},
+"scale": 1.0
+}

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/NavigableRoom.gd" id="1_nr"]
 [ext_resource type="PackedScene" path="res://scenes/player/Margot.tscn" id="2_margot"]
@@ -6,20 +6,26 @@
 [ext_resource type="PackedScene" path="res://scenes/base/CameraZone.tscn" id="4_cz"]
 [ext_resource type="PackedScene" path="res://scenes/base/NPC.tscn" id="5_npc"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_couloir"]
-size = Vector2(220, 320)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_zone"]
 size = Vector2(1600, 700)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_couloir"]
+size = Vector2(220, 320)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_domes"]
+size = Vector2(1500, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_traces"]
+size = Vector2(360, 120)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_drones"]
+size = Vector2(180, 140)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_baies"]
+size = Vector2(700, 280)
+
 [node name="ProZoneCommune" type="Node2D"]
 script = ExtResource("1_nr")
-
-[node name="Background" type="Sprite2D" parent="."]
-position = Vector2(960, 540)
-modulate = Color(0.18, 0.22, 0.28, 1)
-; bg_zone_commune_soir.jpg — placeholder uniform color jusqu'à
-; livraison de l'asset (1920×1080)
 
 [node name="BackgroundPlaceholder" type="ColorRect" parent="."]
 offset_left = 0.0
@@ -27,6 +33,10 @@ offset_top = 0.0
 offset_right = 1920.0
 offset_bottom = 1080.0
 color = Color(0.12, 0.16, 0.22, 1)
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(960, 540)
+modulate = Color(0.18, 0.22, 0.28, 1)
 
 [node name="CameraZones" type="Node2D" parent="."]
 
@@ -40,7 +50,7 @@ shape = SubResource("RectangleShape2D_zone")
 
 [node name="Characters" type="Node2D" parent="."]
 
-; Frank côté canapé gauche
+; Frank — côté canapé gauche
 [node name="Frank" parent="Characters" instance=ExtResource("5_npc")]
 position = Vector2(420, 780)
 pnj_id = "frank"
@@ -49,7 +59,7 @@ interaction_offset = Vector2(80, 50)
 [node name="Sprite2D" parent="Characters/Frank" index="0"]
 modulate = Color(0.85, 0.6, 0.45, 1)
 
-; Sofia côté comptoir droit
+; Sofia — côté comptoir droit
 [node name="Sofia" parent="Characters" instance=ExtResource("5_npc")]
 position = Vector2(1480, 760)
 pnj_id = "sofia"
@@ -60,24 +70,76 @@ modulate = Color(0.55, 0.75, 0.95, 1)
 
 [node name="Hotspots" type="Node2D" parent="."]
 
-; Hotspot DIALOGUE Frank — désactivé tant que flag_emma_a_reveele
-; n'est pas posé. Sofia idem.
-[node name="HotspotFrank" parent="Hotspots" instance=ExtResource("3_hot")]
-position = Vector2(420, 760)
-hotspot_type = 0
-libelle = "Parler à Frank"
-dialogic_timeline = ""
-required_flag = "flag_emma_a_reveele"
-required_flag_value = true
+; 6 hotspots EXAMINE — worldbuilding, aucun flag, aucun EV.
+; Hotspot Frank et Sofia désactivés pour dialogue dans cette scène
+; (apparaîtront actifs en PRO-02 quand flag_emma_a_reveele sera lu).
 
-[node name="CollisionShape2D" parent="Hotspots/HotspotFrank" index="0"]
+[node name="ExamineDomes" parent="Hotspots" instance=ExtResource("3_hot")]
+position = Vector2(960, 80)
+hotspot_type = 2
+libelle = "Dômes caméras au plafond"
+examine_text = "Dix-sept. J'en ai compté dix-sept depuis l'entrée. Angles croisés. Pas d'angle mort visible de là où je suis."
+interaction_offset = Vector2(0, 600)
+
+[node name="CollisionShape2D" parent="Hotspots/ExamineDomes" index="0"]
+shape = SubResource("RectangleShape2D_domes")
+
+[node name="ExamineTraces" parent="Hotspots" instance=ExtResource("3_hot")]
+position = Vector2(960, 940)
+hotspot_type = 2
+libelle = "Traces d'usure au sol"
+examine_text = "Le mobilier est censé être modulable. Le sol dit le contraire — chacun a sa place depuis longtemps. Les habitudes se creusent vite dans un laboratoire."
+
+[node name="CollisionShape2D" parent="Hotspots/ExamineTraces" index="0"]
+shape = SubResource("RectangleShape2D_traces")
+
+[node name="ExamineDrones" parent="Hotspots" instance=ExtResource("3_hot")]
+position = Vector2(1780, 920)
+hotspot_type = 2
+libelle = "Drones sur socles"
+examine_text = "En veille. Deux. Pour l'instant."
+interaction_offset = Vector2(-100, 0)
+
+[node name="CollisionShape2D" parent="Hotspots/ExamineDrones" index="0"]
+shape = SubResource("RectangleShape2D_drones")
+
+[node name="ExamineBaies" parent="Hotspots" instance=ExtResource("3_hot")]
+position = Vector2(960, 380)
+hotspot_type = 2
+libelle = "Baies vitrées — vue Sous-Paris"
+examine_text = "D'ici on voit les trois couches en même temps. Sous-Paris est une tache sombre tout en bas. De là-haut, ça disparaît presque."
+interaction_offset = Vector2(0, 400)
+
+[node name="CollisionShape2D" parent="Hotspots/ExamineBaies" index="0"]
+shape = SubResource("RectangleShape2D_baies")
+
+; EXAMINE sur les PNJ — observation passive (les NPC eux-mêmes sont
+; cliquables mais sans dialogue ici, voir Frank/Sofia ci-dessus).
+[node name="ExamineFrank" parent="Hotspots" instance=ExtResource("3_hot")]
+position = Vector2(420, 780)
+hotspot_type = 2
+libelle = "Observer Frank"
+examine_text = "Il me fixe depuis que les portes se sont ouvertes. Il n'a pas bougé. Il n'a pas cillé. {emma_prenom} n'a pas dit son prénom. Elle a dit Stratom."
+interaction_offset = Vector2(80, 50)
+
+[node name="CollisionShape2D" parent="Hotspots/ExamineFrank" index="0"]
 shape = SubResource("RectangleShape2D_couloir")
 
-; Hotspot NAVIGATE vers couloir résidentiel (toujours actif)
+[node name="ExamineSofia" parent="Hotspots" instance=ExtResource("3_hot")]
+position = Vector2(1480, 760)
+hotspot_type = 2
+libelle = "Observer Sofia"
+examine_text = "Elle a levé les yeux une seconde. M'a évaluée. Est repartie dans sa lecture. Une seconde lui a suffi pour décider quelque chose."
+interaction_offset = Vector2(-80, 50)
+
+[node name="CollisionShape2D" parent="Hotspots/ExamineSofia" index="0"]
+shape = SubResource("RectangleShape2D_couloir")
+
+; Hotspot NAVIGATE : suivre Emma vers le couloir résidentiel
 [node name="HotspotCouloir" parent="Hotspots" instance=ExtResource("3_hot")]
 position = Vector2(1820, 540)
 hotspot_type = 1
-libelle = "Couloir résidentiel"
+libelle = "Suivre Emma — couloir résidentiel"
 target_scene = "res://scenes/base/NavigableRoom.tscn"
 interaction_offset = Vector2(-80, 200)
 

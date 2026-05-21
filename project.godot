@@ -35,6 +35,7 @@ MirrorStatusManager="*res://scripts/managers/MirrorStatusManager.gd"
 ReputationManager="*res://scripts/managers/ReputationManager.gd"
 SurveillanceHUD="*res://scenes/ui/SurveillanceHUDAutoload.tscn"
 GameOverHandler="*res://scripts/managers/GameOverHandler.gd"
+Dialogic="*res://addons/dialogic/Core/DialogicGameHandler.gd"
 DialogicBridge="*res://scripts/managers/DialogicBridge.gd"
 
 [display]
