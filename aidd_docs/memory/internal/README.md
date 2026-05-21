@@ -1,11 +1,13 @@
 # Mémoire interne — Claude Code (8-MINE)
 
-Optimisée pour le développement : état réel du code, APIs de développement, registre des variables.
-À relire en début de session, après `architecture.md` et `etat-prod.md` (externe).
+Ressources techniques et règles de design destinées à Claude : état du code, APIs, registre des variables, règles d'écriture canoniques.
+À relire en début de session.
 
 | Fichier | Contenu |
 |---------|---------|
-| `code-state.md` | Ce qui est implémenté vs documenté (remplace etat-prod.md périmé) |
-| `api-cheatsheet.md` | Guide rapide pour écrire des timelines .dtl et des scripts Godot |
-| `variables-register.md` | Toutes les variables de jeu, qui les possède, plages, signaux |
-| `deal-breakers-log.md` | Contradictions trouvées + état de résolution |
+| `architecture.md` | Conventions · 14 autoloads · pipeline · structure d'un NODE |
+| `etat-prod.md` | Tableau de bord — tâches prioritaires · scènes · assets · log playtests |
+| `code-state.md` | Snapshot du code Godot (managers, scripts, conventions) |
+| `api-cheatsheet.md` | Syntaxe DialogicBridge et patterns GDScript |
+| `variables-register.md` | Toutes les variables / flags / signaux du jeu |
+| `design-rules/` | Règles d'écriture canoniques toujours actives (Sofia, Margot×2, corpos) |

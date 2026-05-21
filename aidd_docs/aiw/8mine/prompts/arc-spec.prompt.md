@@ -18,7 +18,7 @@ un arc donné.
 
 ## Context
 
-**Arc à développer** : `$ARGUMENTS[0]` (ID arc, ex : `PRO`, `A1`, `A2-romance-aiko`)
+**Arc à développer** : `$ARGUMENTS[0]` (ID arc, ex : `PRO`, `A1`, `A2-romance-thomas`)
 
 **Overview projet (source primaire)** :
 ```markdown
@@ -31,7 +31,7 @@ un arc donné.
 ```
 @aidd_docs/memory/external/bible-jeu.md
 @aidd_docs/memory/external/history.md
-@aidd_docs/memory/external/architecture.md
+@aidd_docs/memory/internal/architecture.md
 @aidd_docs/memory/internal/variables-register.md
 ```
 

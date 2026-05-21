@@ -29,6 +29,7 @@
 | 6 | 🟠 | Générer backgrounds Prologue (Flux.1 Dev) |
 | 7 | 🟠 | Pipeline LoRA Emma (première à apparaître) |
 | 8 | 🟡 | Sprites sans LoRA pour playtest rapide |
+| 9 | 🟠 | Arbitrer DB-08 : `pro_arrivee.dtl` utilise `bg:`, `show_char:`, `goto_scene:` (8 occurrences) que `DialogicBridge` n'implémente pas. Soit (a) ajouter les 3 dispatchers, soit (b) retirer les lignes du `.dtl` et piloter les visuels autrement |
 
 ---
 

@@ -14,6 +14,8 @@ _Pour écrire rapidement du code GDScript ou des timelines .dtl_
 [signal arg="miroir:<delta>:<raison?>"]
 [signal arg="reputation:<faction>:<delta>:<raison?>"]
 [signal arg="countdown:<id>:<delta>"]
+[signal arg="ms:<delta>:<raison?>"]
+[signal arg="pd:<delta>:<raison?>"]
 ```
 
 **Exemples concrets :**
@@ -26,11 +28,15 @@ _Pour écrire rapidement du code GDScript ou des timelines .dtl_
 [signal arg="miroir:+5:mensonge_emma"]
 [signal arg="reputation:stratom:-20:fuite_documents"]
 [signal arg="countdown:equipe_nettoyage:1"]
+[signal arg="ms:-1:mensonge_emma"]
+[signal arg="pd:+1:repere_camera"]
 ```
 
 **Notes :**
 - `delta` négatif autorisé pour `surveillance:` et `miroir:` (decrease)
 - `delta` négatif = `untick` pour `countdown:`
+- `ms:` modifie `mental_stability` (clampé 0..MAX par le setter) — la raison est informative
+- `pd:` modifie `personal_danger` (clampé ≥ 0 par le setter) — la raison est informative
 - Factions valides : `stratom`, `marine`, `presse`, `police`, `activistes`, `memorize`, `nexus`, `kaizen`
 - Countdowns valides : `equipe_nettoyage` (max 14), `audit_marine` (max 15)
 

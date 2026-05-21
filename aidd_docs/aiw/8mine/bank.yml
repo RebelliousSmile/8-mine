@@ -1,0 +1,85 @@
+# bank.yml — Registre des ressources 8-MINE
+# Généré par init-bank · Audité par challenge-bank
+# NE PAS ÉDITER MANUELLEMENT — relancer init-bank après ajout d'un canon
+
+projet:
+  nom: 8-MINE
+  type: jeu-narratif-godot-dialogic
+  version: "0.9"
+  date_generation: "2026-05-21"
+
+# --- Overview projet (synthèse 400-500 lignes, source pour arc-spec) ---
+# Consommé par brainstorm/upgrade (workshop) en écriture, par arc-spec en lecture.
+overview: aidd_docs/memory/external/overview.md
+
+# --- Ressources LORE (canon narratif détaillé) ---
+lore:
+  bible: aidd_docs/memory/external/bible-jeu.md
+  history: aidd_docs/memory/external/history.md
+  pnjs_secondaires: aidd_docs/memory/external/pnjs-secondaires.md
+  nodes:
+    - aidd_docs/memory/external/nodes/01.md
+    - aidd_docs/memory/external/nodes/02.md
+  sessions:
+    - aidd_docs/memory/external/session-exemple-01.md
+
+# --- Ressources CODE (canon technique) ---
+code:
+  architecture: aidd_docs/memory/internal/architecture.md
+  api_cheatsheet: aidd_docs/memory/internal/api-cheatsheet.md
+  variables_register: aidd_docs/memory/internal/variables-register.md
+  code_state: aidd_docs/memory/internal/code-state.md
+  linter: scripts/tools/dtl_linter.gd
+  dialogic_bridge: scripts/managers/DialogicBridge.gd
+
+# --- Tracking interne (état de prod, suivi tâches, log playtests) ---
+tracking:
+  prod: aidd_docs/memory/internal/etat-prod.md
+
+# --- Design rules (règles d'écriture canoniques, toujours actives) ---
+# Chargées par CLAUDE.md du projet 8-mine pour conditionner toute écriture narrative.
+design_rules:
+  sofia: aidd_docs/memory/internal/design-rules/sofia-kessler-caracterisation.md
+  margot_terrain: aidd_docs/memory/internal/design-rules/margot-terrain-neutre.md
+  margot_documentariste: aidd_docs/memory/internal/design-rules/margot-documentariste-sincere.md
+  corpos: aidd_docs/memory/internal/design-rules/corpos-job-ordinaire.md
+
+# --- Output styles (rédactionnels) ---
+# Défaut consommé par write-dtl ; variantes déclarables par node-spec.
+output_styles:
+  default: aidd_docs/aiw/8mine/templates/output-styles/scenario.md
+
+# Document type (utilisé par brainstorm pour adapter ses questions)
+document:
+  type: videogame   # 8-MINE = narratif Godot/Dialogic ; questions adaptées
+
+# --- Personas disponibles + ressources qu'iels chargent ---
+# Source de vérité = reference_documents: du YAML persona
+# Cette section est miroir, pour audit rapide
+personas:
+  margot-joueuse:
+    file: aidd_docs/aiw/8mine/personas/margot-joueuse.yml
+    loads: [lore.bible, lore.history, code.api_cheatsheet]
+  dramaturge:
+    file: aidd_docs/aiw/8mine/personas/dramaturge.yml
+    loads: [lore.architecture, lore.history, lore.bible, code.variables_register]
+  playtester-lgbtqia:
+    file: aidd_docs/aiw/8mine/personas/playtester-lgbtqia.yml
+    loads: [lore.bible, lore.pnjs_secondaires, code.api_cheatsheet]
+  critique-indie-narratif:
+    file: aidd_docs/aiw/8mine/personas/critique-indie-narratif.yml
+    loads: [lore.bible, lore.history, code.api_cheatsheet]
+  coauteur-ia:
+    file: aidd_docs/aiw/8mine/personas/coauteur-ia.yml
+    loads: [lore.bible, code.api_cheatsheet]
+  playtester-accessibilite:
+    file: aidd_docs/aiw/8mine/personas/playtester-accessibilite.yml
+    loads: [lore.bible, code.api_cheatsheet]
+    # ⚠ référence hors bank : 8-mine/docs/POINT_AND_CLICK.md
+
+# --- Pipeline outputs ---
+outputs:
+  arc_specs: aidd_docs/memory/external/arcs/   # arc-spec
+  node_specs: aidd_docs/memory/external/nodes/ # decompose-arc
+  timelines: dialogic/timelines/               # write-dtl
+  reviews: aidd_docs/aiw/8mine/reviews/        # review-persona

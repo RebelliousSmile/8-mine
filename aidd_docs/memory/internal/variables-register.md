@@ -72,7 +72,7 @@ Source unique de vérité pour les variables de jeu, leurs propriétaires, plage
 17 PNJs, valeur [-100, +100], 9 paliers.
 
 **8 résidents principaux (IDs Dialogic + CharacterRegistry) :**
-emma, frank, sofia, leo, camille, alex, victor, aiko
+emma, frank, sofia, leo, camille, alex, marine, thomas
 
 **Paliers Relations :** ennemis_jurés / hostiles / méfiants / neutres / favorables / alliés / proches / confidents / fusionnels
 

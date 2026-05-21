@@ -7,7 +7,7 @@ version: 1.0
 
 loading_strategy: from_bank_yml
 reference_documents:
-  - aidd_docs/memory/external/architecture.md
+  - aidd_docs/memory/internal/architecture.md
   - aidd_docs/memory/external/history.md
   - aidd_docs/memory/external/bible-jeu.md
   - aidd_docs/memory/internal/variables-register.md

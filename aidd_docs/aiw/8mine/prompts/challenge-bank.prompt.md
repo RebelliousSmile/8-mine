@@ -31,9 +31,10 @@ liens cassés AVANT d'écrire une timeline.
 
 **Sources canon (code)** :
 ```
+@aidd_docs/memory/internal/architecture.md
 @aidd_docs/memory/internal/api-cheatsheet.md
 @aidd_docs/memory/internal/variables-register.md
-@aidd_docs/memory/internal/deal-breakers-log.md
+@aidd_docs/memory/internal/etat-prod.md
 @scripts/tools/dtl_linter.gd
 @autoload/DialogicBridge.gd
 @autoload/CharacterRegistry.gd

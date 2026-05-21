@@ -1,7 +1,8 @@
 # État réel du code — 8-MINE
 _Dernière mise à jour : 2026-05-21_
 
-> Ce fichier remplace `etat-prod.md` (externe) qui est périmé (voir DB-01 dans deal-breakers-log.md).
+> Snapshot du code Godot (managers, scripts, conventions de NODE).
+> Pour le tracker tâches/scènes/assets → `etat-prod.md`. Pour les conventions canon → `architecture.md`.
 
 ---
 
@@ -76,7 +77,7 @@ Tous présents dans `scripts/world/` et `scripts/ui/`.
 
 ## Convention structure d'un NODE
 
-**4 fichiers obligatoires** (pas 3 comme dans architecture.md externe) :
+**4 fichiers obligatoires** (cf. `architecture.md` § convention NODE) :
 
 ```
 dialogic/timelines/<node_id>.dtl        ← dialogue Dialogic

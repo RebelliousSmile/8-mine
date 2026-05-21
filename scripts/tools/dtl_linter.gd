@@ -6,7 +6,7 @@ extends SceneTree
 ##   godot --headless --path . --script scripts/tools/dtl_linter.gd -- <chemin .dtl> [...autres .dtl]
 ##
 ## Vérifie :
-##   - Commandes [signal arg="..."] reconnues par DialogicBridge (8 dispatchers)
+##   - Commandes [signal arg="..."] reconnues par DialogicBridge (10 dispatchers)
 ##   - Factions valides parmi les 8 connues
 ##   - Countdowns valides parmi ceux déclarés
 ##   - PNJs cités correspondent à un personnage Dialogic connu
@@ -27,7 +27,7 @@ const FACTIONS_VALIDES := [
 const COUNTDOWNS_VALIDES := ["equipe_nettoyage", "audit_marine"]
 
 const PNJ_VALIDES := [
-	"emma", "frank", "sofia", "leo", "camille", "alex", "victor", "aiko",
+	"emma", "frank", "sofia", "leo", "camille", "alex", "marine", "thomas",
 	"margot", "narrator",
 	"_",                # raccourci narrator Dialogic 2
 	"voix_synthetique"  # voix off ambiance Néo-Paris
@@ -35,13 +35,14 @@ const PNJ_VALIDES := [
 
 const DISPATCHERS_VALIDES := [
 	"relation", "flag", "decision", "lieu",
-	"surveillance", "miroir", "reputation", "countdown"
+	"surveillance", "miroir", "reputation", "countdown",
+	"ms", "pd"
 ]
 
 const VARIABLES_CANON := [
 	"mental_stability", "personal_danger", "evidence_collected",
 	"emma_prenom", "frank_prenom", "sofia_prenom", "leo_prenom",
-	"camille_prenom", "alex_prenom", "victor_prenom", "aiko_prenom",
+	"camille_prenom", "alex_prenom", "marine_prenom", "thomas_prenom",
 	"ex_prenom"
 ]
 
@@ -170,6 +171,16 @@ func _verifier_dispatcher(disp: String, morceaux: PackedStringArray, num: int) -
 			var delta: String = morceaux[1]
 			if not _est_delta_valide(delta):
 				_erreur_l(num, "%s : delta invalide '%s' (attendu +N ou -N)" % [disp, delta])
+			if morceaux.size() < 3:
+				_warning(num, "%s sans raison — traçabilité affaiblie" % disp)
+
+		"ms", "pd":
+			if morceaux.size() < 2:
+				_erreur_l(num, "%s:<delta>:<raison?> — format invalide" % disp)
+				return
+			var delta_jauge: String = morceaux[1]
+			if not _est_delta_valide(delta_jauge):
+				_erreur_l(num, "%s : delta invalide '%s' (attendu +N ou -N)" % [disp, delta_jauge])
 			if morceaux.size() < 3:
 				_warning(num, "%s sans raison — traçabilité affaiblie" % disp)
 

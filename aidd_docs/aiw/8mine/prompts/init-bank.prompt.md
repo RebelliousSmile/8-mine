@@ -105,15 +105,15 @@ Classer chaque fichier dans une catégorie 8-MINE :
 |-----------|---------|----------|
 | `lore.bible` | Vision créative, cast, DA | `bible-jeu.md` |
 | `lore.history` | Arborescence narrative, fins | `history.md` |
-| `lore.architecture` | Conventions narratives, format NODE | `architecture.md` |
 | `lore.pnjs` | PNJ secondaires | `pnjs-secondaires.md` |
 | `lore.nodes` | Spec d'un NODE | `nodes/NN.md` |
 | `lore.session` | Trace de playtest | `session-exemple-01.md` |
-| `lore.prod` | État de production | `etat-prod.md` |
-| `code.api` | Cheatsheet DialogicBridge | `api-cheatsheet.md` |
-| `code.variables` | Flags, factions, countdowns | `variables-register.md` |
-| `code.deals` | Deal-breakers résolus / ouverts | `deal-breakers-log.md` |
-| `code.state` | État du code | `code-state.md` |
+| `code.architecture` | Conventions structurelles, format NODE | `internal/architecture.md` |
+| `code.api` | Cheatsheet DialogicBridge | `internal/api-cheatsheet.md` |
+| `code.variables` | Flags, factions, countdowns | `internal/variables-register.md` |
+| `code.state` | État du code | `internal/code-state.md` |
+| `tracking.prod` | État de production · tâches · log playtests | `internal/etat-prod.md` |
+| `design_rules.*` | Règles d'écriture canoniques | `internal/design-rules/*.md` |
 
 ### Step 3 — Structure du `bank.yml` 8-MINE
 
@@ -138,7 +138,6 @@ overview: aidd_docs/memory/external/overview.md
 lore:
   bible: aidd_docs/memory/external/bible-jeu.md
   history: aidd_docs/memory/external/history.md
-  architecture: aidd_docs/memory/external/architecture.md
   pnjs_secondaires: aidd_docs/memory/external/pnjs-secondaires.md
   nodes:
     - aidd_docs/memory/external/nodes/02.md
@@ -146,16 +145,26 @@ lore:
   # Optionnels
   sessions:
     - aidd_docs/memory/external/session-exemple-01.md
-  prod: aidd_docs/memory/external/etat-prod.md
 
 # --- Ressources CODE (canon technique) ---
 code:
+  architecture: aidd_docs/memory/internal/architecture.md
   api_cheatsheet: aidd_docs/memory/internal/api-cheatsheet.md
   variables_register: aidd_docs/memory/internal/variables-register.md
-  deal_breakers: aidd_docs/memory/internal/deal-breakers-log.md
   code_state: aidd_docs/memory/internal/code-state.md
   linter: scripts/tools/dtl_linter.gd
   dialogic_bridge: autoload/DialogicBridge.gd
+
+# --- Tracking interne (état de prod, suivi tâches, log playtests) ---
+tracking:
+  prod: aidd_docs/memory/internal/etat-prod.md
+
+# --- Design rules (règles d'écriture canoniques, toujours actives) ---
+# Référencées dans CLAUDE.md du projet.
+design_rules:
+  # Exemples 8-MINE :
+  # sofia: aidd_docs/memory/internal/design-rules/sofia-kessler-caracterisation.md
+  # margot_terrain: aidd_docs/memory/internal/design-rules/margot-terrain-neutre.md
 
 # --- Output styles (rédactionnels) ---
 # Défaut consommé par write-dtl ; variantes déclarables par node-spec.

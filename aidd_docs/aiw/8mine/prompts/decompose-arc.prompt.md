@@ -22,7 +22,7 @@ indépendamment dans `write-dtl`.
 
 **Ressources canon :**
 ```
-@aidd_docs/memory/external/architecture.md
+@aidd_docs/memory/internal/architecture.md
 @aidd_docs/memory/external/nodes/01.md
 @aidd_docs/memory/external/nodes/02.md
 @aidd_docs/memory/internal/variables-register.md

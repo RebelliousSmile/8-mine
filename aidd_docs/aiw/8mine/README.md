@@ -87,7 +87,7 @@ Le pipeline n'est pas strictement linéaire — `write-dtl --feedback`, `review-
 |-----------|------|
 | `aidd_docs/memory/external/overview.md` | Vue projet (400-500 l., piloté par `brainstorm`) |
 | `aidd_docs/memory/external/bible-jeu.md` | Vision créative · cast · DA |
-| `aidd_docs/memory/external/architecture.md` | Conventions · variables · NODE format |
+| `aidd_docs/memory/internal/architecture.md` | Conventions · variables · NODE format |
 | `aidd_docs/memory/external/history.md` | Arborescence narrative · 9 fins |
 | `aidd_docs/memory/internal/api-cheatsheet.md` | Commandes DialogicBridge · API GDScript |
 | `aidd_docs/memory/internal/variables-register.md` | Flags · factions · countdowns |

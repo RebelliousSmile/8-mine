@@ -26,7 +26,7 @@ Margot Sinclair arrive à la Tour Corporatiste de Saint-Michel pour une mission 
 
 ---
 
-**MJ** : Le tramway magnétique glisse silencieusement au-dessus de Néo-Paris. Par la baie vitrée, tu contemples la stratification brutale de la ville. En contrebas, les canaux de Deep-Paris charrient leurs eaux noires. Au niveau moyen s'étendent les districts commerciaux, forêt d'enseignes holographiques. Plus haut, les tours corporatistes percent la pollution.
+**MJ** : Le tramway magnétique glisse silencieusement au-dessus de Néo-Paris. Par la baie vitrée, tu contemples la stratification brutale de la ville. En contrebas, les canaux de Sous-Paris charrient leurs eaux noires. Au niveau moyen s'étendent les districts commerciaux, forêt d'enseignes holographiques. Plus haut, les tours corporatistes percent la pollution.
 
 Tu descends à la station Saint-Michel Haute. L'immeuble se révèle : une tour de 20 étages en verre intelligent, quatre logos holographiques géants au sommet (Memorize bleu, Kaizen orange, Nexus vert, Stratom rouge).
 
@@ -741,7 +741,7 @@ Emma te lance un regard rapide — *Attention.*
 ### Lieux Explorés
 
 **Lieux connus** :
-- **Tramway aérien** : Traverse stratification Néo-Paris (Deep-Paris, districts commerciaux, tours corporatistes)
+- **Tramway aérien** : Traverse stratification Néo-Paris (Sous-Paris, districts commerciaux, tours corporatistes)
 - **Hall d'entrée Tour Corporatiste** : Atrium 15m haut, marbre synthétique, verre intelligent, cascades recyclées
 - **Ascenseur vitré** : Sans boutons, commande vocale, parois transparentes
 - **Zone Commune Niveau 8** : 200 m², baies vitrées panoramiques, 17 caméras, 2 drones, mobilier modulaire (positions fixes), table circulaire déployable

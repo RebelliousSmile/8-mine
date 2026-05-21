@@ -259,7 +259,7 @@ Comment Margot se présente-t-elle ?
 ### ◆ NODE [A1-05] — Première nuit : bruits de l'immeuble
 > 23h. Cellule. Sons qui filtrent à travers les murs.
 > Marine/Thomas : dispute étouffée. Emma/Léo : intimité audible.
-> Sofia/Alex : conversation intense à voix basse. Camille/Frank : silence total.
+> Sofia/Alex : conversation intime de couple à voix basse — tension éthique en sous-texte, registre dominant = couple, pas confrontation. Camille/Frank : silence total.
 > Fichier Dialogic : `a1_nuit.dtl`
 > Assets requis : `bg_cellule_margot_nuit.png` · ambiance sonore
 
@@ -724,9 +724,9 @@ CONDITIONS
   Relation Emma entre −25 et +50
 ```
 
-Le documentaire sort parce qu'Emma a tout pris. Renvoyée. Crédit solidaire déclenché pour elle seule. Deep-Paris. 200 000 crédits de dette. Margot le savait. Elle a publié quand même. Le documentaire existe. Emma n'a plus d'appartement.
+Le documentaire sort parce qu'Emma a tout pris. Renvoyée. Crédit solidaire déclenché pour elle seule. Sous-Paris. 200 000 crédits de dette. Margot le savait. Elle a publié quand même. Le documentaire existe. Emma n'a plus d'appartement.
 
-**Variante MS = 2** : Margot attend. Le documentaire sort des mois plus tard, depuis une autre ville. Emma est déjà en Deep-Paris.
+**Variante MS = 2** : Margot attend. Le documentaire sort des mois plus tard, depuis une autre ville. Emma est déjà en Sous-Paris.
 
 *Ce que ça dit : Que la vérité peut détruire ceux qu'on aime. Le jeu ne juge pas. Il enregistre.*
 
@@ -907,7 +907,7 @@ Margot a le documentaire. Elle a les preuves. Mais en regardant ses rushes dans 
 ## NOTES DE PLAYTEST — observations narratives
 
 > Retours sur ce qui fonctionne / ce qui est à ajuster dans l'écriture.
-> Retours mécaniques et de production → `etat-prod.md`.
+> Retours mécaniques et de production → `internal/etat-prod.md`.
 
 ### Playtest 01 — 2025-11-21
 
@@ -923,9 +923,21 @@ Margot a le documentaire. Elle a les preuves. Mais en regardant ses rushes dans 
 - Emma disant "fais attention à Frank et Sofia, ce sont les plus dangereux" : trop explicite. Reformuler en signal plus subtil.
 - Position de table en A1-03 (Margot entre les deux blocs) : involontaire dans le playtest, à ancrer comme décision de mise en scène dans le `.dtl`.
 
-**Threads narratifs ouverts à résoudre avant d'écrire A1-05 à A2-01**
-- Que cachent Sofia et Alex dans leur conversation nocturne ? ("expériences continuent" — c'est quoi, exactement ?)
-- Comment signaler subtilement que Frank cherche quelqu'un à protéger, sans le dire ?
-- Léo "saboteur discret" selon Emma — quel est son agenda réel, et comment Margot le découvre-t-elle organiquement ?
-- Marine et sa dette 45k€ — quand et par quel canal la révéler au joueur ?
-- Camille et Frank : aucun son la nuit de leur côté — couple de façade, ou autre chose ? À décider avant d'écrire leurs arcs.
+**Threads narratifs — point au 2026-05-21 (brainstorm overview)**
+
+✅ **Sofia × Alex.** Tranché : couple **solide, démonstratif, transparent**. Asymétrie *fonctionnelle* (Sofia tient le symbolique éthique, Alex tient l'opérationnel sale pour la corpo) sans asymétrie affective. Alex est partie de ce qui rend possible l'intégration de Sofia (femme trans en milieu corpo conservateur). La conversation nocturne `a1_nuit.dtl` se lit d'abord comme une scène **de couple** — tension éthique en sous-texte (Sofia perçoit ce qu'Alex laisse filtrer), pas confrontation en sujet. L'« alliance tacite avec Frank » est purement professionnelle/éthique, parallèle au couple. **Condition canon de retournement contre Stratom** *(tranché 2026-05-21)* : décision de couple (Sofia & Alex ensemble) ; branche optionnelle B (trahison Alex via Margot) verrouillée par choix joueur explicite à point de bascule — Alex bascule alors seul, Sofia est très blessée *en intimité* (force pro ≠ force intime, cf. design-rule Sofia).
+
+✅ **Frank verdict.** Tranché : Frank est l'opérateur **chargé par Stratom d'évaluer Margot** (menace à neutraliser ou ressource à retourner). Le countdown Équipe Nettoyage recule via tests d'intégrité réussis auprès de lui — déjà codifié bible-jeu.md L371. Pas de double moteur « rachat moral » au départ ; le retournement éventuel passe par les actes de Margot et la rencontre avec son intégrité, pas par une quête personnelle pré-existante. Le signaler subtilement = par les *silences* qu'il maintient (registre vocal : silencieux → test → verdict) et par les détails physiques (Frank reflété dans une vitre, regards prolongés, échanges silencieux avec Sofia).
+
+✅ **Léo agenda.** Tranché 2026-05-21 : **hybride à 3 couches**. (a) Surface publique = lassitude esthétique cultivée. (b) Couche 1 = protection d'Emma à son insu (Léo a compris ce que Memorize prépare pour sa cousine). (c) Couche 2 = il monte aussi un coup structuré sur les flux vidéo Memorize, qu'il *justifie* par la protection d'Emma mais qui le sert lui-même. Couches révélées selon EV + relation Léo. A2-romance-leo s'ouvre quand Margot perce la couche 1 ou la couche 2 — trois colorations selon la couche atteinte.
+
+✅ **Marine dette 45k€.** Tranché par défaut : **révélation organique**, pas par un canal unique. Canaux possibles :
+  - A1-05 (nuit d'écoute) si micros posés → Marine au téléphone avec un créancier
+  - Léo (en alliance) peut transmettre l'info via les flux Memorize
+  - Emma en confidence sous pression
+  - Camille en profilage (Camille sait, Margot peut le lui faire dire)
+  Choix au cas par cas par arc-spec selon ce que Margot a déjà débloqué. **Tag faille : `transferable`** (l'info circule).
+
+✅ **Camille × Frank.** Tranché : **couple réel mais glacial**. Aucune façade — vraie relation longue durée devenue silencieuse par routine et contrôle mutuel (profileuse + ex-opératif = chacun lit l'autre en permanence). Intimité étouffée par leurs métiers. Le silence nocturne ≠ absence d'amour passé, c'est sa fossilisation présente. À écrire avec retenue, pas comme un mystère à élucider.
+
+> *Arbitrages issus de la session brainstorm 2026-05-21 (overview.md). Détails et règles de design : voir `memory/external/overview.md` section « Notes auteur ».*

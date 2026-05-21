@@ -117,3 +117,24 @@ Les mocks se trouvent dans `tests/mocks/`. Le `MockHud` émet ses signaux via `c
 | Écriture de tests GUT | `docs/TESTING_GUIDE.md` |
 | Events Dialogic custom | `docs/API_DIALOGIC.md` |
 | Checklist QA manuelle | `docs/MANUAL_VALIDATION.md` |
+
+## Règles de design canoniques (à charger en mémoire active)
+
+Ces fichiers contiennent des règles d'écriture qui conditionnent **toute production narrative** (arcs, dialogues, fiches PNJ, reviews). À lire au démarrage de toute session d'écriture/audit canon. Référencés dans `aidd_docs/aiw/8mine/bank.yml § design_rules`.
+
+| Règle | Fichier |
+|---|---|
+| Sofia Kessler — caractérisation (trans intégrée · vigilante éthique paradoxale · couple Sofia/Alex) | `aidd_docs/memory/internal/design-rules/sofia-kessler-caracterisation.md` |
+| Margot terrain neutre — défaut sans choix joueur = manipulation PNJ. Mirror = instrumentalisation subie | `aidd_docs/memory/internal/design-rules/margot-terrain-neutre.md` |
+| Margot documentariste sincère — registre sociologique, double instrumentalisation corpos (N2) × Witness (scoop) | `aidd_docs/memory/internal/design-rules/margot-documentariste-sincere.md` |
+| Corpos — job ordinaire, pas missions secrètes. Agents importants, fragilité quotidienne ≠ subalterne | `aidd_docs/memory/internal/design-rules/corpos-job-ordinaire.md` |
+
+## Tracking interne Claude (état + structure technique)
+
+| Sujet | Fichier |
+|---|---|
+| État de production (tâches prioritaires, scènes, assets, log playtests) | `aidd_docs/memory/internal/etat-prod.md` |
+| Architecture canon (14 autoloads, conventions de fichiers, variables) | `aidd_docs/memory/internal/architecture.md` |
+| API DialogicBridge (10 dispatchers, exemples) | `aidd_docs/memory/internal/api-cheatsheet.md` |
+| Registre des variables/flags | `aidd_docs/memory/internal/variables-register.md` |
+| Snapshot code Godot | `aidd_docs/memory/internal/code-state.md` |

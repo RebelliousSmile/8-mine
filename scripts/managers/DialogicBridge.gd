@@ -35,6 +35,12 @@ extends Node
 ##   [signal arg="countdown:equipe_nettoyage:1"]
 ##       → CountdownManager.tick("equipe_nettoyage", 1)
 ##
+##   [signal arg="ms:-1:mensonge_emma"]
+##       → GameStateManager.mental_stability += -1  (clamped 0..MAX)
+##
+##   [signal arg="pd:+1:repere_camera"]
+##       → GameStateManager.personal_danger += 1   (clamped >= 0)
+##
 ## Vous pouvez aussi appeler directement les autoloads via la syntaxe
 ## d'expression Dialogic : `{RelationManager.modifier("alex", 5, "")}`.
 ## Le format `signal` reste préférable car il documente l'effet
@@ -108,6 +114,10 @@ func _on_signal_event(argument: Variant) -> void:
 			_traiter_reputation(morceaux)
 		"countdown":
 			_traiter_countdown(morceaux)
+		"ms":
+			_traiter_ms(morceaux)
+		"pd":
+			_traiter_pd(morceaux)
 		_:
 			push_warning("DialogicBridge : commande inconnue '%s'" % morceaux[0])
 
@@ -207,6 +217,27 @@ func _traiter_countdown(morceaux: PackedStringArray) -> void:
 		CountdownManager.tick(id_cd, delta)
 	elif delta < 0:
 		CountdownManager.untick(id_cd, -delta)
+
+
+func _traiter_ms(morceaux: PackedStringArray) -> void:
+	# ms:<delta>:<raison?>
+	# Modifie mental_stability (clampé par le setter de GameStateManager).
+	# La raison reste informative dans la timeline et n'est pas persistée ici.
+	if morceaux.size() < 2:
+		return
+	var delta: int = int(morceaux[1])
+	if delta != 0:
+		GameStateManager.mental_stability += delta
+
+
+func _traiter_pd(morceaux: PackedStringArray) -> void:
+	# pd:<delta>:<raison?>
+	# Modifie personal_danger (clampé >= 0 par le setter de GameStateManager).
+	if morceaux.size() < 2:
+		return
+	var delta: int = int(morceaux[1])
+	if delta != 0:
+		GameStateManager.personal_danger += delta
 
 
 ## Convertit un texte en bool/int/float si possible, sinon le laisse en String.

@@ -91,7 +91,7 @@ Depuis sa cellule, Margot accède au cyberespace. Elle tombe sur des fragments d
 
 **Ce que c'est :**
 - Articles de presse indépendante
-- Threads de forums Deep-Paris
+- Threads de forums Sous-Paris
 - Émissions archivées
 - Rapports corporatistes leakés
 - Témoignages anonymes

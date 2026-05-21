@@ -154,7 +154,7 @@ Sortir un node du jeu actif. **Pas de suppression destructive**.
 
 1. Déplacer `nodes/<NN>.md` → `nodes/.retired/<NN>.md`
 2. Si `.dtl` correspondant existe : déplacer vers `dialogic/timelines/.retired/`
-3. Ajouter une entrée dans `aidd_docs/memory/internal/deal-breakers-log.md` ou un journal équivalent :
+3. Ajouter une entrée dans `aidd_docs/memory/internal/etat-prod.md` (section dédiée « Nodes retirés ») ou un journal équivalent :
    ```markdown
    ## Retired <YYYY-MM-DD> · NODE <NN>
    - Raison : <demander à l'auteur si non précisée>
