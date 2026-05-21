@@ -23,6 +23,10 @@ var _thresholds_already_crossed: Array[int] = []
 var _zones_actives: Dictionary = {}   ## { zone_id (int) : level (int 1-4) }
 var _temps_expose: float = 0.0
 
+## Refs cachées pour éviter les lookups répétés dans _process/_declencher_alerte
+var _game_state: Node = null
+var _countdown: Node = null
+
 
 # --- API ------------------------------------------------------------------
 
@@ -54,6 +58,11 @@ func load_state(data: Dictionary) -> void:
 	_thresholds_already_crossed.clear()
 	for v in data.get("thresholds_already_crossed", []):
 		_thresholds_already_crossed.append(int(v))
+
+
+func _ready() -> void:
+	_game_state = get_node_or_null("/root/GameStateManager")
+	_countdown = get_node_or_null("/root/CountdownManager")
 
 
 func reset_all_for_new_game() -> void:
@@ -104,14 +113,10 @@ func _process(delta: float) -> void:
 
 
 func _declencher_alerte(zone_level: int) -> void:
-	# Incrémente PD côté GameStateManager
-	var gs := get_node_or_null("/root/GameStateManager")
-	if gs and "personal_danger" in gs:
-		gs.personal_danger = int(gs.personal_danger) + 1
-	# Tick le countdown nettoyage si présent
-	var cm := get_node_or_null("/root/CountdownManager")
-	if cm and cm.has_method("avancer_nettoyage"):
-		cm.avancer_nettoyage(1)
+	if _game_state and "personal_danger" in _game_state:
+		_game_state.personal_danger = int(_game_state.personal_danger) + 1
+	if _countdown and _countdown.has_method("avancer_nettoyage"):
+		_countdown.avancer_nettoyage(1)
 	# Émet la pression interne (level [0,100]) — la mécanique
 	# de seuil monotone existe déjà sur ce canal.
 	if _level < MAX:
@@ -145,7 +150,6 @@ func _check_thresholds(ancien: int, nouveau: int) -> void:
 
 
 func _tick_equipe_nettoyage() -> void:
-	var cm := get_node_or_null("/root/CountdownManager")
-	if cm and cm.has_method("tick") and cm.has_method("exists") \
-			and cm.exists("equipe_nettoyage"):
-		cm.tick("equipe_nettoyage", 1)
+	if _countdown and _countdown.has_method("tick") and _countdown.has_method("exists") \
+			and _countdown.exists("equipe_nettoyage"):
+		_countdown.tick("equipe_nettoyage", 1)

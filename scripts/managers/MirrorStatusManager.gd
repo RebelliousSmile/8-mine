@@ -68,7 +68,8 @@ func _set_status(nouveau: int, raison: String) -> void:
 		return
 	mirror_status_changed.emit(ancien, _status, raison)
 	_check_thresholds(ancien, _status)
-	if _status >= MAX:
+	if _status >= MAX and not (MAX + 1) in _thresholds_already_crossed:
+		_thresholds_already_crossed.append(MAX + 1)
 		breakdown_imminent.emit()
 
 
