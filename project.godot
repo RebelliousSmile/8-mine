@@ -73,7 +73,7 @@ project/assembly_name="8-mine"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/dialogic/plugin.cfg", "res://addons/gut/plugin.cfg", "res://addons/maaacks_game_template/plugin.cfg")
+enabled=PackedStringArray("res://addons/dialogic/plugin.cfg", "res://addons/gut/plugin.cfg")
 
 [input]
 
@@ -106,16 +106,6 @@ dialogic_default_action={
 ]
 }
 
-[internationalization]
-
-locale/translations=PackedStringArray("res://addons/maaacks_game_template/base/translations/menus_translations.en.translation", "res://addons/maaacks_game_template/base/translations/menus_translations.fr.translation")
-
-[maaacks_game_template]
-
-disable_install_audio_busses=true
-disable_update_check=false
-disable_install_wizard=true
-copy_path="res://"
 
 [rendering]
 
