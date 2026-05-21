@@ -1,4 +1,4 @@
-<!-- v2 (upgrade 2026-05-21 · suggestions #1-#15 appliquées) -->
+<!-- v3 (upgrade 2026-05-21 · suggestions #1-#26 appliquées) -->
 # 8-MINE — Overview projet
 
 > Synthèse macroscopique. Source de vérité pour `arc-spec`.
@@ -38,6 +38,10 @@
 <!-- #2 : glossaire des sigles -->
 ## Glossaire
 
+<!-- #22 : tableau séparé en deux — jauges numériques d'un côté, lexique structurel de l'autre -->
+
+**Jauges numériques** (plage chiffrée, ressource technique)
+
 | Sigle | Sens | Plage | Autorité technique |
 |---|---|---|---|
 | **MS** | Mental Stability (santé narrative) | 0-6 | `GameStateManager.mental_stability` |
@@ -45,9 +49,17 @@
 | **EV** | Evidence (preuves sur le Programme) | 0-6 | `GameStateManager.evidence_collected` |
 | **Mirror** | Dette d'authenticité = instrumentalisation subie | 0-100 | `MirrorStatusManager` |
 | **Surveillance** | Pression Stratom / caméras | 0-100 | `SurveillanceManager` |
-| **NODE** | Unité narrative atomique (1 scène ou 1 sous-arc) | — | `nodes/*.md` |
-| **FIN-A à FIN-I** | 9 fins canoniques | — | `history.md` ch. 9 |
-| **N1 / N2 / N3** | Strates de couverture du Programme (public · institutionnel · secret) | — | voir [Topologie corporatiste](#topologie-corporatiste) |
+
+**Lexique structurel** (concepts non chiffrés)
+
+| Terme | Sens | Référence |
+|---|---|---|
+| **NODE** | Unité narrative atomique (1 scène ou 1 sous-arc) | `nodes/*.md` |
+| **FIN-A à FIN-I** | 9 fins canoniques | `history.md` ch. 9 |
+| **N1 / N2 / N3** | Strates de couverture du Programme (public · institutionnel · secret) | [Topologie corporatiste](#topologie-corporatiste) |
+| **Tick** <!-- #18 --> | Unité de décompte des countdowns = 1 NODE narratif consommé (pas 1 jour in-game ; un même jour peut contenir plusieurs NODEs et donc plusieurs ticks) | `CountdownManager` |
+| **Trigger** <!-- #26 --> | Événement marqueur qui se déclenche puis se grave (one-shot). Deux familles : *triggers externes* (Stratom déploie, Witness exige) comptés FIN-A ; *triggers internes* (5 marqueurs de bascule Margot vers Julien) comptés FIN-I | `GameStateManager.log_decisions` |
+| **Pool romance** | Ensemble des 8 PNJ accessibles en relation affective ambiguë. *Distinct du pool FIN-E* : être au pool romance ≠ résoudre en FIN-E (cf. Emma : pool oui, FIN-E non) <!-- #17 --> | `A2-04` |
 
 <!-- #3 : système Tier explicité -->
 ### Système Tier (poids narratif PNJ)
@@ -99,14 +111,14 @@ Qui des 8 résidents sait que l'immeuble est le laboratoire du Programme Nexus S
 |---|---|---|
 | Emma | **Sait** | Position interne Memorize, a alerté Margot |
 | Léo | **Sait partiellement** | Sait que Memorize prépare *quelque chose* pour Emma, protège sans tout savoir |
-| Marine | Ne sait pas | Trop accaparée par audit + dette |
-| Thomas | Soupçonne (« on est déjà filmés 24/7 ») | Lucidité résignée sans accès |
+| Marine | Évite activement | Le mot « Programme » la tétanise — elle change de pièce. Évitement compatible avec le soupçon de Thomas qu'elle refuse d'entendre <!-- #23 --> |
+| Thomas | Soupçonne (« on est déjà filmés 24/7 ») | Lucidité résignée sans accès — n'insiste pas auprès de Marine par épuisement |
 | Sofia | **Sait** | Département éthique Nexus, posture critique interne |
 | Alex | **Sait** (acteur) | Taupe Stratom, altère les bio-flux |
 | Camille | **Sait** (acteur) | Profileuse Stratom, exploite |
 | Frank | **Sait** (exécutant) | Mission canon : évaluer Margot pour Stratom |
 
-> *4 sachants pleins, 2 partiels, 2 ignorants.* Toute scène doit respecter cette grille : un sachant ne peut être surpris par N3, un ignorant ne peut le décrire spontanément.
+> *4 sachants pleins, 1 partiel (Léo), 1 soupçonneux (Thomas), 1 évitant (Marine), 0 ignorant total.* Toute scène doit respecter cette grille : un sachant ne peut être surpris par N3, Marine ne peut pas le décrire spontanément (elle change de sujet), Thomas peut formuler des intuitions vagues mais jamais nommer le Programme. <!-- #23 : matrice rectifiée -->
 
 ### Statut canon des 8 résidents — agents importants
 
@@ -119,7 +131,7 @@ Les 8 résidents sont des **agents importants avec responsabilités significativ
 #### Emma Castellane · MEMORIZE · 28 ans · femme · Tier 1
 *La cousine tiraillée*. **Cousine germaine de Margot — éloignement vécu** : branches familiales coupées par brouille ancienne dans leur enfance, peu de souvenirs partagés robustes, reconnexion adulte tardive dont Julien (ex de Margot) fut le catalyseur. L'appel d'Emma à Saint-Michel = réparation de la brouille. Loyale au système qui l'emploie, coupable de ce qu'il fait. C'est elle qui a fait venir Margot — l'aide *« avant d'en avoir le courage de partir »*. **Power Tags** : accès flux Memorize, connaissance interne, liens familiaux activables. **Couple** : Emma × Léo (intime, acté).
 
-#### Léo Mars · MEMORIZE · ~30 ans · homme · Tier 2
+#### Léo Mars · MEMORIZE · 30 ans · homme · Tier 2 <!-- #20 : âge tranché -->
 *Le saboteur silencieux*. **Agenda à trois couches** : (a) **surface publique** = lassitude esthétique cultivée pour passer sous radar ; (b) **couche 1** = protection d'Emma à son insu (il a compris ce que Memorize prépare pour sa cousine et sabote pour la couvrir) ; (c) **couche 2** = il monte aussi un coup structuré sur les flux vidéo Memorize, qu'il *justifie* par la protection d'Emma mais qui le sert lui-même. Le couple Emma/Léo gagne ainsi une asymétrie canon : elle aime ; il aime + il protège + il opère. Couche révélée selon EV + relation Léo. **Couple** : Emma × Léo.
 
 #### Marine Dubois · KAIZEN · 26 ans · femme · Tier 2
@@ -137,7 +149,7 @@ Les 8 résidents sont des **agents importants avec responsabilités significativ
 #### Camille Armand · STRATOM · 32 ans · femme · Tier 2
 *La profileuse*. Voix chaleureuse, fausse intimité, profilage psychologique en temps réel. Contrôle de la pièce par la voix. **Power Tag** : réseau Stratom. **Caractérisation romance** : *dark cogni-affectif* (manipulation, jamais physique — le « dark » est dans l'asymétrie d'information et les mots qui déstabilisent ; aucune emprise corporelle). **Couple** : Camille × Frank (glacial).
 
-#### Frank Désière · STRATOM · ~40 ans · homme · Tier 1
+#### Frank Désière · STRATOM · 42 ans · homme · Tier 1 <!-- #20 : âge tranché -->
 *Le test*. Ex-opératif. Cicatrices visibles, parle peu, observe long. **Verdict en cours** : sa mission canon est d'**évaluer Margot pour Stratom** — décider si elle est menace à neutraliser ou ressource à retourner. Countdown Équipe Nettoyage (14 ticks) recule via tests d'intégrité réussis auprès de lui. **Couple** : Camille × Frank.
 
 ---
@@ -156,7 +168,7 @@ Cf. [Glossaire](#glossaire) pour la définition de chaque sigle. Détail techniq
 | **Surveillance** | 0-100 | Seuils 25 (HUD) / 50 (alerte) / 75 (cinematic) / 90 / 100 (game over) |
 | **Mirror** | 0-100 | Seuils 30 (flashback) / 60 (hésitation) / 90 (option verrouillée) / 100 (game over) |
 | **Réputation × 8 factions** | -100 à +100 | stratom · marine · presse · police · activistes · memorize · nexus · kaizen |
-| **Relations × 17 PNJ** | -100 à +100 | 9 paliers visibles (Méfiance → Intime) |
+| **Relations × 17 PNJ** | -100 à +100 | 9 paliers visibles (Méfiance → Intime). *Décomposition des 17 : 8 résidents Saint-Michel + 9 PNJ Tier 1-2 hors-immeuble (Emma-cousine externes, contact Witness, contact activistes, contact police, etc. — détail dans `pnjs-secondaires.md`)* <!-- #19 --> |
 | **Countdowns** | ticks ↓ | `equipe_nettoyage` (14) · `audit_marine` (15) |
 
 ### Stakes joueur
@@ -223,7 +235,10 @@ Le NODE **A2-04** est le **point d'entrée romance** (un seul arc par run, premi
 Confrontation avec Camille (retourner le profilage ?). Verdict de Frank (mission Stratom : Margot menace ou ressource ?). Tentative d'exposition partielle. Stratom déploie. Emma craque sous pression. Crédit solidaire menace. Point de bascule moral de Margot.
 
 ### A4 — Acte IV : Résolution
-Convergence vers une des 9 fins selon ratio EV/MS/PD/Mirror/Surveillance + flags.
+<!-- #25 : section étoffée pour parité avec A1/A2/A3 -->
+Convergence vers une des 9 fins selon ratio EV/MS/PD/Mirror/Surveillance + flags. La résolution s'ouvre par un NODE-charnière où Margot pose le dernier choix éditorial *(que faire des rushes ?)*, puis chaque fin déroule sa coda spécifique (1-2 NODEs : conséquence immédiate + plan moral). Aucune fin n'est « bonne » au sens absolu — chacune mesure un type de coût différent. Les fins romance (FIN-E) intègrent une coda à 2 temps : sortie effective puis épilogue 6 mois après.
+
+Beats clés : A4-01 (choix éditorial final) · A4-02-A à A4-02-I (coda spécifique à la fin atteinte).
 
 ---
 
@@ -236,7 +251,7 @@ Détail complet : `history.md` lignes 660-900.
 | **FIN-A** | La Reconstruction | EV=6 · MS=6 · Emma>+50 · micros=false · 0 trigger | Documentaire intact, Margot indemne |
 | **FIN-B** | L'Exposé | EV=6 · MS≥3 · Emma>+50 · ≥1 allié | Fin principale, victoire avec coût |
 | **FIN-C** | Le Pacte de Sang | EV=6 · Emma sacrifiée · MS=2-4 | Vérité au prix d'Emma |
-| **FIN-D** | L'Alliance Corporate | EV=4-5 · deal corpo · Sofia/Léo/Emma>+60 | Compromis politique, variantes Nexus/Memorge |
+| **FIN-D** | L'Alliance Corporate | EV=4-5 · deal corpo · Sofia/Léo/Emma>+60 | Compromis politique, variantes Nexus/Memorize <!-- #16 --> |
 | **FIN-E** | La Romance comme Sortie | EV=3-5 · romance active · relation PNJ ≥+60 | Voir variantes ci-dessous |
 | **FIN-F** | Les Mains Propres | EV=4-5 · MS≥5 · micros=false · mains_propres=true | Intégrité, victoire partielle |
 | **FIN-G** | Le Silence | EV<4 · Witness vendu · toutes relations<+40 | Inaction comme choix |
@@ -264,23 +279,29 @@ Détail complet : `history.md` lignes 660-900.
 
 ## Topologie corporatiste
 
-<!-- #10 : diagramme augmenté avec double appartenance Alex et flèche autorité Stratom -->
+<!-- #10 + #21 : diagramme augmenté avec double appartenance Alex, réaligné proprement -->
 
 ```
-                ┌─────────────────────┐
-                │    STRATOM CORP     │  ← bras armé + autorité de
-                │  (couvre les 4)     │     dernière instance
-                └──────────┬──────────┘
-                           │
-        ┌──────┬───────────┼──────────┬──────┐
-        ▼      ▼           ▼          ▼      ▼
-    MEMORIZE  KAIZEN     NEXUS              STRATOM
-     bleu    orange      vert                rouge
-     Emma ×  Marine ×    Sofia × ────┐       Camille ×
-      Léo    Thomas      Alex ──taupe┼───►  Frank
-                                     │
-                                     └── Alex : Nexus public,
-                                         Stratom réel
+                  ┌────────────────────────┐
+                  │    STRATOM CORP        │  bras armé +
+                  │ (autorité de dernière  │  autorité ultime
+                  │      instance)         │  sur les 4 corpos
+                  └────────────┬───────────┘
+                               │
+            ┌──────────┬───────┴───────┬──────────┐
+            ▼          ▼               ▼          ▼
+        MEMORIZE    KAIZEN          NEXUS      STRATOM
+         (bleu)     (orange)        (vert)     (rouge)
+            │          │               │          │
+        Emma ────  Marine ────    Sofia ────  Camille
+         ×           ×               ×           ×
+        Léo        Thomas          Alex* ──┐    Frank
+                                           │
+                                           ▼
+                                     taupe Stratom
+                                  (* Alex : Nexus public,
+                                     Stratom réel ; transparent
+                                     avec Sofia, opaque ailleurs)
 ```
 
 ### Statut canon du rassemblement
@@ -392,8 +413,7 @@ Rivales par essence, convergées par Nexus Social. Chaque corpo apporte une briq
 
 | Mémoire interne | Rôle |
 |---|---|
-| `internal/architecture.md` | Conventions · 14 autoloads · pipeline · structure NODE |
-| `internal/api-cheatsheet.md` | Syntaxe complète DialogicBridge (10 dispatchers, exemples) |
+| `internal/api-cheatsheet.md` | Syntaxe complète DialogicBridge (10 dispatchers, exemples) |<!-- #24 : architecture.md retiré ici (déjà dans la table Documents canon ci-dessus) -->
 | `internal/code-state.md` | Snapshot du code Godot (managers, scripts) |
 | `internal/design-rules/sofia-kessler-caracterisation.md` | Règles d'écriture spécifiques Sofia (trans · vigilante éthique · couple Alex) |
 | `internal/design-rules/margot-terrain-neutre.md` | Règle centrale : défaut sans choix = PNJ mènent. Mirror = instrumentalisation subie |
@@ -418,4 +438,4 @@ Rivales par essence, convergées par Nexus Social. Chaque corpo apporte une briq
 
 ---
 
-*Overview v2 construit le 2026-05-21. Prochaine étape : `arc-spec` sur les arcs A2-romance Emma/Alex/Léo (3 à brainstormer) puis A3.*
+*Overview v3 (upgrade 2026-05-21). Prochaine étape : `arc-spec` sur les arcs A2-romance Emma/Alex/Léo (3 à brainstormer) puis A3.*
