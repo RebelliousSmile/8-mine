@@ -9,11 +9,16 @@ const VALEUR_MIN := -100
 const VALEUR_MAX := 100
 
 const FACTION_DEFINITIONS := {
+	# --- Existantes (Prompt 4a) -------------------------------------------
 	"stratom":    { "label": "Stratom Corp",        "init": 0  },
 	"marine":     { "label": "Marine Nationale",    "init": 0  },
 	"presse":     { "label": "Presse indépendante", "init": 10 },
 	"police":     { "label": "Police judiciaire",   "init": 0  },
 	"activistes": { "label": "Cellule activiste",   "init": 5  },
+	# --- 8-MINE corpos du programme coliving (PRO-01 + suite) -------------
+	"memorize":   { "label": "Memorize Corp",       "init": 0  },
+	"nexus":      { "label": "Nexus Biotech",       "init": 0  },
+	"kaizen":     { "label": "Kaizen Corp",         "init": 0  },
 }
 
 ## Bornes inférieures de chaque palier. La valeur testée tombe dans

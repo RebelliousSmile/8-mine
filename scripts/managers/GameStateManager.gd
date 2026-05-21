@@ -19,15 +19,23 @@ signal flag_modifie(cle: String, ancienne_valeur: Variant, nouvelle_valeur: Vari
 signal decision_enregistree(decision: Dictionary)
 signal chapitre_change(ancien: String, nouveau: String)
 signal personal_danger_changed(ancien: int, nouveau: int)
-signal evidence_value_changed(ancien: int, nouveau: int)
+signal evidence_collected_changed(ancien: int, nouveau: int)
+signal mental_stability_changed(ancien: int, nouveau: int)
 
 ## Variables canon 8-MINE exposées par GameStateManager :
-## - personal_danger (PD) : incidents où Margot a été repérée
-## - evidence_value  (EV) : valeur cumulée des preuves accumulées
-## - mirror_status   (MS) : déléguée à MirrorStatusManager (autoload séparé)
-##                          accessible via get_mirror_status() ci-dessous.
-var personal_danger: int = 0 : set = _set_personal_danger
-var evidence_value: int = 0  : set = _set_evidence_value
+## - personal_danger    (PD) : incidents où Margot a été repérée
+## - evidence_collected (EV) : valeur cumulée des preuves accumulées
+## - mental_stability   (0-6) : état narratif (colorie dialogues, débloque
+##                              options, détermine fins). Distinct de
+##                              MirrorStatusManager (mécanique de game over).
+## - mirror_status      (MS) : déléguée à MirrorStatusManager (autoload séparé)
+##                             accessible via get_mirror_status() ci-dessous.
+const MENTAL_STABILITY_MIN := 0
+const MENTAL_STABILITY_MAX := 6
+
+var personal_danger: int = 0     : set = _set_personal_danger
+var evidence_collected: int = 0  : set = _set_evidence_collected
+var mental_stability: int = 0    : set = _set_mental_stability
 
 var _flags: Dictionary = {}
 var _decisions: Array = []   ## Liste de Dictionary { id, libelle, timestamp, contexte }
@@ -41,11 +49,18 @@ func _set_personal_danger(nouveau: int) -> void:
 		personal_danger_changed.emit(ancien, personal_danger)
 
 
-func _set_evidence_value(nouveau: int) -> void:
-	var ancien := evidence_value
-	evidence_value = maxi(0, nouveau)
-	if evidence_value != ancien:
-		evidence_value_changed.emit(ancien, evidence_value)
+func _set_evidence_collected(nouveau: int) -> void:
+	var ancien := evidence_collected
+	evidence_collected = maxi(0, nouveau)
+	if evidence_collected != ancien:
+		evidence_collected_changed.emit(ancien, evidence_collected)
+
+
+func _set_mental_stability(nouveau: int) -> void:
+	var ancien := mental_stability
+	mental_stability = clampi(nouveau, MENTAL_STABILITY_MIN, MENTAL_STABILITY_MAX)
+	if mental_stability != ancien:
+		mental_stability_changed.emit(ancien, mental_stability)
 
 
 ## Proxy vers MirrorStatusManager pour les consommateurs qui pensent
@@ -140,7 +155,8 @@ func collecter_etat() -> Dictionary:
 		"decisions": _decisions.duplicate(true),
 		"chapitre": _chapitre,
 		"personal_danger": personal_danger,
-		"evidence_value": evidence_value,
+		"evidence_collected": evidence_collected,
+		"mental_stability": mental_stability,
 	}
 
 
@@ -148,7 +164,10 @@ func appliquer_etat(etat: Dictionary) -> void:
 	_flags = etat.get("flags", {}).duplicate(true)
 	_decisions = etat.get("decisions", []).duplicate(true)
 	personal_danger = int(etat.get("personal_danger", 0))
-	evidence_value = int(etat.get("evidence_value", 0))
+	# Migration douce : ancien nom "evidence_value" → "evidence_collected"
+	evidence_collected = int(etat.get("evidence_collected",
+		etat.get("evidence_value", 0)))
+	mental_stability = int(etat.get("mental_stability", 0))
 	var nouveau_chap: String = etat.get("chapitre", "")
 	if nouveau_chap != _chapitre:
 		var ancien := _chapitre
@@ -173,7 +192,8 @@ func reset_all_for_new_game() -> void:
 	_decisions.clear()
 	_chapitre = ""
 	personal_danger = 0
-	evidence_value = 0
+	evidence_collected = 0
+	mental_stability = 0
 
 
 # --- Pont Dialogic ---------------------------------------------------------

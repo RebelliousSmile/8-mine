@@ -30,16 +30,42 @@ const SEUILS := [
 	[85,   "intime"],
 ]
 
+## 9 PNJ canon hérités du Prompt 4a (thriller externe à la tour) +
+## 8 résidents 8-MINE (les 4 corpos × 2 employés du programme coliving).
+##
+## Note collision : "kaizen" est ici un PERSONNAGE (Prompt 4a, faction
+## marine). Dans le brief 8-MINE, KAIZEN est aussi un NOM DE CORPO.
+## Les deux coexistent dans des dictionnaires distincts (NPC_DEFINITIONS
+## vs FACTION_DEFINITIONS), pas de conflit technique, mais on documente
+## ici l'ambiguïté pour quand il faudra renommer le PNJ.
+##
+## Note collision "marine" : faction militaire (Prompt 4a) ET prénom
+## de résidente future (8-MINE A1-03). Idem, pas de conflit technique
+## (NPC_DEFINITIONS["marine"] vs FACTION_DEFINITIONS["marine"]) mais
+## affichage potentiellement confus.
 const NPC_DEFINITIONS := {
-	"sara":   { "label": "Sara",   "faction": "presse",     "init": 0   },
-	"kaizen": { "label": "Kaizen", "faction": "marine",     "init": -10 },
-	"lior":   { "label": "Lior",   "faction": "activistes", "init": 5   },
-	"marl":   { "label": "Marl",   "faction": "stratom",    "init": 0   },
-	"tess":   { "label": "Tess",   "faction": "police",     "init": 0   },
-	"viktor": { "label": "Viktor", "faction": "stratom",    "init": -20 },
-	"mira":   { "label": "Mira",   "faction": "presse",     "init": 15  },
-	"aslan":  { "label": "Aslan",  "faction": "activistes", "init": 0   },
-	"nadia":  { "label": "Nadia",  "faction": "marine",     "init": 0   },
+	# --- Prompt 4a (rester compatibles) -----------------------------------
+	"sara":    { "label": "Sara",    "faction": "presse",     "init": 0   },
+	"kaizen":  { "label": "Kaizen",  "faction": "marine",     "init": -10 },
+	"lior":    { "label": "Lior",    "faction": "activistes", "init": 5   },
+	"marl":    { "label": "Marl",    "faction": "stratom",    "init": 0   },
+	"tess":    { "label": "Tess",    "faction": "police",     "init": 0   },
+	"viktor":  { "label": "Viktor",  "faction": "stratom",    "init": -20 },
+	"mira":    { "label": "Mira",    "faction": "presse",     "init": 15  },
+	"aslan":   { "label": "Aslan",   "faction": "activistes", "init": 0   },
+	"nadia":   { "label": "Nadia",   "faction": "marine",     "init": 0   },
+	# --- 8-MINE résidents (introduits PRO-01 + A1-03) ---------------------
+	# 8 résidents = 4 corpos × 2 employés.
+	# stratom est partagé avec les externes Prompt 4a (viktor/marl).
+	"emma":    { "label": "Emma",    "faction": "memorize",   "init": 20  },
+	"frank":   { "label": "Frank",   "faction": "stratom",    "init": 0   },
+	"sofia":   { "label": "Sofia",   "faction": "nexus",      "init": 0   },
+	# --- Résidents nommés au brief mais introduits à A1-03 ----------------
+	"marine":  { "label": "Marine",  "faction": "memorize",   "init": 0   },
+	"thomas":  { "label": "Thomas",  "faction": "stratom",    "init": 0   },
+	"leo":     { "label": "Léo",     "faction": "kaizen",     "init": 0   },
+	"camille": { "label": "Camille", "faction": "kaizen",     "init": 0   },
+	"alex":    { "label": "Alex",    "faction": "nexus",      "init": 0   },
 }
 
 var _relations: Dictionary = {}       ## { "alex": 25, "sam": -12, ... }

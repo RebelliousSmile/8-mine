@@ -1,9 +1,14 @@
 extends "res://tests/helpers/test_environment.gd"
 
 
-func test_npc_definitions_contient_9_pnjs() -> void:
-	assert_eq(RelationManager.NPC_DEFINITIONS.size(), 9,
-		"NPC_DEFINITIONS doit contenir les 9 PNJs 8-MINE")
+func test_npc_definitions_contient_9_pnjs_prompt4a() -> void:
+	# Les 9 PNJ canon du Prompt 4a doivent toujours être présents
+	# (extension à 17 incluant les résidents 8-MINE — voir
+	# test_relation_8mine_residents.gd).
+	for id in ["sara", "kaizen", "lior", "marl", "tess",
+			"viktor", "mira", "aslan", "nadia"]:
+		assert_true(RelationManager.NPC_DEFINITIONS.has(id),
+			"PNJ Prompt 4a '%s' manquant" % id)
 
 
 func test_npc_definitions_ids_attendus() -> void:

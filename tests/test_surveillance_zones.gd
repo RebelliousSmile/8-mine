@@ -81,23 +81,25 @@ func test_personal_danger_setter_emet_signal() -> void:
 		GameStateManager, "personal_danger_changed", [0, 3])
 
 
-func test_evidence_value_clamp_zero() -> void:
+func test_evidence_collected_clamp_zero() -> void:
 	GameStateManager.reset_all_for_new_game()
-	GameStateManager.evidence_value = -10
-	assert_eq(GameStateManager.evidence_value, 0)
+	GameStateManager.evidence_collected = -10
+	assert_eq(GameStateManager.evidence_collected, 0)
 
 
-func test_save_load_inclut_PD_et_EV() -> void:
+func test_save_load_inclut_PD_EV_MS() -> void:
 	const SLOT := 2
 	SaveManager.effacer_slot(SLOT)
 	SaveManager.new_game()
 	GameStateManager.personal_danger = 4
-	GameStateManager.evidence_value = 25
+	GameStateManager.evidence_collected = 25
+	GameStateManager.mental_stability = 3
 	SaveManager.sauvegarder(SLOT)
 	SaveManager.new_game()
 	SaveManager.charger(SLOT)
 	assert_eq(GameStateManager.personal_danger, 4)
-	assert_eq(GameStateManager.evidence_value, 25)
+	assert_eq(GameStateManager.evidence_collected, 25)
+	assert_eq(GameStateManager.mental_stability, 3)
 	SaveManager.effacer_slot(SLOT)
 
 

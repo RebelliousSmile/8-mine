@@ -197,7 +197,8 @@ func _appliquer_etat_global(etat: Dictionary) -> void:
 			"_inline_":
 				# On passe l'etat complet : GameStateManager.load_state
 				# pioche les clés qu'il connaît (flags, decisions,
-				# chapitre, personal_danger, evidence_value...).
+				# chapitre, personal_danger, evidence_collected,
+				# mental_stability...).
 				node.call(charge_method, etat)
 			"_inline_lieu_":
 				node.call(charge_method, {
