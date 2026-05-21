@@ -1,4 +1,4 @@
-<!-- v3 (upgrade 2026-05-21 · suggestions #1-#26 appliquées) -->
+<!-- v4 (upgrade 2026-05-21 · suggestions #1-#36 appliquées) -->
 # 8-MINE — Overview projet
 
 > Synthèse macroscopique. Source de vérité pour `arc-spec`.
@@ -60,6 +60,7 @@
 | **Tick** <!-- #18 --> | Unité de décompte des countdowns = 1 NODE narratif consommé (pas 1 jour in-game ; un même jour peut contenir plusieurs NODEs et donc plusieurs ticks) | `CountdownManager` |
 | **Trigger** <!-- #26 --> | Événement marqueur qui se déclenche puis se grave (one-shot). Deux familles : *triggers externes* (Stratom déploie, Witness exige) comptés FIN-A ; *triggers internes* (5 marqueurs de bascule Margot vers Julien) comptés FIN-I | `GameStateManager.log_decisions` |
 | **Pool romance** | Ensemble des 8 PNJ accessibles en relation affective ambiguë. *Distinct du pool FIN-E* : être au pool romance ≠ résoudre en FIN-E (cf. Emma : pool oui, FIN-E non) <!-- #17 --> | `A2-04` |
+| **Nommage NODE** <!-- #33 --> | Convention `<ACTE>-<NUMERO>[-<VARIANTE>]` : `PRO-01`, `A1-03`, `A2-04`, `A4-02-A` (la lettre finale ∈ {A..I} indexe la fin atteinte). Les NODE-variantes par fin sont les seuls à porter un 3ᵉ segment | `nodes/*.md` |
 
 <!-- #3 : système Tier explicité -->
 ### Système Tier (poids narratif PNJ)
@@ -168,7 +169,7 @@ Cf. [Glossaire](#glossaire) pour la définition de chaque sigle. Détail techniq
 | **Surveillance** | 0-100 | Seuils 25 (HUD) / 50 (alerte) / 75 (cinematic) / 90 / 100 (game over) |
 | **Mirror** | 0-100 | Seuils 30 (flashback) / 60 (hésitation) / 90 (option verrouillée) / 100 (game over) |
 | **Réputation × 8 factions** | -100 à +100 | stratom · marine · presse · police · activistes · memorize · nexus · kaizen |
-| **Relations × 17 PNJ** | -100 à +100 | 9 paliers visibles (Méfiance → Intime). *Décomposition des 17 : 8 résidents Saint-Michel + 9 PNJ Tier 1-2 hors-immeuble (Emma-cousine externes, contact Witness, contact activistes, contact police, etc. — détail dans `pnjs-secondaires.md`)* <!-- #19 --> |
+| **Relations × 17 PNJ** | -100 à +100 | 9 paliers visibles (Méfiance → Intime). *Décomposition des 17 : 8 résidents Saint-Michel + 9 PNJ Tier 1-2 hors-immeuble (famille de Margot hors Saint-Michel, contact Witness, contact activistes, contact police, etc. — détail dans `pnjs-secondaires.md`)* <!-- #19 + #35 --> |
 | **Countdowns** | ticks ↓ | `equipe_nettoyage` (14) · `audit_marine` (15) |
 
 ### Stakes joueur
@@ -197,8 +198,25 @@ Chaque faille découverte chez un couple propose un usage :
 
 Référence détaillée : `history.md`.
 
+<!-- #27 : section temporalité -->
+### Temporalité interne
+
+Le séjour de Margot dure **3 mois in-game** = **~30 ticks** (1 tick = 1 NODE consommé, cf. glossaire) répartis approximativement :
+
+| Acte | Ticks budgetés | Densité narrative |
+|---|---|---|
+| CP | 0 (hors temps) | Création de personnage, pas de consommation tick |
+| PRO | 2 | 2 NODEs cadrage |
+| A1 | 6 | Installation, 1 NODE par séquence |
+| A2 | 10 | Romance + pivot, le plus dense en branches |
+| A3 | 8 | Confrontation, choix lourds |
+| A4 | 4 | Résolution + coda |
+| **Total** | **~30** | — |
+
+Les countdowns `audit_marine` (15) et `equipe_nettoyage` (14) sont calibrés pour pouvoir s'enclencher sur la moitié + d'un run typique (15 ticks ≈ fin A2 / début A3). Un run trop rapide (joueur qui esquive systématiquement) peut éviter le déclenchement ; un run trop lent (joueur qui explore en boucle) le subit certainement.
+
 ### CP — Création de personnage
-Un seul nœud. Choix de **motivation de départ** (4 options : carrière, relations, militante, argent) qui colorie l'ensemble du dialogue. Sortie : `FLAG_MOTIVATION ∈ {carriere, relations, militante, argent}`.
+Un seul nœud. Choix de **motivation de départ** (4 options : carrière, relations, militantisme, argent) qui colorie l'ensemble du dialogue. Sortie : `FLAG_MOTIVATION ∈ {carriere, relations, militantisme, argent}`. <!-- #29 : valeur normalisée en substantif snake_case -->
 
 ### PRO — Prologue
 - **PRO-01** Arrivée à Saint-Michel *(scène point-and-click implémentée)*
@@ -209,10 +227,12 @@ Sortie prologue : valeurs initiales `MS=3 · PD=0 · EV=0`, countdowns activés,
 ### A1 — Acte I : Installation et collecte
 Six séquences canoniques (cf. `history.md` ch. 1-7). Margot s'installe, observe, collecte premières preuves. Alliance avec Léo (flux vidéo). Premier contact décisif. Alex commence à se révéler.
 
-Beats clés : A1-01 (confrontation Emma/Léo) · A1-03 (dîner d'arrivée) · A1-05 (nuit d'écoute) · A2-01 (rencontre Camille).
+Beats clés : A1-01 (confrontation Emma/Léo) · A1-03 (dîner d'arrivée) · A1-05 (nuit d'écoute) · A1-06 (premier scan Alex). <!-- #32 : A2-01 retiré ici (appartient logiquement à A2), beat A1-06 ajouté pour parité 6 séquences -->
 
 ### A2 — Acte II : Romance optionnelle + pivot
-Le NODE **A2-04** est le **point d'entrée romance** (un seul arc par run, premier PNJ atteignant relation ≥ +30 avec le bon flag).
+Le NODE **A2-04** *(à spec — voir `nodes/A2-04.md` lorsque créé)* est le **point d'entrée romance** (un seul arc par run, premier PNJ atteignant relation ≥ +30 avec le bon flag). <!-- #31 : statut spec marqué -->
+
+Beats clés : A2-01 (rencontre Camille) · A2-04 (entrée romance) · A2-pivot (bascule moitié d'acte). <!-- #32 : A2-01 réattribué ici -->
 
 **Pool romance complet — 8 PNJ accessibles, intrusion conjugale assumée :**
 
@@ -251,7 +271,7 @@ Détail complet : `history.md` lignes 660-900.
 | **FIN-A** | La Reconstruction | EV=6 · MS=6 · Emma>+50 · micros=false · 0 trigger | Documentaire intact, Margot indemne |
 | **FIN-B** | L'Exposé | EV=6 · MS≥3 · Emma>+50 · ≥1 allié | Fin principale, victoire avec coût |
 | **FIN-C** | Le Pacte de Sang | EV=6 · Emma sacrifiée · MS=2-4 | Vérité au prix d'Emma |
-| **FIN-D** | L'Alliance Corporate | EV=4-5 · deal corpo · Sofia/Léo/Emma>+60 | Compromis politique, variantes Nexus/Memorize <!-- #16 --> |
+| **FIN-D** | L'Alliance Corporate | EV=4-5 · deal corpo · Sofia/Léo/Emma>+60 *(les 3 alliés des 2 corpos non-coercitives — Nexus + Memorize — qui peuvent négocier face à Stratom au nom de Margot)* <!-- #28 --> | Compromis politique, variantes Nexus/Memorize <!-- #16 --> |
 | **FIN-E** | La Romance comme Sortie | EV=3-5 · romance active · relation PNJ ≥+60 | Voir variantes ci-dessous |
 | **FIN-F** | Les Mains Propres | EV=4-5 · MS≥5 · micros=false · mains_propres=true | Intégrité, victoire partielle |
 | **FIN-G** | Le Silence | EV<4 · Witness vendu · toutes relations<+40 | Inaction comme choix |
@@ -396,6 +416,15 @@ Rivales par essence, convergées par Nexus Social. Chaque corpo apporte une briq
 - Dialogues écrits en `.dtl` (Dialogic 2), pilotage des managers via `DialogicBridge` (10 dispatchers : relation, flag, decision, lieu, surveillance, miroir, reputation, countdown, ms, pd).
 - Linter mécanique : `scripts/tools/dtl_linter.gd` à passer en pre-LLM-review sur tout `.dtl`.
 
+<!-- #30 : workflow d'édition de l'overview -->
+### Comment éditer ce document
+
+- **Modifications canon majeures** (nouveau PNJ Tier 1-2, nouvelle FIN, nouvelle règle de design) : passage obligatoire par session `brainstorm` + acceptation `narrative` avant de toucher au fichier.
+- **Modifications canon mineures** (clarif, dédup, typo, exemple supplémentaire) : édition directe + commit.
+- **Bump de version** : incrémenter le commentaire `<!-- vN -->` en tête de fichier à chaque commit qui ajoute/modifie une suggestion structurelle (les fixes typo seuls ne bumpent pas).
+- **Archive threads tranchés** : alimenter le bloc d'archive en bas dès qu'un thread ouvert est tranché — ne jamais le supprimer (mémoire des décisions canon).
+- **Source d'autorité en cas de conflit** : `bible-jeu.md` > `history.md` > overview > arc-spec. Si une contradiction apparaît, remonter et fixer la source la plus haute.
+
 ---
 
 ## Liens canon
@@ -431,11 +460,13 @@ Rivales par essence, convergées par Nexus Social. Chaque corpo apporte une briq
 - ~~Léo — agenda caché précis~~ → **hybride à 3 couches** : esthétique publique / protection Emma / coup personnel justifié. Cf. fiche Léo.
 - ~~Alex — condition de retournement contre Stratom~~ → **acte de couple** (Sofia & Alex ensemble) ; branche trahison opt-in à point de bascule. Cf. fiche Alex.
 - ~~Margot — orientation/genre~~ → **inférée par défaut, jamais thématisée** dans CP. Pool 8 PNJ reste accessible. Cohérent avec `ExProfileManager` (ex de tout genre).
-- ~~Margot — âge~~ → **32 ans** (tranché upgrade v2).
+- ~~Margot — âge~~ → **32 ans**. <!-- #36 : mention meta « upgrade v2 » retirée -->
+- ~~Léo — âge~~ → **30 ans**. <!-- #34 -->
+- ~~Frank — âge~~ → **42 ans**. <!-- #34 -->
 - ~~Emma — degré de cousinage et histoire commune~~ → **germaines + éloignement vécu** (brouille familiale ancienne, peu de souvenirs partagés, reconnexion adulte tardive via Julien). A2-romance-emma = **fusion-confusion non consommée**. Cf. fiche Emma + `bible-jeu.md § 6`.
 - ~~Pool A2-romance — statut de jeu~~ → **tensions affectives ambiguës, pas drague**. Initiative variable, motivation variable, aboutissement non garanti.
-- ~~Variantes FIN-E~~ → **5 canon + 2 conditionnelles (Léo, Alex opt-in) + Emma exclue** (tranché upgrade v2).
+- ~~Variantes FIN-E~~ → **5 canon + 2 conditionnelles (Léo, Alex opt-in) + Emma exclue**. <!-- #36 : mention meta « upgrade v2 » retirée -->
 
 ---
 
-*Overview v3 (upgrade 2026-05-21). Prochaine étape : `arc-spec` sur les arcs A2-romance Emma/Alex/Léo (3 à brainstormer) puis A3.*
+*Overview v4 (upgrade 2026-05-21). Prochaine étape : `arc-spec` sur les arcs A2-romance Emma/Alex/Léo (3 à brainstormer) puis A3.*
