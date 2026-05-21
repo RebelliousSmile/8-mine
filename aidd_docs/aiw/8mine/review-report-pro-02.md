@@ -163,8 +163,8 @@ en MS/PD). Le coût d'ajout des 2 dispatchers est ~30min ; le coût de découvri
 ce manque après écriture de 20 timelines serait massif.
 
 **Validation du pipeline** : ✅
-- Stage 4 (`03-write-dtl`) produit un `.dtl` lintable.
-- Stage 5 (`04-review-persona`) détecte ce que le linter rate.
+- Stage 4 (`write-dtl`) produit un `.dtl` lintable.
+- Stage 5 (`review-persona`) détecte ce que le linter rate.
 - La divergence Margot/Dramaturge > 4 points est bien un signal de faille
   structurelle, pas de désaccord de goût.
 

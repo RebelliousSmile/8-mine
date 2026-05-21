@@ -1,8 +1,8 @@
 ---
-name: 02-decompose-arc
-description: Stage 3 du pipeline 8-MINE. Décompose un arc-spec en specs NODE individuelles.
+name: decompose-arc
+description: Décompose un arc-spec en specs NODE individuelles avec table Transitions.
 argument-hint: <chemin arc-spec.md>
-version: 1.0
+version: 1.1
 ---
 
 # Decompose Arc — Arc développé → Specs NODE
@@ -11,7 +11,7 @@ version: 1.0
 
 Transformer un `arc-spec.md` en N fichiers `nodes/NN.md`, un par NODE, conformes au
 gabarit utilisé pour PRO-01 et PRO-02. Chaque NODE devient une unité écrivable
-indépendamment en Stage 4.
+indépendamment dans `write-dtl`.
 
 ## Context
 
@@ -154,7 +154,7 @@ ou
 
 #### 2.8 — Notes de mise en scène
 
-3-5 lignes destinées à Stage 4. Pas du dialogue ; des indications :
+3-5 lignes destinées à `write-dtl`. Pas du dialogue ; des indications :
 - Tonalité de Margot dans ce NODE
 - Rythme attendu (lent / nerveux)
 - Sous-texte à préserver
@@ -167,7 +167,7 @@ Cocher l'une des 3 cases :
 - Moyen : 1-2 choix
 - Dense : 3+ choix
 
-Cette case détermine la durée d'écriture estimée en Stage 4.
+Cette case détermine la durée d'écriture estimée.
 
 ### Step 3 — Validation croisée
 
@@ -188,7 +188,7 @@ Avant d'écrire les fichiers :
 ### Step 4 — Ordre d'écriture
 
 Produire un fichier `aidd_docs/memory/external/arcs/<ARC_ID>-order.md` qui liste les
-NODES dans l'ordre topologique (par dépendances), pour orienter le Stage 4 parallèle.
+NODES dans l'ordre topologique (par dépendances), pour orienter le écriture parallèle.
 
 ## Output
 

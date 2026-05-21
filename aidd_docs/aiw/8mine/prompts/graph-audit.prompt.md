@@ -12,13 +12,13 @@ version: 1.0
 Construire le **graphe complet** des transitions entre nodes (à partir des tables `Transitions`
 de chaque `nodes/NN.md`) et détecter les anomalies structurelles AVANT écriture ou playtest.
 
-**Complémentaire de** `00-challenge-bank` :
-- `00-challenge-bank` audite **lore ↔ code** (PNJ canon, dispatchers, factions)
+**Complémentaire de** `challenge-bank` :
+- `challenge-bank` audite **lore ↔ code** (PNJ canon, dispatchers, factions)
 - `graph-audit` audite **structure narrative** (flags croisés, branches, fins, cycles)
 
 **Quand l'invoquer** :
-- Après `02-decompose-arc` (vérifier que la décomposition tient)
-- Avant Stage 3 d'écriture (s'assurer qu'aucun node ne pointe dans le vide)
+- Après `decompose-arc` (vérifier que la décomposition tient)
+- Avant `write-dtl` (s'assurer qu'aucun node ne pointe dans le vide)
 - Après chaque `node-manage --update` ou `--retire` (cascade d'impact)
 - En continu pendant l'écriture multi-arcs
 
@@ -242,7 +242,7 @@ Les fixes passent par `node-manage --update` ou édition manuelle.
 ## Note méthodologique
 
 Le graphe global est précieux à 3 moments :
-1. **Après `02-decompose-arc`** : valider que la décomposition tient avant d'écrire
+1. **Après `decompose-arc`** : valider que la décomposition tient avant d'écrire
 2. **Après un `node-manage --retire`** : vérifier qu'aucun flag orphelin ne reste
 3. **Avant playtest** : s'assurer que les 9 fins sont toutes atteignables
 

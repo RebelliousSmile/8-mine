@@ -1,8 +1,8 @@
 ---
-name: 04-review-persona
-description: Stage 4/5 du pipeline 8-MINE. Review d'un .dtl par un persona — mode complet ou light.
+name: review-persona
+description: Review d'un .dtl par un persona — mode complet ou light (pré-review rapide).
 argument-hint: <chemin .dtl> <persona-name> [--node-spec <chemin>] [--light]
-version: 1.1
+version: 1.2
 ---
 
 # Review Persona — .dtl + spec → Verbatims + Triage
@@ -57,11 +57,11 @@ godot --headless --path . --script scripts/tools/dtl_linter.gd -- <chemin .dtl>
 ```
 
 Si `FAIL` → STOP. La review LLM est inutile sur un `.dtl` mécaniquement cassé.
-Retour à Stage 3 (`03-write-dtl --feedback`) ou correction manuelle.
+Retour à `write-dtl --feedback` ou correction manuelle.
 
 ## Modes
 
-### Mode `--light` (Stage 4a — pré-review rapide)
+### Mode `--light` (pré-review rapide)
 
 Une seule passe, un seul persona, 5-10 min :
 
@@ -72,9 +72,9 @@ Une seule passe, un seul persona, 5-10 min :
 - Triage 🟢/🟡/🔴 unique pour le `.dtl` entier
 
 Objectif : détecter rapidement une catastrophe avant la review complète (gain de temps).
-Si `--light` revient 🔴 → ne PAS lancer la review complète, repartir en Stage 3.
+Si `--light` revient 🔴 → ne PAS lancer la review complète, repartir à l'écriture (`write-dtl --feedback`).
 
-### Mode complet (défaut, Stage 4b — review matricielle)
+### Mode complet (défaut, review matricielle)
 
 Matrice complète NODE × branche × persona, format détaillé ci-dessous.
 Utilisé après un `--light` 🟢 ou 🟡, ou directement si auteur skip `--light`.
@@ -113,14 +113,14 @@ Format strict :
 
 **Faiblesse principale** : <description courte + citation>
 
-**Triage** : 🟢 OK pour review complète · 🟡 à surveiller · 🔴 retour Stage 3
+**Triage** : 🟢 OK pour review complète · 🟡 à surveiller · 🔴 retour à l'écriture (`write-dtl --feedback`)
 ```
 
 #### Step 4-L — Recommandation
 
 - 🟢 → "Lancer la review complète avec 2-3 personas (dont au moins Dramaturge)"
 - 🟡 → "Faisable mais lancer la review complète sur les branches sensibles seulement"
-- 🔴 → "Ne PAS lancer la review complète. Retour `03-write-dtl --feedback` avec : <résumé du feedback>"
+- 🔴 → "Ne PAS lancer la review complète. Retour `write-dtl --feedback` avec : <résumé du feedback>"
 
 ### Step 1 — Identifier les branches
 
@@ -169,11 +169,11 @@ faiblesses trouvées → relire ; il y en a toujours 3.
 
 Pour chaque branche, attribuer :
 
-| Triage | Critère | Action Stage 6 |
+| Triage | Critère | Action |
 |--------|---------|----------------|
 | 🟢 patchable | Tous scores ≥ 14 | `doctor.prompt.md` (patch ciblé) |
-| 🟡 structurel | Au moins un score 11-13 | rewrite local via `03-write-dtl --feedback` |
-| 🔴 systémique | Au moins un score ≤ 10 OU divergence > 4 entre personas | retour Stage 3 (revoir node-spec ou arc-spec) |
+| 🟡 structurel | Au moins un score 11-13 | rewrite local via `write-dtl --feedback` |
+| 🔴 systémique | Au moins un score ≤ 10 OU divergence > 4 entre personas | retour `arc-spec` / `decompose-arc` |
 
 ### Step 7 — Format de sortie
 
@@ -220,5 +220,5 @@ orchestrateur.
 4. **3 faiblesses minimum (mode complet)** — forcer l'avocat du diable. Mode `--light` : 1 faiblesse suffit
 5. **Triage strict** — appliquer les seuils sans indulgence
 6. **Persona ≠ auteur** — incarner le profil défini dans le YAML, pas l'opinion du LLM
-7. **Pas de réécriture** — la review constate, le rewrite est en Stage 5
+7. **Pas de réécriture** — la review constate, le rewrite est dans `doctor` ou `write-dtl --feedback`
 8. **Light = filtre, pas substitut** — un `--light` 🟢 ne dispense pas de la review complète sur les arcs sensibles

@@ -1,8 +1,8 @@
 ---
-name: 00-init-bank
-description: Stage 0a du pipeline 8-MINE. Génère bank.yml depuis aidd_docs/memory/ et lie les personas.
+name: init-bank
+description: Setup du pipeline 8-MINE. Génère bank.yml depuis aidd_docs/memory/ et scaffold overview.md si absent.
 argument-hint: [--dry-run] [--force]
-version: 1.0
+version: 1.1
 ---
 
 # Init Bank — memory/ → bank.yml
@@ -16,10 +16,10 @@ pipeline 8-MINE et les personas peuvent charger.
 **À lancer** :
 - Au setup initial du pipeline (une fois)
 - Après ajout d'un fichier canon dans `memory/external/` ou `memory/internal/`
-- Avant `00-challenge-bank` (qui audite le contenu déclaré)
+- Avant `challenge-bank` (qui audite le contenu déclaré)
 
 **À ne pas confondre avec** :
-- `00-challenge-bank` qui **audite** (lore ↔ code) sans modifier bank.yml
+- `challenge-bank` qui **audite** (lore ↔ code) sans modifier bank.yml
 - `templates/bank.yml` (AIW) qui est le template générique TTRPG, non adapté à 8-MINE
 
 ## Context
@@ -75,8 +75,8 @@ Format adapté (pas de TTRPG, pas d'ICML) :
 
 ```yaml
 # bank.yml — Registre des ressources 8-MINE
-# Généré par 00-init-bank · Audité par 00-challenge-bank
-# NE PAS ÉDITER MANUELLEMENT — relancer 00-init-bank après ajout d'un canon
+# Généré par init-bank · Audité par challenge-bank
+# NE PAS ÉDITER MANUELLEMENT — relancer init-bank après ajout d'un canon
 
 projet:
   nom: 8-MINE
@@ -84,8 +84,8 @@ projet:
   version: "0.4"  # de etat-prod.md si présent
   date_generation: "<YYYY-MM-DD>"
 
-# --- Overview projet (synthèse 400-500 lignes, source pour 01-arc-spec) ---
-# Consommé par brainstorm/upgrade (workshop) en écriture, par 01-arc-spec en lecture.
+# --- Overview projet (synthèse 400-500 lignes, source pour arc-spec) ---
+# Consommé par brainstorm/upgrade (workshop) en écriture, par arc-spec en lecture.
 overview: aidd_docs/memory/external/overview.md
 
 # --- Ressources LORE (canon narratif détaillé) ---
@@ -112,7 +112,7 @@ code:
   dialogic_bridge: autoload/DialogicBridge.gd
 
 # --- Output styles (rédactionnels) ---
-# Défaut consommé par 03-write-dtl ; variantes déclarables par node-spec.
+# Défaut consommé par write-dtl ; variantes déclarables par node-spec.
 output_styles:
   default: aidd_docs/aiw/8mine/templates/output-styles/scenario.md
   # introspection: aidd_docs/aiw/8mine/templates/output-styles/introspection.md
@@ -147,11 +147,10 @@ personas:
 
 # --- Pipeline outputs ---
 outputs:
-  pitches: aidd_docs/aiw/8mine/pitches/        # Stage 1 (auteur)
-  arc_specs: aidd_docs/memory/external/arcs/   # Stage 2
-  node_specs: aidd_docs/memory/external/nodes/ # Stage 3
-  timelines: dialogic/timelines/               # Stage 4
-  reviews: aidd_docs/aiw/8mine/reviews/        # Stage 5
+  arc_specs: aidd_docs/memory/external/arcs/   # arc-spec
+  node_specs: aidd_docs/memory/external/nodes/ # decompose-arc
+  timelines: dialogic/timelines/               # write-dtl
+  reviews: aidd_docs/aiw/8mine/reviews/        # review-persona
 ```
 
 ### Step 4 — Vérification de cohérence personas ↔ bank
@@ -187,8 +186,8 @@ Bank généré : aidd_docs/aiw/8mine/bank.yml
 1. **Le bank reflète l'état réel de `memory/`** — ne pas inventer de fichier, ne pas garder un fichier supprimé.
 2. **Source de vérité personas = leur YAML** — la section `personas:` du bank est un miroir d'audit, pas une source.
 3. **Pas de TTRPG / ICML / chapitres** — ce bank est spécialisé jeu narratif Godot.
-4. **Aucune édition manuelle** — toute modification doit passer par `00-init-bank` (régénération) ou éditer directement le YAML persona pour `reference_documents:`.
-5. **À relancer après chaque ajout canon** — un nouveau `nodes/03.md` ou un nouveau `pnjs-tertiaires.md` n'apparaît dans le bank qu'après `00-init-bank`.
+4. **Aucune édition manuelle** — toute modification doit passer par `init-bank` (régénération) ou éditer directement le YAML persona pour `reference_documents:`.
+5. **À relancer après chaque ajout canon** — un nouveau `nodes/03.md` ou un nouveau `pnjs-tertiaires.md` n'apparaît dans le bank qu'après `init-bank`.
 
 ## Note historique
 

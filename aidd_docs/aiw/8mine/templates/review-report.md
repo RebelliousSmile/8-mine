@@ -1,6 +1,6 @@
 # Review Report — `<ARC_ID>`
 
-> Sortie de Stage 5. Entrée du triage Stage 6.
+> Sortie consolidée de `review-persona`. Entrée du triage `doctor` / `write-dtl --feedback`.
 > Un rapport par arc, consolidant les personas.
 
 ---
@@ -27,7 +27,7 @@
 **Légende triage :**
 - 🟢 **Patchable** (score ≥ 14 sur les deux) → `doctor.prompt.md` (patchs ciblés)
 - 🟡 **Structurel** (un score 11-13) → rewrite local du NODE/branche
-- 🔴 **Systémique** (un score ≤ 10 ou divergence > 4) → retour Stage 3 (découpage)
+- 🔴 **Systémique** (un score ≤ 10 ou divergence > 4) → retour `arc-spec` / `decompose-arc`
 
 ---
 
@@ -64,12 +64,12 @@
 ### 🟡 Structurel (rewrite local)
 
 ```
-@aidd_docs/aiw/8mine/prompts/03-write-dtl.prompt.md aidd_docs/memory/external/nodes/02.md
+@aidd_docs/aiw/8mine/prompts/write-dtl.prompt.md aidd_docs/memory/external/nodes/02.md
   --target "PRO-02 [B]"
   --feedback "branche refus manque de tension narrative"
 ```
 
-### 🔴 Systémique (retour Stage 3)
+### 🔴 Systémique (retour `arc-spec` / `decompose-arc`)
 
 ```
 PRO-02 [D] : le choix "miroir" n'est pas justifié à ce stade.
@@ -89,7 +89,7 @@ Pour chaque branche, écart-type Margot ↔ Dramaturge :
 
 ## Plateau check
 
-Si après 1 itération de Stage 6 le triage reste majoritairement 🟡/🔴 :
+Si après 1 itération de rewrite le triage reste majoritairement 🟡/🔴 :
 - **STOP** la review automatique.
 - Demander un **playtest papier** (autorité finale).
 - Mettre l'arc en `Playtest ⏳` dans `etat-prod.md`.

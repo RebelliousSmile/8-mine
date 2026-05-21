@@ -1,7 +1,7 @@
 # NODE [`<NODE_ID>`] — `<Titre>`
 `<dialogic/timelines/<fichier>.dtl>` · `<Acte>` · Scène `<n>`
 
-> Sortie de Stage 3 (`02-decompose-arc`). Entrée du prompt `03-write-dtl`.
+> Sortie du prompt `decompose-arc`. Entrée du prompt `write-dtl`.
 > Format aligné sur `aidd_docs/memory/external/nodes/NN.md`.
 
 ---
@@ -16,7 +16,7 @@ output_style: scenario           # référence templates/output-styles/<nom>.md
 complexite: simple|moyen|dense   # 0 / 1-2 / 3+ choix
 ```
 
-**Output-style** : tonalité rédactionnelle à appliquer en Stage 4. Défaut = `scenario`.
+**Output-style** : tonalité rédactionnelle à appliquer dans `write-dtl`. Défaut = `scenario`.
 Variantes possibles si déclarées dans `templates/output-styles/` (ex : `introspection`, `action`).
 
 ---
@@ -142,4 +142,4 @@ Pour chaque entrée de "Variables à l'entrée", indiquer le node amont qui la p
 
 ## Changelog
 
-`<YYYY-MM-DD>` · création via `02-decompose-arc` depuis `<arc-spec>.md`
+`<YYYY-MM-DD>` · création via `decompose-arc` depuis `<arc-spec>.md`

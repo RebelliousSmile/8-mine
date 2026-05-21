@@ -1,8 +1,8 @@
 ---
-name: 00-challenge-bank
-description: Stage 0 du pipeline 8-MINE. Audit d'intégrité de la bank lore et des liens canon ↔ code.
+name: challenge-bank
+description: Audit d'intégrité de la bank lore et des liens canon ↔ code.
 argument-hint: [--strict] [--scope lore|code|tout]
-version: 1.0
+version: 1.1
 ---
 
 # Challenge Bank — Audit d'intégrité avant écriture
@@ -15,7 +15,7 @@ liens cassés AVANT d'écrire une timeline.
 
 **Quand l'invoquer** :
 - Après `brainstorm` / mise à jour de la pitch
-- Avant Stage 2 (`01-arc-spec`) sur un nouvel arc
+- Avant `arc-spec` sur un nouvel arc
 - Régulièrement pour signaler les dérives entre canon écrit et code implémenté
 - Après ajout d'un PNJ, d'une faction, d'un countdown, ou d'un dispatcher
 
@@ -83,7 +83,7 @@ Pour chaque catégorie, produire :
 **Cas critiques à flagger** :
 
 1. **PNJ cité par un node mais absent de `PNJ_VALIDES`** → le linter warn et le `.dtl` plantera silencieusement
-2. **Faction citée par un node mais absente de `FACTIONS_VALIDES`** → blocage Stage 4
+2. **Faction citée par un node mais absente de `FACTIONS_VALIDES`** → blocage `write-dtl`
 3. **Effet promis par un node (ex : MS+1) mais dispatcher absent de `DISPATCHERS_VALIDES`** → cause racine du verdict 🔴 PRO-02
 4. **Fin déclarée dans history.md mais aucune branche ne pose le flag de sortie** → fin orpheline
 5. **Variable utilisée dans un node mais absente de `VARIABLES_CANON` et non-flag** → warning linter
@@ -94,7 +94,7 @@ Pour chaque catégorie, produire :
 Pour chaque persona dans `8mine/personas/*.yml` :
 
 - [ ] `reference_documents:` listés existent tous sur disque
-- [ ] La `loading_strategy: from_bank_yml` est cohérente avec ce que le prompt `04-review-persona` charge
+- [ ] La `loading_strategy: from_bank_yml` est cohérente avec ce que le prompt `review-persona` charge
 - [ ] Les critères de scoring ont des poids qui somment à 100%
 
 ### Step 4 — Vérification des `deal-breakers-log`

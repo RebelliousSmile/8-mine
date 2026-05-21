@@ -13,13 +13,13 @@ Centraliser les opérations transverses sur les nodes :
 
 - **Listing** : table de bord (qui existe, qui est écrit, qui est reviewé, quel triage)
 - **Status d'un node** : détail (spec, .dtl, review, linter, transitions sortantes)
-- **Update d'un node-spec** : régénération partielle après feedback de review (Stage 5 → Stage 3 sans repartir d'`02-decompose-arc`)
+- **Update d'un node-spec** : régénération partielle après feedback de review (review → réécriture sans repartir de '`decompose-arc`)
 - **Retire** : sortir un node du jeu actif (archivage)
 
 **À ne pas confondre avec** :
-- `02-decompose-arc` qui **crée** la liste initiale de nodes depuis un arc-spec
-- `03-write-dtl` qui **écrit** le `.dtl` à partir d'un node-spec
-- `04-review-persona` qui **score** un `.dtl` écrit
+- `decompose-arc` qui **crée** la liste initiale de nodes depuis un arc-spec
+- `write-dtl` qui **écrit** le `.dtl` à partir d'un node-spec
+- `review-persona` qui **score** un `.dtl` écrit
 
 Ce prompt **ne génère pas** de propositions (pas de profusion) ; il **gère** ce qui existe. Pour de la divergence/contradiction, voir les prompts de proposition (workshop).
 
@@ -125,7 +125,7 @@ Si une donnée n'est pas trouvable (review absente, .dtl absent), afficher `—`
 
 ### Action `--update <NN> --feedback "<texte>"`
 
-Mettre à jour le node-spec `<NN>.md` en intégrant un feedback de review (typiquement Stage 5 → 🟡 structurel ou 🔴 systémique).
+Mettre à jour le node-spec `<NN>.md` en intégrant un feedback de review (typiquement review 🟡 structurel ou 🔴 systémique).
 
 **Étapes** :
 
@@ -144,7 +144,7 @@ Mettre à jour le node-spec `<NN>.md` en intégrant un feedback de review (typiq
    - <YYYY-MM-DD> · update via node-manage · raison : <résumé du feedback>
    ```
 6. Écrire le fichier patché
-7. **Ne pas toucher au `.dtl`** — l'auteur relancera `03-write-dtl <NN>` ensuite si la spec a bougé sur des points qui impactent l'écriture
+7. **Ne pas toucher au `.dtl`** — l'auteur relancera `write-dtl <NN>` ensuite si la spec a bougé sur des points qui impactent l'écriture
 
 **Confirmation obligatoire** : afficher le diff avant écriture si plus de 20 lignes touchées.
 
@@ -177,7 +177,7 @@ Aucune action sans confirmation pour `--update` et `--retire`.
 ## Rules
 
 1. **Ne pas inventer de donnée manquante** — afficher `—` ou flagger l'incohérence
-2. **Update ≠ rewrite** — ce prompt patche la spec, il ne réécrit pas le `.dtl`. Pour le `.dtl`, relancer `03-write-dtl`
+2. **Update ≠ rewrite** — ce prompt patche la spec, il ne réécrit pas le `.dtl`. Pour le `.dtl`, relancer `write-dtl`
 3. **Retire ≠ delete** — toujours archiver dans `.retired/`
 4. **Préserver les conventions** — H1, ligne 2 (filename .dtl), structure de sections. Toute dérogation = bug
 5. **Source de vérité = fichiers sur disque** — pas de cache, pas de mémoire ; relire à chaque invocation
@@ -186,16 +186,16 @@ Aucune action sans confirmation pour `--update` et `--retire`.
 
 ## Note d'intégration
 
-Ce prompt est l'**outil de pilotage** entre Stage 3 et Stage 5. Cycle typique d'usage :
+Ce prompt est l'**outil de pilotage** entre écriture et review. Cycle typique d'usage :
 
 ```
-02-decompose-arc                    → crée nodes/01.md … nodes/NN.md
+decompose-arc                    → crée nodes/01.md … nodes/NN.md
 node-manage --list                  → vérifie le set
-03-write-dtl 02.md                  → écrit pro_cellule.dtl
-04-review-persona pro_cellule.dtl dramaturge   → review 🟡
+write-dtl 02.md                  → écrit pro_cellule.dtl
+review-persona pro_cellule.dtl dramaturge   → review 🟡
 node-manage --update 02 --feedback "Branche [B] structurellement vide — ajouter un beat avant le choix"
-03-write-dtl 02.md                  → réécriture du .dtl
-04-review-persona pro_cellule.dtl dramaturge   → re-review
+write-dtl 02.md                  → réécriture du .dtl
+review-persona pro_cellule.dtl dramaturge   → re-review
 ```
 
 Pour les opérations de masse (lister tous les nodes 🔴, etc.), `--list` suffit ; pas de mode `--filter triage=🔴` prévu (trop spécifique, l'auteur grep le tableau).

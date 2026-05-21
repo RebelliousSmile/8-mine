@@ -1,8 +1,8 @@
 ---
-name: 03-write-dtl
-description: Stage 4 du pipeline 8-MINE. Génère une timeline Dialogic .dtl à partir d'une node-spec.
+name: write-dtl
+description: Génère une timeline Dialogic .dtl à partir d'une node-spec + output-style. Linter PASS obligatoire en sortie.
 argument-hint: <chemin node-spec.md> [--feedback "<correctif>"]
-version: 1.0
+version: 1.1
 ---
 
 # Write DTL — Spec NODE → Timeline Dialogic
@@ -209,7 +209,7 @@ Si linter renvoie `FAIL` :
 
 Si encore `FAIL` après 2 tentatives → STOP et reporter à l'auteur (signal probable d'un manque côté code : nouveau dispatcher à ajouter dans `DialogicBridge.gd`, nouveau PNJ dans `PNJ_VALIDES`, etc.).
 
-**Aucun `.dtl` ne sort de ce prompt en statut `FAIL`.** C'est le contrat avec Stage 5.
+**Aucun `.dtl` ne sort de ce prompt en statut `FAIL`.** C'est le contrat avec `review-persona`.
 
 ## Output
 
@@ -221,7 +221,7 @@ Si encore `FAIL` après 2 tentatives → STOP et reporter à l'auteur (signal pr
 
 1. **Output unique = .dtl** — pas de .tscn ni .gd générés
 2. **API stricte** — référence canon `api-cheatsheet.md`
-3. **Pas d'invention de variable** — toute nouvelle variable doit être ajoutée à `variables-register.md` PAR L'AUTEUR avant Stage 4
+3. **Pas d'invention de variable** — toute nouvelle variable doit être ajoutée à `variables-register.md` PAR L'AUTEUR avant `write-dtl`
 4. **Pas de tutoriel déguisé** — ne pas expliquer Néo-Paris au joueur
 5. **Sous-texte > exposition** — ce qu'on ne dit pas porte le sens
 6. **Stub .tscn = note Markdown** — pas de binaire

@@ -1,8 +1,8 @@
 ---
-name: 01-arc-spec
-description: Stage 2 du pipeline 8-MINE. Dérive un arc-spec court d'un overview projet.
+name: arc-spec
+description: Production 8-MINE. Dérive un arc-spec court d'un overview projet.
 argument-hint: <ARC_ID> [--overview <chemin>]
-version: 1.1
+version: 1.2
 ---
 
 # Arc Spec — Overview → Arc développé
@@ -11,7 +11,7 @@ version: 1.1
 
 Produire un `arc-spec.md` (3-5 pages) pour **un seul arc** (PRO, A1, A2-romance-X, A3, A4, FIN-*),
 à partir de l'**overview du projet**. Cet arc-spec sert de contrat pour le découpage en NODES
-en Stage 3. Il doit être **structuré, testable, et vérifiable par le persona Dramaturge**.
+par `decompose-arc`. Il doit être **structuré, testable, et vérifiable par le persona Dramaturge**.
 
 L'overview reste la source de vérité macroscopique ; l'arc-spec est sa déclinaison locale pour
 un arc donné.
@@ -105,7 +105,7 @@ Avant de finaliser, lister 3 risques potentiels :
 - PNJ utilisé hors de son arc personnel ?
 - Jauge poussée trop haut/bas ?
 
-Ces risques alimentent la review Dramaturge en Stage 5.
+Ces risques alimentent la review Dramaturge dans `review-persona`.
 
 ## Output
 
@@ -126,7 +126,7 @@ Avant de rendre, vérifier :
 ## Rules
 
 1. **Ne jamais inventer de variable** — toujours croiser avec `variables-register.md`
-2. **Ne pas écrire de dialogue** — c'est le rôle de Stage 4 (`03-write-dtl`)
+2. **Ne pas écrire de dialogue** — c'est le rôle de `write-dtl`
 3. **Pas de jauge "neutre"** — chaque branche doit avoir des effets concrets
 4. **Stakes joueur explicites** — si on ne peut pas dire ce qui se perd ou se gagne, le beat est faux
 5. **Output unique = arc-spec.md** — pas de .dtl, pas de .tscn à ce stade

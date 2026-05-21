@@ -1,6 +1,6 @@
 # Arc Specification — `<ARC_ID>`
 
-> Sortie de Stage 2. Entrée du prompt `02-decompose-arc`.
+> Sortie du prompt `arc-spec`. Entrée du prompt `decompose-arc`.
 > Contrat de l'arc : ce qu'il consomme, ce qu'il produit.
 
 ---
@@ -65,7 +65,7 @@ flag_strategie_double_jeu: <bool>
 | `<ARC>-02` | confrontation | dense | 3+ |
 | `<ARC>-03` | résolution | moyenne | 1-2 |
 
-## Personas concernés (pour Stage 5)
+## Personas concernés (pour `review-persona`)
 
 - **Margot (joueuse)** : ce qu'elle doit ressentir à chaque beat
 - **Dramaturge** : invariants à préserver (stakes, arc émotionnel, fins)
