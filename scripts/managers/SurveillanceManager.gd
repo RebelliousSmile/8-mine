@@ -128,7 +128,7 @@ func _set_level(nouveau: int, raison: String) -> void:
 		return
 	surveillance_changed.emit(ancien, _level, raison)
 	_check_thresholds(ancien, _level)
-	if _level >= MAX and not "_max_emitted" in _thresholds_already_crossed:
+	if _level >= MAX and not (MAX + 1) in _thresholds_already_crossed:
 		# Marqueur interne pour éviter double émission
 		_thresholds_already_crossed.append(MAX + 1)
 		surveillance_max_atteint.emit()
