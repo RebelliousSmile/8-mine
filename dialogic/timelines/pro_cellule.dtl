@@ -1,0 +1,141 @@
+# PRO-02 — La Cellule
+# Timeline Dialogic 2 textuelle (.dtl)
+# Préconditions :
+#   flag_emma_a_reveele = true (posé par PRO-01)
+# Postconditions selon choix :
+#   [A] flag_micros_poses=true · PD+1 · MS-1 · ferme FIN-A/F
+#   [B] flag_micros_poses=false · MS+1 · maintient FIN-A/F
+#   [C] flag_confrontation_emma_precoce=true
+#   [D] flag_strategie_miroir=true · PD+1
+
+# === SCÈNE 1 — Le couloir ===
+
+[signal arg="lieu:pro_couloir_residences"]
+
+_: {emma_prenom} te guide vers un couloir latéral.
+
+_: Ses doigts sur ton bras sont fermes, presque urgents.
+
+_: Vous passez devant plusieurs portes identiques. Des plaques métalliques : L. Mars. M. Dubois. T. Renard.
+
+_: Trois caméras espacées régulièrement. Pas de répit.
+
+# --- Hotspots optionnels du couloir (déclenchables via .tscn) ---
+
+margot: [i]Chacun a son nom sur la porte. Sauf la mienne. La plaque dit : Invitée Temporaire. Pas de nom. Un statut.[/i]
+
+margot: [i]Trois caméras ici. Espacement régulier. Conçu pour qu'il n'y ait nulle part où parler sans être dans le champ d'au moins deux d'entre elles.[/i]
+
+# --- Narration séquencée ---
+
+_: {emma_prenom} s'arrête devant la dernière porte. La plaque : Invitée Temporaire. Pas ton nom.
+
+_: Elle pose sa paume sur le scanner biométrique.
+
+emma: J'ai ajouté ton profil ce matin. Toi seule peux entrer.
+
+_: [i]Pause. Regard vers une caméra.[/i]
+
+emma: ...physiquement.
+
+# === SCÈNE 2 — La cellule ===
+
+[signal arg="lieu:pro_cellule"]
+
+_: La porte se referme derrière vous.
+
+_: Vingt-cinq mètres carrés. Lit simple. Bureau holographique éteint. Une kitchenette — plaque chauffante, mini-frigo, pas de four. Une fenêtre — sur un puits de lumière intérieur, pas l'extérieur.
+
+_: Et dans le coin supérieur droit : une caméra.
+
+# --- Hotspots optionnels de la cellule (commentaires internes de Margot) ---
+
+margot: [i]Objectif fixe. Couverture totale de la pièce. Il n'y a pas d'angle mort ici. Je savais que ce serait le cas. Le savoir et le voir, c'est différent.[/i]
+
+margot: [i]Une fenêtre qui donne sur l'intérieur du bâtiment. Lumière artificielle recyclée. Pas de ciel. Pas d'horizon. C'est calculé.[/i]
+
+margot: [i]Ma valise est là. Je l'ai posée sans m'en rendre compte. Réflexe. Comme si c'était chez moi. Ce n'est pas chez moi.[/i]
+
+margot: [i]Interface interne. Messagerie entre résidents. {emma_prenom} a dit que je pouvais la contacter via ça. Ce que je n'enverrai pas par là sera plus intéressant que ce que j'enverrai.[/i]
+
+margot: [i]Les micros sont là. Enveloppés dans une chemise, au fond de la valise. Je ne les ai pas encore sortis. Je ne sais pas encore si je vais le faire.[/i]
+
+margot: [i]Pas de four. Pas de couteaux. Rien qui puisse servir à autre chose qu'à manger. L'optimisation a ses détails.[/i]
+
+# --- Narration séquencée : Le message SMS ---
+
+_: L'acoustique change. La porte fermée atténue les sons. Pour la première fois depuis l'arrivée, le silence n'est pas clinique.
+
+_: {emma_prenom} vérifie rapidement la pièce. Puis se retourne vers toi. Elle lève un doigt sur ses lèvres.
+
+[portrait char=emma portrait=murmure]
+
+_: Elle sort son téléphone corporatiste. Tape rapidement. Te le montre — sans envoyer, juste affiché.
+
+_: [i]Caméra = vidéo + audio. Analyse vocale + reconnaissance émotionnelle. NE JAMAIS chuchoter (alerte immédiate). Parler normalement = 80 pour cent ignoré par les algorithmes. Douche = seul endroit audio atténué. Pas vraiment privé. Mieux que rien.[/i]
+
+_: [i]Tu peux partir. 1ère semaine sans pénalités. Dis juste que c'est pas pour toi. Je comprendrai.[/i]
+
+_: [i]Ou tu restes. Mais ils vont te tester. Frank surtout. Et si tu fais des vagues — l'équipe Stratom dans 2 semaines. Officiellement maintenance. Officieusement : ils font disparaître ce qui perturbe l'expérience.[/i]
+
+_: {emma_prenom} efface le message. Voix haute, ton léger :
+
+emma: Le dîner collectif est à 19h30 dans la Zone Commune. Facultatif mais recommandé pour ton documentaire. Tu as une heure pour t'installer.
+
+_: Elle te regarde. Attend une réaction qu'elle puisse expliquer aux caméras.
+
+margot: [i]Elle tremble légèrement. Je l'ai senti quand on s'est dit au revoir. Elle a peur pour moi. Elle a peur pour elle. Elle a fait une erreur en me faisant venir ici, et elle le sait, et elle reste quand même.[/i]
+
+# === CHOIX — Le matériel Ghost Market ===
+
+_: [i]Margot seule. La valise sur le lit. Une heure avant le dîner.[/i]
+
+[choice text="Installer les micros maintenant"]
+	[signal arg="flag:flag_micros_poses:true"]
+	[signal arg="decision:pose_micros:Margot installe les micros Ghost Market"]
+	[signal arg="surveillance:+5:materiel_grey_market"]
+	[signal arg="miroir:+5:journal_habitudes_ex"]
+	_: Tu sors les micros de la chemise. Petits, discrets, Ghost Market grade.
+	_: Tu sais comment les poser — tu l'as fait pour d'autres reportages.
+	_: Tu penses à {emma_prenom}. À ce qu'elle t'a dit sur le robot de nettoyage à 23h. [i]Sous les tables, pas. Il est méticuleux.[/i]
+	_: Donc pas sous les tables.
+	_: Tu prends ta caméra dans l'autre main — couverture, si quelqu'un entre. Et tu sors.
+	margot: [i]Il gardait un journal de mes habitudes dans son téléphone. Il appelait ça de la "documentation". C'est exactement ce que je suis en train de faire.[/i]
+	[signal arg="lieu:a1_zone_commune"]
+
+[choice text="Laisser le matériel dans la valise"]
+	[signal arg="flag:flag_micros_poses:false"]
+	[signal arg="decision:refus_micros:Margot refuse d'installer les micros"]
+	_: Tu regardes les micros. Tu les remets dans la chemise.
+	_: Pas parce que tu as peur d'être découverte.
+	_: Parce que tu sais très bien pourquoi tu les as achetés. Et que ça ressemble à quelque chose que tu ne veux pas refaire.
+	_: Tu prends ta caméra HD à la place. Visible. Assumée. C'est ça, le documentaire que tu veux faire.
+	margot: [i]Enfin — c'est ce que tu veux croire.[/i]
+	[signal arg="lieu:a1_zone_commune"]
+
+[choice text="Confronter {emma_prenom} maintenant"]
+	[signal arg="flag:flag_confrontation_emma_precoce:true"]
+	[signal arg="decision:confrontation_precoce:Margot interpelle Emma dans le couloir"]
+	[signal arg="relation:emma:-3:confrontation_publique"]
+	_: Tu n'as pas une heure. Tu as besoin de savoir maintenant.
+	_: Tu retournes dans le couloir. {emma_prenom} n'est pas encore loin.
+	margot: [i]Voix normale, pour les micros.[/i] {emma_prenom} — tu as deux minutes ? Je voudrais qu'on discute du cadre du documentaire avant le dîner.
+	_: Elle se retourne. Quelque chose passe dans ses yeux. Elle comprend que ce n'est pas une question sur le documentaire.
+	[signal arg="lieu:a1_confrontation_emma"]
+
+[choice text="Accepter le rôle consciemment"]
+	[signal arg="flag:flag_strategie_miroir:true"]
+	[signal arg="decision:strategie_miroir:Margot accepte d'être la variable de stress"]
+	[signal arg="miroir:+10:posture_observateur"]
+	_: Variable de stress contrôlée.
+	_: Tu répètes le mot intérieurement. Tu le retournes.
+	_: Ils t'ont mise là pour perturber le système. Très bien. Tu vas le perturber — à ta façon.
+	_: Tu sors ton carnet numérique. Tu notes :
+	_: [i]Jour 1. Je suis une variable. Ils croient observer. Je vais observer aussi. Voir qui craque en premier.[/i]
+	_: Tu fermes le carnet. Tu prends ta caméra. Tu te prépares pour le dîner.
+	margot: [i]J'ai écrit exactement ce qu'il aurait écrit. Je le sais. Je le fais quand même. La différence, c'est que moi, je le sais.[/i]
+	[signal arg="lieu:a1_zone_commune"]
+
+# --- Fin NODE PRO-02 ---
+
+[signal arg="flag:pro_02_termine:true"]

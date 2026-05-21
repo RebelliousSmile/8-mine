@@ -56,7 +56,8 @@ directories/dch_directory={
 }
 directories/dtl_directory={
 "exemple_relation": "res://dialogues/exemple_relation.dtl",
-"pro_arrivee": "res://dialogic/timelines/pro_arrivee.dtl"
+"pro_arrivee": "res://dialogic/timelines/pro_arrivee.dtl",
+"pro_cellule": "res://dialogic/timelines/pro_cellule.dtl"
 }
 layout/style_directory={}
 

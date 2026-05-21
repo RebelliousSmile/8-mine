@@ -79,6 +79,30 @@ Aucun fichier code correspondant :
 
 ---
 
+## ⚠️ DB-08 — PRO-01 .dtl utilise 3 dispatchers fictifs (découvert par dtl_linter)
+
+**Constat** : `dialogic/timelines/pro_arrivee.dtl` contient :
+- `[signal arg="bg:bg_xxx"]` × 4 (lignes 17, 33, 70, 109)
+- `[signal arg="show_char:..."]` × 3 (lignes 54, 110, 111)
+- `[signal arg="goto_scene:..."]` × 1 (ligne 136)
+
+Aucun de ces 3 préfixes n'existe dans `DialogicBridge._on_signal_event()`. À l'exécution, ils déclenchent `push_warning("commande inconnue 'bg'")` et n'ont aucun effet.
+
+**Impact** :
+- Backgrounds non changés (visuels figés sur le bg initial)
+- Sprites PNJ non affichés
+- Transition de scène en fin de PRO-01 → `pro_zone_commune.tscn` non déclenchée
+
+**Hypothèses** :
+- Soit le `.dtl` a été écrit en anticipant des dispatchers à venir
+- Soit les changements visuels passent par un autre canal (signal direct depuis le `.tscn`)
+
+**Action** : à arbitrer par l'auteur. Soit (a) ajouter `bg`, `show_char`, `goto_scene` à DialogicBridge, soit (b) retirer ces lignes du .dtl et déclencher les visuels autrement.
+
+**Découvert par** : `scripts/tools/dtl_linter.gd` (créé 2026-05-21 avec le pipeline `aiw/8mine/`).
+
+---
+
 ## ℹ️ DB-07 — Deux systèmes "stabilité mentale" distincts : pas un bug
 
 **Constat** : `GameStateManager.mental_stability` [0–6] et `MirrorStatusManager._status` [0–100] coexistent.

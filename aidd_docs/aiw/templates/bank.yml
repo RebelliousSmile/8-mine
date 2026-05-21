@@ -1,0 +1,122 @@
+# bank.yml Template
+# Fichier de configuration des ressources pour un Document
+# Place ce fichier à la racine du Document (ex: <univers>/<projet>/bank.yml)
+#
+# Documentation complète : docs/memory-bank/project-structure.md
+
+# ===================================================================
+# IDENTIFICATION
+# ===================================================================
+document:
+  name: "<nom-document>"
+  univers: "<identifiant-univers>"  # archipels | wot | ecryme | zombiology | demonslayer | otherscape | mina
+  type: "<type-document>"           # novel | roleplaying | scenario | guide
+
+# ===================================================================
+# RESSOURCES OBLIGATOIRES
+# ===================================================================
+
+# Style d'écriture (output-style)
+# Définit le ton, les conventions stylistiques
+# Nommage : <univers>-<type>.md  (ex: archipels-scenario.md)
+# Une entrée par type utilisé dans le projet
+output-style:
+  # scenario:    "<univers>/.output-styles/<univers>-scenario.md"
+  # roleplaying: "<univers>/.output-styles/<univers>-roleplaying.md"
+  # novel:       "<univers>/.output-styles/<univers>-novel.md"
+  # projet:      ".output-styles/<nom-projet>.md"   # surcharge locale optionnelle
+
+# ===================================================================
+# DOCUMENTATION UNIVERS (fichiers thématiques)
+# ===================================================================
+# Commenter les lignes non pertinentes pour ce projet
+# Seuls les fichiers listés seront chargés par les prompts
+
+docs:
+  # --- Obligatoire ---
+  terminologie: "<univers>/.docs/terminologie.md" # Vocabulaire canonique (univers uniquement, pas de règles)
+
+  # --- Thématiques (décommenter selon besoin du projet) ---
+  # histoire: "<univers>/.docs/histoire.md"        # Chronologie, événements majeurs
+  # geographie: "<univers>/.docs/geographie.md"    # Lieux, nations, distances
+  # factions: "<univers>/.docs/factions.md"        # Organisations, relations, conflits
+  # personnages: "<univers>/.docs/personnages.md"  # PNJ importants, motivations
+  # magie: "<univers>/.docs/magie.md"              # Système magique (si applicable)
+  # technologie: "<univers>/.docs/technologie.md"  # Système technique (si applicable)
+  # creatures: "<univers>/.docs/creatures.md"      # Bestiaire (si applicable)
+  # religions: "<univers>/.docs/religions.md"      # Cultes, croyances (si applicable)
+  # economie: "<univers>/.docs/economie.md"        # Commerce, monnaie (si applicable)
+
+  # --- Spécifiques au projet (dans .docs/) ---
+  # Voir docs/memory-bank/project-structure.md pour la liste complète
+  projet:
+    # - ".docs/pj.md"                    # Fiches personnages joueurs
+    # - ".docs/document-rules.md"        # Règles spécifiques au document
+    # - ".docs/creation-personnages.md"  # Règles de création PJ
+    # - ".docs/scenarios-details.md"     # Détails scénarios (si campagne)
+    # - ".docs/novels-details.md"        # Détails nouvelles (si recueil)
+
+# Personas de review (créés par init-project, utilisés par comment.prompt.md)
+# Trois niveaux : global (réutilisables), univers (spécifiques à l'univers), projet (spécifiques)
+personas:
+  global:
+    # - "docs/templates/personas/olivier-larue.yml"   # Relecteur pro
+    # - "docs/templates/personas/mj-medfan.yml"       # MJ généraliste
+  univers:
+    # - "<univers>/.templates/personas/<id>.yml"
+  projet:
+    # - ".templates/personas/<id>.yml"
+
+# Overview / Brief du projet
+# Description générale, intentions, pitch
+overview: "overview.md"
+
+# Table des matières / Structure du document
+# Sommaire détaillé avec synopsis des chapitres
+toc:
+  fichier: ".toc/INDEX.md"
+  # OU chemin relatif si partagé au niveau univers
+  # fichier: "../toc-templates/novel.md"
+
+# ===================================================================
+# RESSOURCES CONDITIONNELLES (selon type de document)
+# ===================================================================
+
+# Règles de jeu (uniquement pour type: roleplaying | scenario)
+rules-files:
+  systeme: "docs/rules-files/<systeme-jdr>.md"
+  # Exemples:
+  # - "docs/rules-files/pbta-simplifie.md"
+  # - "docs/rules-files/archipels-jdr.md"
+  # - "docs/rules-files/wot-jdr.md"
+  regles-specifiques:
+    - "rules/regles-locales.md"      # règles ajoutées pour ce document
+    - "rules/talents-personnalises.md"
+
+# ===================================================================
+# EXPORT ICML (INDESIGN)
+# ===================================================================
+# Configuration pour le pipeline ICML/InDesign (optionnel)
+# Utilise par: python scripts/build-icml.py --project "<univers>/<projet>"
+
+icml:
+  chapitres-source: "chapitres/"
+  chapitres-order:
+    - "chapitres/chapitre01.md"
+    - "chapitres/chapitre02.md"
+    # ...
+  output: "output/<nom-projet>.icml"   # ICML à la racine output/ (liens InDesign immuables)
+  # releases: "output/releases/"       # Dossier pour les exports PDF versionnés
+  # indesign: "output/indesign/"       # Sources maquette InDesign
+
+# ===================================================================
+# METADONNEES
+# ===================================================================
+metadata:
+  auteur: "<nom-auteur>"
+  date-creation: "YYYY-MM-DD"
+  version: "1.0"
+  statut: "draft | review | final"
+  tags:
+    - "<tag1>"
+    - "<tag2>"

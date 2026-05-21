@@ -1,0 +1,15 @@
+# LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# Output PDFs (optional - uncomment to ignore)
+# output/*.pdf
+
+# OS files
+.DS_Store
+Thumbs.db

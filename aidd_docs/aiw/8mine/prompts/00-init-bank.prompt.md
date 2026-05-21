@@ -1,0 +1,197 @@
+---
+name: 00-init-bank
+description: Stage 0a du pipeline 8-MINE. Génère bank.yml depuis aidd_docs/memory/ et lie les personas.
+argument-hint: [--dry-run] [--force]
+version: 1.0
+---
+
+# Init Bank — memory/ → bank.yml
+
+## Goal
+
+Scanner `aidd_docs/memory/external/` et `aidd_docs/memory/internal/`, puis produire
+`aidd_docs/aiw/8mine/bank.yml` — registre canonique des ressources que les prompts du
+pipeline 8-MINE et les personas peuvent charger.
+
+**À lancer** :
+- Au setup initial du pipeline (une fois)
+- Après ajout d'un fichier canon dans `memory/external/` ou `memory/internal/`
+- Avant `00-challenge-bank` (qui audite le contenu déclaré)
+
+**À ne pas confondre avec** :
+- `00-challenge-bank` qui **audite** (lore ↔ code) sans modifier bank.yml
+- `templates/bank.yml` (AIW) qui est le template générique TTRPG, non adapté à 8-MINE
+
+## Context
+
+**Memory à indexer :**
+```
+@aidd_docs/memory/external/
+@aidd_docs/memory/internal/
+```
+
+**Personas dont les `reference_documents:` doivent rester cohérents :**
+```
+@aidd_docs/aiw/8mine/personas/
+```
+
+**Bank cible :**
+```
+aidd_docs/aiw/8mine/bank.yml
+```
+
+## Process
+
+### Step 1 — Inventaire `memory/`
+
+Lister exhaustivement :
+- Tous les `.md` dans `memory/external/` (racine + sous-dossiers comme `nodes/`)
+- Tous les `.md` dans `memory/internal/`
+
+Pour chaque fichier, extraire **le rôle canonique** depuis la première ligne d'intro
+(titre H1) ou le frontmatter. Si rôle ambigu → flagger pour décision auteur.
+
+### Step 2 — Catégoriser
+
+Classer chaque fichier dans une catégorie 8-MINE :
+
+| Catégorie | Contenu | Exemples |
+|-----------|---------|----------|
+| `lore.bible` | Vision créative, cast, DA | `bible-jeu.md` |
+| `lore.history` | Arborescence narrative, fins | `history.md` |
+| `lore.architecture` | Conventions narratives, format NODE | `architecture.md` |
+| `lore.pnjs` | PNJ secondaires | `pnjs-secondaires.md` |
+| `lore.nodes` | Spec d'un NODE | `nodes/NN.md` |
+| `lore.session` | Trace de playtest | `session-exemple-01.md` |
+| `lore.prod` | État de production | `etat-prod.md` |
+| `code.api` | Cheatsheet DialogicBridge | `api-cheatsheet.md` |
+| `code.variables` | Flags, factions, countdowns | `variables-register.md` |
+| `code.deals` | Deal-breakers résolus / ouverts | `deal-breakers-log.md` |
+| `code.state` | État du code | `code-state.md` |
+
+### Step 3 — Structure du `bank.yml` 8-MINE
+
+Format adapté (pas de TTRPG, pas d'ICML) :
+
+```yaml
+# bank.yml — Registre des ressources 8-MINE
+# Généré par 00-init-bank · Audité par 00-challenge-bank
+# NE PAS ÉDITER MANUELLEMENT — relancer 00-init-bank après ajout d'un canon
+
+projet:
+  nom: 8-MINE
+  type: jeu-narratif-godot-dialogic
+  version: "0.4"  # de etat-prod.md si présent
+  date_generation: "<YYYY-MM-DD>"
+
+# --- Overview projet (synthèse 400-500 lignes, source pour 01-arc-spec) ---
+# Consommé par brainstorm/upgrade (workshop) en écriture, par 01-arc-spec en lecture.
+overview: aidd_docs/memory/external/overview.md
+
+# --- Ressources LORE (canon narratif détaillé) ---
+lore:
+  bible: aidd_docs/memory/external/bible-jeu.md
+  history: aidd_docs/memory/external/history.md
+  architecture: aidd_docs/memory/external/architecture.md
+  pnjs_secondaires: aidd_docs/memory/external/pnjs-secondaires.md
+  nodes:
+    - aidd_docs/memory/external/nodes/02.md
+    # ...
+  # Optionnels
+  sessions:
+    - aidd_docs/memory/external/session-exemple-01.md
+  prod: aidd_docs/memory/external/etat-prod.md
+
+# --- Ressources CODE (canon technique) ---
+code:
+  api_cheatsheet: aidd_docs/memory/internal/api-cheatsheet.md
+  variables_register: aidd_docs/memory/internal/variables-register.md
+  deal_breakers: aidd_docs/memory/internal/deal-breakers-log.md
+  code_state: aidd_docs/memory/internal/code-state.md
+  linter: scripts/tools/dtl_linter.gd
+  dialogic_bridge: autoload/DialogicBridge.gd
+
+# --- Output styles (rédactionnels) ---
+# Défaut consommé par 03-write-dtl ; variantes déclarables par node-spec.
+output_styles:
+  default: aidd_docs/aiw/8mine/templates/output-styles/scenario.md
+  # introspection: aidd_docs/aiw/8mine/templates/output-styles/introspection.md
+  # action: aidd_docs/aiw/8mine/templates/output-styles/action.md
+
+# Document type (utilisé par brainstorm pour adapter ses questions)
+document:
+  type: videogame   # 8-MINE = narratif Godot/Dialogic ; questions adaptées
+
+# --- Personas disponibles + ressources qu'iels chargent ---
+# Source de vérité = reference_documents: du YAML persona
+# Cette section est miroir, pour audit rapide
+personas:
+  margot-joueuse:
+    file: aidd_docs/aiw/8mine/personas/margot-joueuse.yml
+    loads: [lore.bible, lore.history, code.api_cheatsheet]
+  dramaturge:
+    file: aidd_docs/aiw/8mine/personas/dramaturge.yml
+    loads: [lore.architecture, lore.history, lore.bible, code.variables_register]
+  playtester-lgbtqia:
+    file: aidd_docs/aiw/8mine/personas/playtester-lgbtqia.yml
+    loads: [lore.bible, lore.pnjs_secondaires, code.api_cheatsheet]
+  critique-indie-narratif:
+    file: aidd_docs/aiw/8mine/personas/critique-indie-narratif.yml
+    loads: [lore.bible, lore.history, code.api_cheatsheet]
+  coauteur-ia:
+    file: aidd_docs/aiw/8mine/personas/coauteur-ia.yml
+    loads: [lore.bible, code.api_cheatsheet]
+  playtester-accessibilite:
+    file: aidd_docs/aiw/8mine/personas/playtester-accessibilite.yml
+    loads: [lore.bible, code.api_cheatsheet]
+
+# --- Pipeline outputs ---
+outputs:
+  pitches: aidd_docs/aiw/8mine/pitches/        # Stage 1 (auteur)
+  arc_specs: aidd_docs/memory/external/arcs/   # Stage 2
+  node_specs: aidd_docs/memory/external/nodes/ # Stage 3
+  timelines: dialogic/timelines/               # Stage 4
+  reviews: aidd_docs/aiw/8mine/reviews/        # Stage 5
+```
+
+### Step 4 — Vérification de cohérence personas ↔ bank
+
+Pour chaque persona dans `personas/`, lire son `reference_documents:` et vérifier que
+chaque entrée correspond à un chemin déclaré dans le bank. Si un persona référence un
+fichier absent du bank → warning explicite (pas un blocage, peut indiquer un ajout en
+cours côté persona).
+
+### Step 5 — Écriture du bank
+
+Si `--dry-run` : afficher en stdout sans écrire.
+Sinon : écrire `aidd_docs/aiw/8mine/bank.yml`.
+Si le fichier existe déjà et `--force` n'est pas passé → demander confirmation.
+
+### Step 6 — Rapport synthétique
+
+```
+Bank généré : aidd_docs/aiw/8mine/bank.yml
+- Lore : X fichiers (dont N nodes)
+- Code : Y fichiers
+- Personas : 6
+- Warnings : Z (références persona non trouvées dans memory/)
+```
+
+## Output
+
+- `aidd_docs/aiw/8mine/bank.yml` (sauf `--dry-run`)
+- Rapport stdout
+
+## Rules
+
+1. **Le bank reflète l'état réel de `memory/`** — ne pas inventer de fichier, ne pas garder un fichier supprimé.
+2. **Source de vérité personas = leur YAML** — la section `personas:` du bank est un miroir d'audit, pas une source.
+3. **Pas de TTRPG / ICML / chapitres** — ce bank est spécialisé jeu narratif Godot.
+4. **Aucune édition manuelle** — toute modification doit passer par `00-init-bank` (régénération) ou éditer directement le YAML persona pour `reference_documents:`.
+5. **À relancer après chaque ajout canon** — un nouveau `nodes/03.md` ou un nouveau `pnjs-tertiaires.md` n'apparaît dans le bank qu'après `00-init-bank`.
+
+## Note historique
+
+`templates/bank.yml` est l'ancien template AIW (TTRPG/InDesign). Il reste pour référence
+mais n'est **pas** consommé par le pipeline 8-MINE. Le seul bank actif est
+`8mine/bank.yml` produit par ce prompt.
