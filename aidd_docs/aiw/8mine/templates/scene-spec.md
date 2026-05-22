@@ -8,12 +8,15 @@
 ## Métadonnées
 
 ```yaml
-scene_id: <scene_id>           # ex: diner_arrivee, cellule_nuit, coursive_residents
+scene_id: <scene_id>           # ex: diner_arrivee, cellule_nuit, appart_emma_leo
 timeline: dialogic/timelines/<fichier>.dtl
 lieu: <lieu_id>                # cf. LocationManager
 recurring: true|false
 actes: [PRO|A1|A2|A3|A4]       # liste des actes où la scène peut se jouer
 output_style: scenario         # cf. templates/output-styles/
+acces_requis:                  # cf. overview.md § Gating d'accès aux espaces privés
+  - palier:<pnj> >= <seuil>    # ex: palier:emma >= Allie (espace privé)
+  # ou "public" pour les zones communes (cellule margot, coursives, etc.)
 ```
 
 ---

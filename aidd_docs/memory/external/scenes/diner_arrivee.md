@@ -15,6 +15,8 @@ lieu: zone_commune_soir
 recurring: false                # one-shot — c'est LE premier dîner
 actes: [A1]
 output_style: scenario
+acces_requis:
+  - public                      # zone commune — pas de gating relation
 ```
 
 ---

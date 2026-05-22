@@ -110,6 +110,21 @@ Modèle inspiré des companions SWTOR et des seuils de loyauté de Life is Stran
 - **Verrous canon** (Sofia/Alex couple, Emma fusion-confusion, Alex opt-in, Camille dark cogni-affectif…) deviennent des *conditions sur sujets / répliques* dans les scene-specs et pnj-behaviors.
 - **Pool romance « 8 PNJ »** disparaît comme menu fermé. Reste la design rule canon : *initiative variable, motivation variable, aboutissement non garanti* — appliquée par le tissu de sujets et événements de seuil, pas par un pool énuméré.
 
+### Règle canon — Gating d'accès aux espaces privés
+
+Les **appartements des PNJs** *(appart_emma_leo, appart_marine_thomas, appart_sofia_alex, appart_camille_frank)* sont des espaces privés. Margot ne peut y entrer qu'au-dessus d'un **seuil de relation** avec un des occupants. Conséquences sur le modèle :
+
+- Chaque scène d'appartement déclare sa **condition d'accès** sous forme `palier:<pnj> ≥ <seuil>` dans ses métadonnées (champ `acces_requis`).
+- Seuils par défaut *(à raffiner par `pnj-behavior`)* :
+  - Emma, Marine, Thomas : `Allié` *(accès relativement ouvert)*
+  - Sofia × Alex : `Allié` + couple intact *(intrusion conjugale assumée — voir verrous PNJ)*
+  - Camille × Frank : `Confident` *(glacial — accès tardif)*
+  - Léo : `Favorable` pour l'atelier *(semi-public)* · `Allié` pour l'appart partagé Emma/Léo
+- L'atelier Léo, le poste technique Alex/Sofia, le salon Camille sont des **espaces semi-privés** (corpos partagés ou créatifs) — seuils plus bas (`Favorable`).
+- Les espaces publics de l'immeuble (zone commune, coursives, cellule Margot, ascenseur) restent accessibles sans condition de relation.
+
+Cette règle protège des intrusions narratives prématurées et discipline la progression : Margot ne peut pas se téléporter dans la chambre de Camille au début du jeu. Elle aligne aussi le modèle 3 couches avec la vraisemblance sociale (la confiance se gagne).
+
 ### Ce qui reste
 
 - Les 5 actes (CP, PRO, A1, A2, A3, A4) — **phases narratives**, pas containers fermés.

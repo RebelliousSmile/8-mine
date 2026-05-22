@@ -107,6 +107,13 @@ prenom_var: emma_prenom
 
 ---
 
+## Seuils d'accès aux espaces privés *(cf. overview.md § Gating)*
+
+| Scène | Espace | Seuil d'accès |
+|-------|--------|---------------|
+| `appart_emma_leo` | privé (appart partagé Emma/Léo) | `palier:emma ≥ Allié` |
+| Atelier Léo *(si Léo est l'occupant exclusif)* | semi-privé | `palier:leo ≥ Favorable` |
+
 ## Hooks scènes
 
 Scènes-types où Emma apparaît typiquement (à spec dans `scenes/`) :

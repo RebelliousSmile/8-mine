@@ -14,6 +14,9 @@ lieu: cellule_margot_nuit
 recurring: true
 actes: [A1, A2, A3]            # plusieurs cycles nuit possibles par run
 output_style: scenario
+acces_requis:
+  - public                      # cellule de Margot — espace privé à elle, pas de gating
+  # Le sujet `frapper_chez_emma` est gated séparément (palier:emma >= Allié)
 ```
 
 ---
