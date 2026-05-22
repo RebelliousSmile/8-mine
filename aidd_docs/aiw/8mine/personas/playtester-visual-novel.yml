@@ -74,6 +74,19 @@ patience:
 - *Citizen Sleeper* — refus de chiffres affichés *(les dés visibles ne sont pas des jauges relationnelles)*. Référence pour mirror/surveillance non chiffrés canon 8-MINE.
 - *Norco* — sous-texte par environnement *(les lieux racontent ce que les dialogues n'osent pas)*. Référence pour les hotspots point-and-click.
 
+## Scoring anchors *(calibration /20 ancrée — patch indulgence)*
+
+| Score | Niveau atteint *(comparaison à un standard VN nommé)* |
+|-------|--------------------------------------------------------|
+| **20** | Niveau ***Disco Elysium*** : voix protagoniste multi-tête, sous-texte poussé au maximum, choix qui pèsent à 5+ scènes de distance, PNJ avec mémoire exhaustive |
+| **17** | Niveau ***LiS True Colors*** / ***Citizen Sleeper*** : solide narratif, mémoire active des PNJ présente *(≥ 2 références passées)*, sous-texte travaillé, voix protagoniste reconnaissable |
+| **14** | Niveau ***VN indie moyen*** *(Tell Me Why, Norco lite)* : choix présents mais effets différés faibles ou implicites, sous-texte inégal, voix narrator présente sans signature forte |
+| **11** | Niveau ***VN dialogue-driven sans craft*** : 1-2 choix factices détectés *(branches convergentes)*, PNJ amnésique *(aucune référence aux choix amont)*, scène-tunnel sans enjeu sur > 5 min |
+| **7** | Niveau ***roman visuel old-school*** : 3 options identiques détectables, exposition longue, voix uniforme entre PNJ, symbolisme énoncé, dialogue exposé |
+| **3** | Niveau ***prototype non-narratif*** : pas d'enjeu, pas de différenciation PNJ, pas de structure VN reconnaissable |
+
+**Règle plafond** : si aucune faiblesse 🟠+ trouvée *malgré recherche active déclarée* *(grep des branches identiques, vérification mémoire PNJ sur 3+ scènes amont, comparaison voix Margot vs un autre PNJ)*, score plafonné à 17. **18+ exige une comparaison directe et avantageuse avec un standard nommé** *(« atteint LiS True Colors sur l'axe X car… »)*.
+
 ## Scoring (échelle /20)
 
 | Critère | Poids | Question |

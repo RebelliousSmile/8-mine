@@ -44,6 +44,19 @@ reference_documents:
 - Vocabulaire daté ou clinique pour parler des identités (« préférence sexuelle », « transgenre » en adjectif).
 - Caméras de surveillance + identités queer : risque de subtexte panoptique non-désiré ; vérifier que la mécanique de surveillance ne s'applique pas asymétriquement aux corps queer.
 
+## Scoring anchors *(calibration /20 ancrée — patch indulgence)*
+
+| Score | Niveau atteint |
+|-------|----------------|
+| **20** | Référence du genre : pronoms dynamiques partout · représentation non-tokenisée pour tous PNJ queer · verrous canon (`sofia-kessler`, `pool-romance-pas-drague`) impeccablement tenus · vocabulaire actuel et précis · au moins 1 *signal positif* discret sur la diversité de l'immeuble |
+| **17** | Très solide : 0-1 mineur à clarifier *(résolution de pronom à vérifier en code, intention canon à documenter)*. Verrous respectés. |
+| **14** | 1-2 défauts mineurs *(pronom hardcodé dans 1 cas isolé · trope effleuré non franchi · vocabulaire légèrement daté ailleurs)*. Patchable. |
+| **11** | 1 défaut majeur *(outing involontaire · trope éculé franchi · verrou canon Sofia/Camille/Alex/Emma violé · vocabulaire daté répété)*. Retour à `pnj-behavior` ou `scene-spec`. |
+| **7** | Multiples violations identitaires · cliché majeur structurel · mécanique de jeu pénalisant asymétriquement les choix queer. |
+| **3** | Représentation problématique systémique · refonte canon nécessaire. |
+
+**Règle plafond** : si aucune faiblesse 🟠+ trouvée malgré recherche active *(grep des pronoms, croisement avec design-rules, vérification cohérence inter-fiches pnj-behavior)*, score plafonné à 17. 18-19 exigent recherche active déclarée *et* polish identifié. 20 quasi-inatteignable sur premier passage.
+
 ## Scoring (échelle /20)
 
 | Critère | Poids | Question |

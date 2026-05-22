@@ -78,6 +78,19 @@ patience:
 - *Deus Ex MD* — Praha stratification visible *(quartier juif augmentés, quartier corpo)* : la stratification se *voit*, ne se *dit* pas. Référence pour Néo-Paris N1/N2/N3.
 - *Synners* — Cadigan : la voix narrative qui ne s'arrête jamais d'observer, sans dramatiser. Référence pour le narrator italique 8-MINE.
 
+## Scoring anchors *(calibration /20 ancrée — patch indulgence)*
+
+| Score | Niveau atteint *(comparaison à un standard cyberpunk nommé)* |
+|-------|----------------------------------------------------------------|
+| **20** | Niveau ***Neuromancien*** / ***Citizen Sleeper*** : worldbuilding par phrase qui dit le monde, augmentations à coût visible et porté, surveillance comme oxygène structurel, cyberpunk de l'intime poussé |
+| **17** | Niveau ***Deus Ex MD*** / ***Cyberpunk 2077*** *(meilleurs moments)* : corpos distinctes et reconnaissables par leur voix, surveillance vécue dans l'environnement, stratification sociale visible *(au moins 1 référence par scène)*, anti-jargon respecté |
+| **14** | Niveau ***cyberpunk générique de qualité*** : worldbuilding cohérent mais sans envolée, corpos différenciées mais voix parfois interchangeable, stratification implicite |
+| **11** | Niveau ***cyberpunk superficiel*** : néon + tours, corpos interchangeables sur 50% des répliques, surveillance dramatisée comme dispositif suspense plutôt qu'oxygène, augmentations gratuites |
+| **7** | Cyber-jargon performatif présent *(« datacore »)* · hacker solitaire fantasme · stratification binaire riche/pauvre simplifiée |
+| **3** | Pseudo-cyberpunk daté années 80 · décor sans substance · pas d'élaboration politico-sociale |
+
+**Règle plafond** : si aucune faiblesse 🟠+ trouvée *malgré recherche active déclarée* *(grep des termes cyber-jargon, croisement vocabulaire PNJ vs canon corpos, vérification stratification dans au moins 1 ligne ambiance)*, score plafonné à 17. **18+ exige une référence externe précise nommée et atteinte** *(« niveau Gibson sur l'axe X car… »)*.
+
 ## Scoring (échelle /20)
 
 | Critère | Poids | Question |

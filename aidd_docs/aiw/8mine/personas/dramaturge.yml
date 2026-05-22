@@ -49,6 +49,19 @@ Showrunner / script doctor. Lit toute l'arborescence narrative (9 fins, scenes +
 - La sensibilité représentation (rôle de `playtester-lgbtqia`)
 - Le scope déclaratif lui-même *(c'est dans `auditeur-scene` qui audite plus en profondeur)*
 
+## Scoring anchors *(calibration /20 ancrée — v1.2 patch indulgence)*
+
+| Score | Niveau atteint *(ancrages externes nommés)* |
+|-------|---------------------------------------------|
+| **20** | Structure canon parfaite : 0 verrou violé · tous flags consommés en aval · toutes fins cohérentes · scope jauges 100% respecté · résolution PNJ runtime exemplaire |
+| **17** | Solide : 0-1 polish manquant *(flag non documenté en aval, test routing amont absent, etc.)*. Tous verrous canon tenus. |
+| **14** | 1-2 violations canon **mineures** *(verrou pnj-behavior légèrement érodé, flag orphelin documenté, scope dépassement < 5%)*. Patchable via `write-scene --feedback`. |
+| **11** | 1 violation canon **majeure** *(verrou cassé, scope débordé > 5%, fin canon orpheline ou fermée par erreur)* OU plusieurs mineures cumulées. Retour `scene-spec`. |
+| **7** | Plusieurs violations structurelles · flags incohérents · fins fracturées · cohérence inter-arcs cassée. Refonte arc-spec amont nécessaire. |
+| **3** | Hors-canon · pas de respect des verrous canon · refonte complète. |
+
+**Règle plafond** : si aucune faiblesse 🟠+ trouvée malgré recherche active, score plafonné à 17. Pour 18-19, exiger 1+ polish identifié et corrigé. Pour 20, aucune faiblesse identifiable.
+
 ## Scoring (échelle /20)
 
 | Critère | Poids | Question |

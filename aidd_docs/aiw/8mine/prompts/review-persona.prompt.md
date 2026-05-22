@@ -1,8 +1,8 @@
 ---
 name: review-persona
-description: Review d'un .dtl par un persona — mode complet ou light (pré-review rapide). Supporte scene-spec (nouveau modèle 3 couches) et node-spec (legacy).
+description: Review d'un .dtl par un persona — mode complet ou light. Calibration /20 ancrée + tags sévérité par finding + plafond automatique. Supporte scene-spec (nouveau modèle 3 couches) et node-spec (legacy).
 argument-hint: <chemin .dtl> <persona-name> [--scene-spec <chemin> | --node-spec <chemin>] [--pnj-behaviors <chemin1,chemin2,...>] [--light]
-version: 1.3
+version: 1.4
 ---
 
 # Review Persona — .dtl + spec → Verbatims + Triage
@@ -149,16 +149,23 @@ Charger la section **Craft Checklist** du YAML persona et appliquer ses items un
 branche. Ne pas inventer de critères hors-YAML. Si la persona déclare un `reference_documents:`,
 ces documents sont chargés avant la review (ex : `node-spec.md` pour `dramaturge`).
 
-### Step 3 — Scoring
+### Step 3 — Scoring AVEC CALIBRATION ANCRÉE
 
-Charger la table **Scoring** du YAML persona (critères + poids). Donner un score /20 par
-critère, puis calculer le global pondéré selon les poids déclarés. Ne pas modifier les poids.
+Charger la table **Scoring** du YAML persona (critères + poids) **ET** la section
+**`scoring_anchors`** du YAML persona (ancrages /20 vs standards externes nommés).
 
-**Format scoring uniforme** :
+Donner un score /20 par critère, **en justifiant via l'ancrage** :
 
 ```
-Score : <crit_1> <n>/20 · <crit_2> <n>/20 · … — Global <n>/20
+Score : <crit_1> <n>/20 (ancrage : "<niveau scoring_anchors atteint>") · <crit_2> <n>/20 · … — Global <n>/20
 ```
+
+**Règles de plafond automatique** *(à vérifier après les findings du Step 5)* :
+- Si **≥ 1 faiblesse 🔴 critique** trouvée → triage 🔴 systémique automatique, score global ≤ 11/20
+- Si **≥ 1 faiblesse 🟠 majeur** trouvée → score global plafonné à 14/20
+- Si **seulement des faiblesses 🟡 mineur** trouvées → score global plafonné à 17/20
+- Si **seulement des polish 🟢** identifiés → 18-19/20 possible
+- **20/20** exige *« aucune faiblesse identifiable malgré recherche active déclarée »*
 
 ### Step 4 — Verbatims (3 lignes max par branche)
 
@@ -171,11 +178,30 @@ Citer **textuellement** des passages du .dtl et réagir :
 
 3 citations max. Pas de paraphrase, pas de généralité.
 
-### Step 5 — Avocat du diable (3 faiblesses minimum)
+### Step 5 — Avocat du diable AVEC TAGS DE SÉVÉRITÉ
 
-Après avoir scoré, lister **3 faiblesses précises** selon les critères de la persona.
-Citation exacte exigée. **Forcer la recherche active de problèmes.** Si moins de 3
-faiblesses trouvées → relire ; il y en a toujours 3.
+Après scoring initial, lister **3 faiblesses minimum** avec **tag de sévérité obligatoire** :
+
+```
+1. [🔴 critique] <description> — « <citation exacte> » — <impact>
+2. [🟠 majeur] <description> — « <citation> » — <impact>
+3. [🟡 mineur] <description> — « <citation> » — <impact>
+4. [🟢 polish] <description> *(optionnel, n'affecte pas le score)*
+```
+
+**Définition des sévérités** :
+- **🔴 critique** : viole un verrou canon, casse une mécanique de jeu, rend une fin inaccessible ou un PNJ incohérent au point de fracturer la canon
+- **🟠 majeur** : défaut structurel patchable mais qui affecte significativement l'expérience joueur ou la cohérence inter-arcs
+- **🟡 mineur** : polish ergonomique, lisibilité, redondance, sous-utilisation d'une ressource canon
+- **🟢 polish** : suggestion d'amélioration discrétionnaire, n'affecte ni la canon ni l'expérience de manière notable
+
+**Règle de recherche active** : avant de conclure *« moins de 3 faiblesses trouvées »*,
+le persona doit déclarer explicitement avoir cherché les 5 risques typiques de sa
+craft checklist *(grep `.dtl`, croisement avec scene-spec, pnj-behavior, design-rules)*.
+Si recherche active déclarée et aucune faiblesse 🟠+ trouvée, le justifier dans le rapport.
+
+**Mise à jour du score** *(après tagging)* : recalculer le score global en appliquant
+les règles de plafond automatique du Step 3.
 
 ### Step 6 — Triage
 
@@ -229,8 +255,19 @@ orchestrateur.
 1. **Linter PASS obligatoire** — pas de review LLM sur un `.dtl` cassé mécaniquement
 2. **Une seule passe** — pas de boucle de validation interne
 3. **Citations exactes** — pas de paraphrase, le .dtl est la source de vérité
-4. **3 faiblesses minimum (mode complet)** — forcer l'avocat du diable. Mode `--light` : 1 faiblesse suffit
-5. **Triage strict** — appliquer les seuils sans indulgence
-6. **Persona ≠ auteur** — incarner le profil défini dans le YAML, pas l'opinion du LLM
-7. **Pas de réécriture** — la review constate, le rewrite est dans `doctor` ou `write-dtl --feedback`
-8. **Light = filtre, pas substitut** — un `--light` 🟢 ne dispense pas de la review complète sur les arcs sensibles
+4. **3 faiblesses minimum (mode complet) avec tags sévérité obligatoires** — forcer l'avocat du diable. Mode `--light` : 1 faiblesse suffit
+5. **Triage strict + plafonds automatiques** — appliquer les seuils sans indulgence (cf. Step 3 règles plafond)
+6. **Calibration ancrée obligatoire** — chaque score critère cite l'ancrage `scoring_anchors` atteint
+7. **Persona ≠ auteur** — incarner le profil défini dans le YAML, pas l'opinion du LLM
+8. **Pas de réécriture** — la review constate, le rewrite est dans `doctor` ou `write-dtl --feedback`
+9. **Light = filtre, pas substitut** — un `--light` 🟢 ne dispense pas de la review complète sur les arcs sensibles
+10. **Concordance suspecte = signal** — si plusieurs personas en parallèle scorent à ±1 point l'un de l'autre, déclarer explicitement *« concordance étroite — vérifier calibration via persona-trainer »*
+
+## Détecteurs anti-indulgence
+
+Si l'un de ces patterns apparaît dans le rapport, le persona est probablement trop kind :
+
+- Score ≥ 17/20 + aucune faiblesse 🟠+ trouvée → vérifier que la recherche active a été déclarée et exhaustive
+- Score ≥ 18/20 + faiblesses listées en bullets *(sans tag sévérité)* → invalide, relancer avec tags
+- Score ≥ 19/20 + critères tous ≥ 17 → improbable sur premier passage ; déclarer concordance suspecte
+- 4 personas concordent à ±1 point → invoquer `persona-trainer` sur le persona dominant le moins discriminant
