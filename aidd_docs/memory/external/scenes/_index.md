@@ -113,6 +113,12 @@ Suivre `pnjs-behavior/<pnj>.md` pour la définition canonique :
 | `event_frank_rencontre_nocturne` | `frank.md` ✅ | `cellule_nuit` |
 | `event_frank_verdict_a3` | `frank.md` ✅ | *(verdict_frank A3 à spec — automatique countdown ≤ 7)* |
 | `event_frank_confident` | `frank.md` ✅ | *(scenes A4 — coda FIN-E Frank)* |
+| `event_sofia_alignement_test` | `sofia.md` ✅ | *(scénique, déclenchable scenes A1-A2 dès Méfiance + initiative Sofia)* |
+| `event_sofia_allie` | `sofia.md` ✅ | *(poste_technique_alex_sofia à spec, post `flag_sofia_alliee`)* |
+| `event_sofia_proche` | `sofia.md` ✅ | *(scenes intimes uniquement — appart_sofia_alex, cellule_nuit rare)* |
+| `event_sofia_confident` | `sofia.md` ✅ | *(scenes A4 — coda FIN-E Sofia « L'Acte éthique »)* |
+| `event_sofia_blessee_intime` | `sofia.md` ✅ | *(automatique post `event_alex_franchi_optin` — scene matin obligatoire)* |
+| `event_sofia_alliance_frank_visible` | `sofia.md` ✅ | *(récurrent ambiance — zone_commune_jour, verdict_frank avec Sofia/Frank co-présents)* |
 | `event_camille_cliffhanger` | `camille.md` ✅ | `diner_arrivee` |
 | `event_camille_favorable` | `camille.md` ✅ | *(scenes A2 à spec)* |
 | `event_camille_allie` | `camille.md` ✅ | *(scenes A2 à spec — salon_camille, croisements)* |
