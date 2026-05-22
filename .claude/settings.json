@@ -1,0 +1,5 @@
+{
+  "enabledPlugins": {
+    "sc-php@aidd-overlay": true
+  }
+}

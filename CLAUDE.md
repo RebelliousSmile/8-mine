@@ -120,7 +120,7 @@ Les mocks se trouvent dans `tests/mocks/`. Le `MockHud` émet ses signaux via `c
 
 ## Règles de design canoniques (à charger en mémoire active)
 
-Ces fichiers contiennent des règles d'écriture qui conditionnent **toute production narrative** (arcs, dialogues, fiches PNJ, reviews). À lire au démarrage de toute session d'écriture/audit canon. Référencés dans `aidd_docs/aiw/8mine/bank.yml § design_rules`.
+Ces fichiers contiennent des règles d'écriture qui conditionnent **toute production narrative** (arcs, dialogues, fiches PNJ, reviews). À lire au démarrage de toute session d'écriture/audit canon. Référencés dans `aidd_docs/memory/internal/bank.yml § design_rules`.
 
 | Règle | Fichier |
 |---|---|
