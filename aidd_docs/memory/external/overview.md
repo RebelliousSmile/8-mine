@@ -1,8 +1,31 @@
+<!-- v5 (refonte architecture narrative — modèle 3 couches scenes × sujets × seuils) -->
 # 8-MINE — Overview projet
 
 > Synthèse macroscopique. Source de vérité pour `arc-spec`.
 > Construite par `brainstorm` (session 2026-05-21) à partir de `bible-jeu.md`, `history.md`, `internal/architecture.md`, `internal/variables-register.md`, `session-exemple-01.md`.
 > Ne pas écrire d'arc complet ici — les arcs vivent dans `memory/external/arcs/`.
+
+---
+
+<!-- #1 + #8 : en-tête, TOC, quick start -->
+## Pour démarrer
+
+**Audience** : auteur·rice d'arc, reviewer canon, narrative designer entrant·e.
+**Ordre de lecture conseillé** : *Pitch* → *Glossaire* → *Cast principal* → *Jauges et stakes* → *Arborescence des arcs* → *Notes auteur*. Tout le reste sert de référence ponctuelle.
+**Convention canon** : la sous-section *Notes auteur · Décisions canon* est prescriptive (à respecter). Le reste est descriptif (à connaître).
+
+### Table des matières
+1. [Pitch](#pitch)
+2. [Glossaire](#glossaire)
+3. [Cast principal](#cast-principal)
+4. [Jauges et stakes joueur](#jauges-et-stakes-joueur)
+5. [Arborescence des arcs](#arborescence-des-arcs)
+6. [Fins canoniques A-I](#fins-canoniques-a-i)
+7. [Topologie corporatiste](#topologie-corporatiste)
+8. [Notes auteur](#notes-auteur)
+9. [Conventions de production](#conventions-de-production)
+10. [Liens canon](#liens-canon)
+11. [Archive — threads tranchés](#archive--threads-tranchés-2026-05-21)
 
 ---
 
@@ -12,15 +35,130 @@
 
 ---
 
+<!-- #2 : glossaire des sigles -->
+## Glossaire
+
+<!-- #22 : tableau séparé en deux — jauges numériques d'un côté, lexique structurel de l'autre -->
+
+**Jauges numériques** (plage chiffrée, ressource technique)
+
+| Sigle | Sens | Plage | Autorité technique |
+|---|---|---|---|
+| **MS** | Mental Stability (santé narrative) | 0-6 | `GameStateManager.mental_stability` |
+| **PD** | Personal Danger (pression physique) | 0-∞ | `GameStateManager.personal_danger` |
+| **EV** | Evidence (preuves sur le Programme) | 0-6 | `GameStateManager.evidence_collected` |
+| **Mirror** | Dette d'authenticité = instrumentalisation subie | 0-100 | `MirrorStatusManager` |
+| **Surveillance** | Pression Stratom / caméras | 0-100 | `SurveillanceManager` |
+
+**Lexique structurel** (concepts non chiffrés)
+
+| Terme | Sens | Référence |
+|---|---|---|
+| **NODE** | Unité narrative atomique (1 scène ou 1 sous-arc) | `nodes/*.md` |
+| **FIN-A à FIN-I** | 9 fins canoniques | `history.md` ch. 9 |
+| **N1 / N2 / N3** | Strates de couverture du Programme (public · institutionnel · secret) | [Topologie corporatiste](#topologie-corporatiste) |
+| **Tick** <!-- #18 --> | Unité de décompte des countdowns = 1 NODE narratif consommé (pas 1 jour in-game ; un même jour peut contenir plusieurs NODEs et donc plusieurs ticks) | `CountdownManager` |
+| **Trigger** <!-- #26 --> | Événement marqueur qui se déclenche puis se grave (one-shot). Deux familles : *triggers externes* (Stratom déploie, Witness exige) comptés FIN-A ; *triggers internes* (5 marqueurs de bascule Margot vers Julien) comptés FIN-I | `GameStateManager.log_decisions` |
+| **Pool romance** | Ensemble des 8 PNJ accessibles en relation affective ambiguë. *Distinct du pool FIN-E* : être au pool romance ≠ résoudre en FIN-E (cf. Emma : pool oui, FIN-E non) <!-- #17 --> | `A2-04` |
+| **Nommage NODE** <!-- #33 --> | Convention `<ACTE>-<NUMERO>[-<VARIANTE>]` : `PRO-01`, `A1-03`, `A2-04`, `A4-02-A` (la lettre finale ∈ {A..I} indexe la fin atteinte). Les NODE-variantes par fin sont les seuls à porter un 3ᵉ segment | `nodes/*.md` |
+
+<!-- #3 : système Tier explicité -->
+### Système Tier (poids narratif PNJ)
+
+| Tier | Critère | Volume canon attendu |
+|---|---|---|
+| **Tier 1** | Pivot d'arc, présent dans plusieurs actes, fiche complète obligatoire | Emma, Thomas, Frank |
+| **Tier 2** | Romance pool ou faille structurelle exploitable, fiche complète | Léo, Marine, Sofia, Alex, Camille |
+| **Tier 3** | Cité, contextuel, non interactif | voir `pnjs-secondaires.md` |
+
+---
+
+## Architecture narrative
+
+> **À retenir** : 8-MINE ne se structure pas en arcs séquentiels mais en **scènes-types** hébergeant des **sujets** dont les choix font **évoluer les jauges**. Le franchissement de seuils (paliers de relation, autres jauges) déclenche des **événements de seuil** — réactions one-shot du PNJ qui débloquent du nouveau contenu (sujets, scènes, actions). Pas de *romance arc*, pas de *PIVOT NODE*, pas de *gateway* `A2-04`. La romance et l'intimité sont l'effet émergent de pousser un palier suffisamment haut sur un PNJ par des choix de sujets favorables.
+
+### Le modèle à 3 couches
+
+```
+1. SCÈNE
+   Lieu + PNJs présents + dialogues d'ambiance + liste de SUJETS abordables
+       │
+       └─► 2. SUJETS choisis par Margot modifient les JAUGES
+               (relation × PNJ, MS, PD, EV, Mirror, Surveillance, factions, countdowns)
+                   │
+                   └─► 3. SI une jauge franchit un SEUIL → ÉVÉNEMENT DE SEUIL
+                          • réaction scriptée one-shot du PNJ concerné
+                          • joué immédiat OU différé à la prochaine scène compatible
+                          • DÉVERROUILLE de nouveaux sujets / scènes / actions
+```
+
+Modèle inspiré des companions SWTOR et des seuils de loyauté de Life is Strange. La techno sous-jacente (`threshold_crossed`, `_thresholds_already_crossed`) **existe déjà** dans 8-MINE pour Surveillance et Mirror — il s'agit de l'étendre aux paliers de relation par PNJ et autres jauges narratives.
+
+### Unités d'écriture
+
+| Unité | Fichier | Décrit |
+|---|---|---|
+| **Scene-spec** | `scenes/<scene_id>.md` | Une scène-type réutilisable : lieu, PNJs présents, dialogues d'ambiance, sujets disponibles avec tables de réponses par palier, événements de seuil susceptibles d'y être joués |
+| **PNJ-behavior** | `pnjs-behavior/<pnj>.md` | Catalogue d'un PNJ : voix par palier, verrous canon, événements de seuil one-shot par seuil franchi, hooks scènes |
+| **Node-spec** | `nodes/<NN>.md` | Réservé aux scènes scriptées **non-réutilisables** : prologue, codas de fin. N'est pas l'unité courante. |
+
+### Ce qui remplace l'ancien modèle
+
+- **Plus d'arc-spec par PNJ** (`A2-romance-emma`, `A2-romance-alex`, etc.). Recyclés en `pnjs-behavior/<pnj>.md` + extensions des scene-specs concernées. Anciens fichiers archivés dans `_archive/`.
+- **Plus de gateway `A2-04`** ni de point d'entrée romance figé. Les sujets intimes/romantiques apparaissent dans les scènes existantes quand `relation:<pnj>` est assez haut + flags compatibles.
+- **Plus de PIVOT NODE**. Les phrases canon (ex. réplique seuil d'Emma à Confident) sont des **répliques conditionnelles** déclenchées par un événement de seuil dans une scène ordinaire.
+- **Verrous canon** (Sofia/Alex couple, Emma fusion-confusion, Alex opt-in, Camille dark cogni-affectif…) deviennent des *conditions sur sujets / répliques* dans les scene-specs et pnj-behaviors.
+- **Pool romance « 8 PNJ »** disparaît comme menu fermé. Reste la design rule canon : *initiative variable, motivation variable, aboutissement non garanti* — appliquée par le tissu de sujets et événements de seuil, pas par un pool énuméré.
+
+### Règle canon — Gating d'accès aux espaces privés
+
+Les **appartements des PNJs** *(appart_emma_leo, appart_marine_thomas, appart_sofia_alex, appart_camille_frank)* sont des espaces privés. Margot ne peut y entrer qu'au-dessus d'un **seuil de relation** avec un des occupants. Conséquences sur le modèle :
+
+- Chaque scène d'appartement déclare sa **condition d'accès** sous forme `palier:<pnj> ≥ <seuil>` dans ses métadonnées (champ `acces_requis`).
+- Seuils par défaut *(à raffiner par `pnj-behavior`)* :
+  - Emma, Marine, Thomas : `Allié` *(accès relativement ouvert)*
+  - Sofia × Alex : `Allié` + couple intact *(intrusion conjugale assumée — voir verrous PNJ)*
+  - Camille × Frank : `Confident` *(glacial — accès tardif)*
+  - Léo : `Favorable` pour l'atelier *(semi-public)* · `Allié` pour l'appart partagé Emma/Léo
+- L'atelier Léo, le poste technique Alex/Sofia, le salon Camille sont des **espaces semi-privés** (corpos partagés ou créatifs) — seuils plus bas (`Favorable`).
+- Les espaces publics de l'immeuble (zone commune, coursives, cellule Margot, ascenseur) restent accessibles sans condition de relation.
+
+Cette règle protège des intrusions narratives prématurées et discipline la progression : Margot ne peut pas se téléporter dans la chambre de Camille au début du jeu. Elle aligne aussi le modèle 3 couches avec la vraisemblance sociale (la confiance se gagne).
+
+### Ce qui reste
+
+- Les 5 actes (CP, PRO, A1, A2, A3, A4) — **phases narratives**, pas containers fermés.
+- Les 9 fins (FIN-A à FIN-I) — conditions d'activation = combinaisons de paliers + flags au moment d'A4.
+- Toutes les jauges, autoloads, conventions code, tests GUT.
+- Les NODES déjà produits (PRO-01, PRO-02) — *scene-shaped* en pratique, conservés tels quels et migrables si nécessaire.
+- Toutes les **règles de design canon** (Margot terrain neutre, Mirror sur action confirmée, Sofia inattaquable en posture pro, Camille = cogni-affectif, etc.) — toutes valides, juste appliquées dans le nouveau modèle.
+
+### Prompts et templates
+
+| Prompt | Statut |
+|---|---|
+| `scene-spec` *(nouveau)* | Produit `scenes/<scene_id>.md` depuis l'overview + pnj-behaviors |
+| `pnj-behavior` *(nouveau)* | Produit `pnjs-behavior/<pnj>.md` depuis bible-jeu + design rules |
+| `arc-spec` *(archivé)* | Conservé pour référence dans `_archive/` ; ne pas invoquer pour nouvelle production |
+| `decompose-arc` *(à refondre)* | Sera adapté en `decompose-scene` |
+| `write-dtl` *(à adapter)* | Consommera scene-spec + pnj-behaviors concernés au lieu de node-spec |
+| `graph-audit` *(à refondre)* | Auditera la couverture matricielle (palier × sujet × PNJ) au lieu de la connexité d'arcs |
+
+---
+
 ## Cast principal
 
 ### Protagoniste — Margot Sinclair
 
-**Journaliste documentariste · ~32 ans · post-rupture · orientation à déterminer (cf. threads ouverts)**
+**Journaliste documentariste · 32 ans · post-rupture · orientation inférée par défaut, jamais thématisée** <!-- #12 : âge tranché 32 (point), orientation explicitement non-thématisée -->
 
 Couverture : documentaire CNC sur le coliving. Mission réelle : enquêter sur le Programme Nexus Social après alerte de sa cousine Emma. Outils : caméra légère, micros (option PRO-02), Witness Networks comme diffuseur sous contrat (pression sensationnaliste).
 
-**Règle de design centrale** : Margot n'est pas un personnage qui « dérive vers l'instrumentalisation ». C'est un **terrain neutre** sur lequel les PNJ agissent activement (profilage, scan biométrique, test, séduction, manipulation). Sans choix joueur conscient, ce sont les PNJ qui mènent. Mirror [0-100] mesure l'**instrumentalisation subie**, pas la dérive interne. Cf. mémoire `margot-terrain-neutre`.
+**Trois règles canon — appliquées partout, énoncées une seule fois ici** <!-- #4 : dédup des règles Margot répétées en 3 endroits -->:
+
+1. *Margot = terrain neutre*. Sans choix joueur conscient, les PNJ agissent (profilage, scan, séduction, manipulation). Cf. `margot-terrain-neutre`.
+2. *Registre sociologique sur compétences d'investigation*. Elle vient comprendre, pas révéler — mais ses outils rendent le glissement techniquement possible. Cf. `margot-documentariste-sincere`.
+3. *Double instrumentalisation*. Les 4 corpos parient sur N2 ; Witness Networks espère secrètement un scoop. Margot est l'enjeu silencieux entre deux logiques.
 
 ### Les 8 résidents et leurs 4 couples
 
@@ -28,73 +166,90 @@ Les binômes corporatistes du Programme sont **aussi** des couples réels. Quatr
 
 | Binôme corpo | Couple | Statut conjugal canon | Faille principale |
 |---|---|---|---|
-| MEMORIZE *(bleu `#4a90d9`)* | **Emma × Léo** | Couple intime acté, intimité audible | Léo cultive une surface esthétique ; il a un agenda réel caché *(à préciser — cf. threads ouverts)* dont Emma ne sait rien |
+| MEMORIZE *(bleu `#4a90d9`)* | **Emma × Léo** | Couple intime acté, intimité audible | Léo cultive une surface esthétique ; agenda à 3 couches dont Emma ne sait rien |
 | KAIZEN *(orange `#d9a44a`)* | **Marine × Thomas** | Couple en tension visible, dispute étouffée | Dette cachée 45 k€ de Marine + résignation de Thomas qui n'y croit plus |
-| NEXUS *(vert `#4ad97a`)* | **Sofia × Alex** | Couple actuel, scène nocturne = confrontation éthique de couple | Sofia (éthique) suspecte ce qu'Alex (taupe Stratom) cache ; Alex la considère comme sa « faille émotionnelle » |
-| STRATOM *(rouge `#d94a4a`)* | **Camille × Frank** | Couple réel mais glacial — chacun lit l'autre en permanence (profileuse + ex-opératif) | Aucun amour partagé, intimité étouffée par leurs métiers respectifs |
+| NEXUS *(vert `#4ad97a`)* | **Sofia × Alex** | Couple solide, démonstratif, transparent | Sofia (éthique) suspecte ce qu'Alex (taupe Stratom) cache — mais Alex ne ment pas à Sofia |
+| STRATOM *(rouge `#d94a4a`)* | **Camille × Frank** | Couple réel mais glacial — profileuse + ex-opératif se lisent en permanence | Aucun amour partagé, intimité étouffée |
 
-**Conséquence** : 6 résidents sur 8 sont engagés intra-coliving. Toute romance Margot × PNJ_marié est une intrusion conjugale assumée, qui **doit** se lire en double-jeu (chaque PNJ a une raison propre de sortir de son couple via Margot — ce n'est jamais une intrusion unilatérale). *Exception canon* : Sofia/Alex est un couple si solide et transparent que `A2-romance-alex` est conçu en **romance refusée** (D) — l'intrusion n'aboutit pas, sauf branche trahison opt-in explicite (cf. fiche Alex + tableau A2).
+<!-- #13 : usage couleurs corpo documenté -->
+> **Usage des codes couleur corpo** : balisage UI (HUD réputation), bannières de NODE dans Dialogic (header de scène), tags de spec dans les arc-spec markdown. Pas de couleur dans les dialogues eux-mêmes.
 
----
+**Conséquence** : 6 résidents sur 8 sont engagés intra-coliving. Toute romance Margot × PNJ_marié est une intrusion conjugale assumée, qui **doit** se lire en double-jeu (chaque PNJ a une raison propre de sortir de son couple via Margot — ce n'est jamais une intrusion unilatérale). *Exception canon* : Sofia/Alex est un couple si solide que `A2-romance-alex` est conçu en **romance refusée** (D), sauf branche trahison opt-in explicite.
+
+<!-- #7 : matrice asymétrie d'info N3 -->
+### Asymétrie d'information sur N3 (Programme secret)
+
+Qui des 8 résidents sait que l'immeuble est le laboratoire du Programme Nexus Social ?
+
+| Résident | Connaissance N3 | Source |
+|---|---|---|
+| Emma | **Sait** | Position interne Memorize, a alerté Margot |
+| Léo | **Sait partiellement** | Sait que Memorize prépare *quelque chose* pour Emma, protège sans tout savoir |
+| Marine | Évite activement | Le mot « Programme » la tétanise — elle change de pièce. Évitement compatible avec le soupçon de Thomas qu'elle refuse d'entendre <!-- #23 --> |
+| Thomas | Soupçonne (« on est déjà filmés 24/7 ») | Lucidité résignée sans accès — n'insiste pas auprès de Marine par épuisement |
+| Sofia | **Sait** | Département éthique Nexus, posture critique interne |
+| Alex | **Sait** (acteur) | Taupe Stratom, altère les bio-flux |
+| Camille | **Sait** (acteur) | Profileuse Stratom, exploite |
+| Frank | **Sait** (exécutant) | Mission canon : évaluer Margot pour Stratom |
+
+> *4 sachants pleins, 1 partiel (Léo), 1 soupçonneux (Thomas), 1 évitant (Marine), 0 ignorant total.* Toute scène doit respecter cette grille : un sachant ne peut être surpris par N3, Marine ne peut pas le décrire spontanément (elle change de sujet), Thomas peut formuler des intuitions vagues mais jamais nommer le Programme. <!-- #23 : matrice rectifiée -->
 
 ### Statut canon des 8 résidents — agents importants
 
 Les 8 résidents sont des **agents importants avec responsabilités significatives** (Saint-Michel = immeuble prestigieux, zone stratégique négociée — pas de poste subalterne). Tension d'écriture : **fragilité visible quotidienne ≠ inexpérience** — chacun a un vrai pouvoir d'action en contexte pro.
 
-*→ Détail canon : `bible-jeu.md § 6` (Note de design #4) · mémoire [[corpos-job-ordinaire]]*
+*→ Détail canon : `bible-jeu.md § 6` (Note de design #4) · mémoire `corpos-job-ordinaire`*
 
 ### Fiches synthétiques par PNJ
 
 #### Emma Castellane · MEMORIZE · 28 ans · femme · Tier 1
-*La cousine tiraillée*. **Cousine germaine de Margot — éloignement vécu** *(tranché 2026-05-21)* : branches familiales coupées par brouille ancienne dans leur enfance, peu de souvenirs partagés robustes, reconnexion adulte tardive dont Julien (ex de Margot) fut le catalyseur. L'appel d'Emma à Saint-Michel = réparation de la brouille. Loyale au système qui l'emploie, coupable de ce qu'il fait. C'est elle qui a fait venir Margot — l'aide *« avant d'en avoir le courage de partir »*. Power Tags : accès flux Memorize, connaissance interne, liens familiaux activables. Couple : Emma × Léo (intime, acté).
+*La cousine tiraillée*. **Cousine germaine de Margot — éloignement vécu** : branches familiales coupées par brouille ancienne dans leur enfance, peu de souvenirs partagés robustes, reconnexion adulte tardive dont Julien (ex de Margot) fut le catalyseur. L'appel d'Emma à Saint-Michel = réparation de la brouille. Loyale au système qui l'emploie, coupable de ce qu'il fait. C'est elle qui a fait venir Margot — l'aide *« avant d'en avoir le courage de partir »*. **Power Tags** : accès flux Memorize, connaissance interne, liens familiaux activables. **Couple** : Emma × Léo (intime, acté).
 
-#### Léo Mars · MEMORIZE · ~30 ans · homme · Tier 2
-*Le saboteur silencieux*. **Agenda à trois couches** *(tranché 2026-05-21)* : (a) **surface publique** = lassitude esthétique cultivée pour passer sous radar ; (b) **couche 1** = protection d'Emma à son insu (il a compris ce que Memorize prépare pour sa cousine et sabote pour la couvrir) ; (c) **couche 2** = il monte aussi un coup structuré sur les flux vidéo Memorize, qu'il *justifie* par la protection d'Emma mais qui le sert lui-même. Le couple Emma/Léo gagne ainsi une asymétrie canon : elle aime ; il aime + il protège + il opère. Couche révélée selon EV + relation Léo. Couple : Emma × Léo.
+#### Léo Mars · MEMORIZE · 30 ans · homme · Tier 2 <!-- #20 : âge tranché -->
+*Le saboteur silencieux*. **Agenda à trois couches** : (a) **surface publique** = lassitude esthétique cultivée pour passer sous radar ; (b) **couche 1** = protection d'Emma à son insu (il a compris ce que Memorize prépare pour sa cousine et sabote pour la couvrir) ; (c) **couche 2** = il monte aussi un coup structuré sur les flux vidéo Memorize, qu'il *justifie* par la protection d'Emma mais qui le sert lui-même. Le couple Emma/Léo gagne ainsi une asymétrie canon : elle aime ; il aime + il protège + il opère. Couche révélée selon EV + relation Léo. **Couple** : Emma × Léo.
 
 #### Marine Dubois · KAIZEN · 26 ans · femme · Tier 2
-*La performeuse au bord du gouffre*. 75 k abonnés, sourire crispé, **45 k€ de dette cachée**. Audit Kaizen en cours (countdown 15 ticks). Si elle tombe, cascade crédit solidaire → tout l'immeuble s'effondre. **Piège Margot** : si Margot expose Marine pour gagner EV, elle déclenche elle-même la cascade. Couple : Marine × Thomas (tension).
+*La performeuse au bord du gouffre*. 75 k abonnés, sourire crispé, **45 k€ de dette cachée**. Audit Kaizen en cours (countdown 15 ticks). Si elle tombe, cascade crédit solidaire → tout l'immeuble s'effondre. **Piège Margot** : si Margot expose Marine pour gagner EV, elle déclenche elle-même la cascade. **Couple** : Marine × Thomas (tension).
 
 #### Thomas Renard · KAIZEN · 29 ans · homme · Tier 1
-*Le résigné*. Ingénieur systèmes épuisé. Pull informe, cernes prononcés, café tardif. Cynisme désarmant. Power Tags : connaissance systèmes Kaizen, invisibilité par épuisement. *« On est déjà filmés 24/7. Fais ce que tu veux. »* — son point d'entrée. Couple : Marine × Thomas.
+*Le résigné*. Ingénieur systèmes épuisé. Pull informe, cernes prononcés, café tardif. Cynisme désarmant. **Power Tags** : connaissance systèmes Kaizen, invisibilité par épuisement. *« On est déjà filmés 24/7. Fais ce que tu veux. »* — son point d'entrée. **Couple** : Marine × Thomas.
 
 #### Sofia Kessler · NEXUS · 28 ans · femme trans · Tier 2
-*La vigilante éthique*. Département éthique d'une corpo qui collecte biométrie — paradoxe incarné. Sincère, structurellement complice. Registre : analytique → accusatrice → protectrice. **Identité trans** : connue de tous les résidents depuis longtemps, intégrée, jamais le sujet d'une scène. Power Tag #3 : *alliance tacite avec Frank* (professionnelle, pas romantique). Couple : Sofia × Alex — solide, démonstratif, transparent ; Alex est partie de ce qui rend possible son intégration en milieu corpo conservateur. **Sa force n'est pas la même au travail et dans l'intimité** : autorité éthique tenue en posture pro, plus exposée en intimité — une trahison intime ne peut pas être affrontée en posture d'autorité. Cf. mémoire `sofia-kessler-caracterisation`.
+*La vigilante éthique*. Département éthique d'une corpo qui collecte biométrie — paradoxe incarné. Sincère, structurellement complice. Registre : analytique → accusatrice → protectrice. **Sa force n'est pas la même au travail et dans l'intimité** : autorité éthique tenue en posture pro, plus exposée en intimité — une trahison intime ne peut pas être affrontée en posture d'autorité. **Power Tags** : alliance tacite avec Frank (professionnelle). **Couple** : Sofia × Alex. *Identité trans, paradoxe éthique, couple Alex : règles d'écriture intégrales dans `sofia-kessler-caracterisation`.* <!-- #4 : 3 redites Sofia condensées en un renvoi -->
 
 #### Alex Norvège · NEXUS → STRATOM · 29 ans · homme · Tier 2
-*Le double agent*. Implants neuronaux, scan biométrique passif permanent. Officiellement Nexus, réellement taupe Stratom. **Se salit les mains pour la corpo sans hésiter** (altération active des enregistrements biométriques selon mission), **mais jamais dans le dos de Sofia** — transparence totale dans le couple. Weakness Tag : *triple loyauté impossible — si démasqué, perd les trois soutiens*. Couple : Sofia × Alex (solide, démonstratif, vie de couple assumée). **Condition canon d'un retournement contre Stratom** : décision de couple (Sofia & Alex basculent ensemble) — sauf branche optionnelle où Margot pousse Alex à trahir, auquel cas il bascule seul, effondré, et Sofia est très blessée.
+*Le double agent*. Implants neuronaux, scan biométrique passif permanent. Officiellement Nexus, réellement taupe Stratom. **Se salit les mains pour la corpo sans hésiter** (altération active des enregistrements biométriques selon mission), **mais jamais dans le dos de Sofia** — transparence totale dans le couple. **Weakness Tag** : triple loyauté impossible — si démasqué, perd les trois soutiens. **Condition canon d'un retournement contre Stratom** : décision de couple (Sofia & Alex basculent ensemble) — sauf branche optionnelle où Margot pousse Alex à trahir, auquel cas il bascule seul, effondré, et Sofia est très blessée. **Couple** : Sofia × Alex.
 
 #### Camille Armand · STRATOM · 32 ans · femme · Tier 2
-*La profileuse*. Voix chaleureuse, fausse intimité, profilage psychologique en temps réel. Contrôle de la pièce par la voix. Power Tag : réseau Stratom. Caractérisation romance : *dark cogni-affectif* (manipulation, jamais physique — le « dark » est dans l'asymétrie d'information et les mots qui déstabilisent ; aucune emprise corporelle). Couple : Camille × Frank (glacial).
+*La profileuse*. Voix chaleureuse, fausse intimité, profilage psychologique en temps réel. Contrôle de la pièce par la voix. **Power Tag** : réseau Stratom. **Caractérisation romance** : *dark cogni-affectif* (manipulation, jamais physique — le « dark » est dans l'asymétrie d'information et les mots qui déstabilisent ; aucune emprise corporelle). **Couple** : Camille × Frank (glacial).
 
-#### Frank Désière · STRATOM · ~40 ans · homme · Tier 1
-*Le test*. Ex-opératif. Cicatrices visibles, parle peu, observe long. **Verdict en cours** : sa mission canon est d'**évaluer Margot pour Stratom** — décider si elle est menace à neutraliser ou ressource à retourner. Countdown Équipe Nettoyage (14 ticks) recule via tests d'intégrité réussis auprès de lui. Couple : Camille × Frank.
+#### Frank Désière · STRATOM · 42 ans · homme · Tier 1 <!-- #20 : âge tranché -->
+*Le test*. Ex-opératif. Cicatrices visibles, parle peu, observe long. **Verdict en cours** : sa mission canon est d'**évaluer Margot pour Stratom** — décider si elle est menace à neutraliser ou ressource à retourner. Countdown Équipe Nettoyage (14 ticks) recule via tests d'intégrité réussis auprès de lui. **Couple** : Camille × Frank.
 
 ---
 
 ## Jauges et stakes joueur
 
-### Jauges principales (variables-register.md)
+### Jauges principales
 
-| Jauge | Plage | Source autorité | Effet narratif principal |
-|---|---|---|---|
-| **MS** — Mental Stability | 0-6 | `GameStateManager.mental_stability` | Score de santé narrative. < 2 colorie les dialogues, débloque/verrouille options. 0 → FIN-I |
-| **PD** — Personal Danger | 0-∞ (clamp 0+) | `GameStateManager.personal_danger` | Pression physique. 6 → FIN-H |
-| **EV** — Evidence Collected | 0-6 | `GameStateManager.evidence_collected` | Preuves accumulées sur le Programme. 6 = exposé possible |
-| **Surveillance externe** | 0-100 | `SurveillanceManager` | Pression Stratom/caméras. Seuils 25/50/75/90/100 (100 = game over) |
-| **Mirror** — dette d'authenticité | 0-100 | `MirrorStatusManager` | **Mesure de l'instrumentalisation subie**. Seuils 30/60/90/100 (100 = game over miroir) |
-| **Réputation × 8 factions** | -100 à +100 | `ReputationManager` | stratom, marine, presse, police, activistes, memorize, nexus, kaizen |
-| **Relations × 17 PNJ** | -100 à +100 | `RelationManager` | 9 paliers visibles (Méfiance → Intime) |
-| **Countdowns** | ticks décroissants | `CountdownManager` | `equipe_nettoyage` (14) · `audit_marine` (15) |
+Cf. [Glossaire](#glossaire) pour la définition de chaque sigle. Détail technique : `variables-register.md`.
+
+| Jauge | Plage | Effet narratif principal |
+|---|---|---|
+| **MS** | 0-6 | < 2 colorie les dialogues, débloque/verrouille options. 0 → FIN-I |
+| **PD** | 0-∞ (clamp 0+) | 6 → FIN-H |
+| **EV** | 0-6 | 6 = exposé possible |
+| **Surveillance** | 0-100 | Seuils 25 (HUD) / 50 (alerte) / 75 (cinematic) / 90 / 100 (game over) |
+| **Mirror** | 0-100 | Seuils 30 (flashback) / 60 (hésitation) / 90 (option verrouillée) / 100 (game over) |
+| **Réputation × 8 factions** | -100 à +100 | stratom · marine · presse · police · activistes · memorize · nexus · kaizen |
+| **Relations × 17 PNJ** | -100 à +100 | 9 paliers visibles (Méfiance → Intime). *Décomposition des 17 : 8 résidents Saint-Michel + 9 PNJ Tier 1-2 hors-immeuble (famille de Margot hors Saint-Michel, contact Witness, contact activistes, contact police, etc. — détail dans `pnjs-secondaires.md`)* <!-- #19 + #35 --> |
+| **Countdowns** | ticks ↓ | `equipe_nettoyage` (14) · `audit_marine` (15) |
 
 ### Stakes joueur
 
 **Le jeu mesure l'écart entre ce que Margot prétend faire et ce qu'elle fait vraiment.**
 
-**Intention initiale canon** : Margot **a un passé d'investigation** (compétences acquises, pas naïve techniquement) **mais son registre actuel est sociologique — curieusement**, pas son registre habituel. Elle vient observer la cohabitation pour *comprendre*, pas pour révéler.
-
-**Double instrumentalisation** : les 4 corpos parient sur N2 (documentaire reste à la couverture officielle « démonstration collaboration »). **Witness Networks** l'a peut-être envoyée au casse-pipe — commande sociologique vendable + espoir secret qu'elle déterre un scoop grâce à ses compétences d'investigatrice. Margot est l'enjeu silencieux entre deux logiques, sans nécessairement le savoir au départ.
-
-**Plus elle cherche à comprendre, plus elle se retrouve à savoir ce qu'elle ne devrait pas savoir** — l'info indésirable s'accumule par effet de bord de l'attention soutenue. Ses compétences d'investigatrice rendent le glissement *techniquement possible* sans qu'il soit *intentionné*. Sa question morale est *« quoi faire de ce que j'ai vu sans le chercher »*, pas *« comment exposer »*. La pression Witness peut être déclencheur de bascule (Règle 2). Cf. mémoire `margot-documentariste-sincere`.
+**Plus elle cherche à comprendre, plus elle se retrouve à savoir ce qu'elle ne devrait pas savoir** — l'info indésirable s'accumule par effet de bord. Sa question morale est *« quoi faire de ce que j'ai vu sans le chercher »*, pas *« comment exposer »*.
 
 Chaque faille découverte chez un couple propose un usage :
 
@@ -104,11 +259,11 @@ Chaque faille découverte chez un couple propose un usage :
 4. **Levier** — la faille sert à obtenir autre chose (chantage tacite, faveur, info). Mirror ++.
 5. **Arme** — exposition publique, déclenchement de cascade. Mirror +++ et conséquences corpo. *Choix de fin possible, jamais intention initiale.*
 
-**Règle 1 — Défaut sans choix = manipulation par PNJ.** Si le joueur ne pousse pas, le PNJ agit. Chaque `[choice]` doit comporter une option « subir/esquiver » qui déclenche un effet *PNJ-driven* (relation, surveillance, info captée), pas un no-op.
+### Règles de gameplay canon
 
-**Règle 2 — Pression externe refusable.** Witness Networks et Stratom peuvent exiger ; Margot peut toujours refuser, contre PD / faction / contrat. **Mirror ne monte JAMAIS sur action involontaire externe** — uniquement sur action joueur confirmée.
-
-**Règle 3 — Failles hybrides.** Chaque faille a un tag déclaré dans son arc-spec : `transferable` (info Marine peut servir dans l'arc Camille) ou `anchored` (le silence Camille/Frank ne s'utilise nulle part ailleurs).
+- **Règle 1 — Défaut sans choix = manipulation par PNJ.** Si le joueur ne pousse pas, le PNJ agit. Chaque `[choice]` doit comporter une option « subir/esquiver » qui déclenche un effet *PNJ-driven* (relation, surveillance, info captée), pas un no-op.
+- **Règle 2 — Pression externe refusable.** Witness Networks et Stratom peuvent exiger ; Margot peut toujours refuser, contre PD / faction / contrat. **Mirror ne monte JAMAIS sur action involontaire externe** — uniquement sur action joueur confirmée.
+- **Règle 3 — Failles hybrides.** Chaque faille a un tag déclaré dans son arc-spec : `transferable` (info Marine peut servir dans l'arc Camille) ou `anchored` (le silence Camille/Frank ne s'utilise nulle part ailleurs).
 
 ---
 
@@ -116,8 +271,25 @@ Chaque faille découverte chez un couple propose un usage :
 
 Référence détaillée : `history.md`.
 
+<!-- #27 : section temporalité -->
+### Temporalité interne
+
+Le séjour de Margot dure **3 mois in-game** = **~30 ticks** (1 tick = 1 NODE consommé, cf. glossaire) répartis approximativement :
+
+| Acte | Ticks budgetés | Densité narrative |
+|---|---|---|
+| CP | 0 (hors temps) | Création de personnage, pas de consommation tick |
+| PRO | 2 | 2 NODEs cadrage |
+| A1 | 6 | Installation, 1 NODE par séquence |
+| A2 | 10 | Romance + pivot, le plus dense en branches |
+| A3 | 8 | Confrontation, choix lourds |
+| A4 | 4 | Résolution + coda |
+| **Total** | **~30** | — |
+
+Les countdowns `audit_marine` (15) et `equipe_nettoyage` (14) sont calibrés pour pouvoir s'enclencher sur la moitié + d'un run typique (15 ticks ≈ fin A2 / début A3). Un run trop rapide (joueur qui esquive systématiquement) peut éviter le déclenchement ; un run trop lent (joueur qui explore en boucle) le subit certainement.
+
 ### CP — Création de personnage
-Un seul nœud. Choix de **motivation de départ** (4 options : carrière, relations, militante, argent) qui colorie l'ensemble du dialogue. Sortie : `FLAG_MOTIVATION ∈ {carriere, relations, militante, argent}`.
+Un seul nœud. Choix de **motivation de départ** (4 options : carrière, relations, militantisme, argent) qui colorie l'ensemble du dialogue. Sortie : `FLAG_MOTIVATION ∈ {carriere, relations, militantisme, argent}`. <!-- #29 : valeur normalisée en substantif snake_case -->
 
 ### PRO — Prologue
 - **PRO-01** Arrivée à Saint-Michel *(scène point-and-click implémentée)*
@@ -128,65 +300,106 @@ Sortie prologue : valeurs initiales `MS=3 · PD=0 · EV=0`, countdowns activés,
 ### A1 — Acte I : Installation et collecte
 Six séquences canoniques (cf. `history.md` ch. 1-7). Margot s'installe, observe, collecte premières preuves. Alliance avec Léo (flux vidéo). Premier contact décisif. Alex commence à se révéler.
 
-Beats clés : A1-01 (confrontation Emma/Léo) · A1-03 (dîner d'arrivée) · A1-05 (nuit d'écoute) · A2-01 (rencontre Camille).
+Beats clés : A1-01 (confrontation Emma/Léo) · A1-03 (dîner d'arrivée) · A1-05 (nuit d'écoute) · A1-06 (premier scan Alex). <!-- #32 : A2-01 retiré ici (appartient logiquement à A2), beat A1-06 ajouté pour parité 6 séquences -->
 
-### A2 — Acte II : Romance optionnelle + pivot
-Le NODE **A2-04** est le **point d'entrée romance** (un seul arc par run, premier PNJ atteignant relation ≥ +30 avec le bon flag).
+### A2 — Acte II : Mise en tension + pivot
 
-**Pool romance complet — 8 PNJ accessibles, intrusion conjugale assumée :**
+Margot a pris ses marques. Les jauges `relation:<pnj>` se stratifient selon ses choix de sujets dans les scènes de A1. En A2 :
 
-> ⚠ **Pool de tensions affectives, pas menu de drague.** Initiative variable (PNJ ou Margot), motivation variable (attirance / calcul / désamorçage / besoin affectif), lisibilité variable (geste ambigu, jamais étiqueté), aboutissement non garanti. Pas d'écran « choisis ton partenaire ». Cf. `internal/design-rules/pool-romance-pas-drague.md`.
+- Les **sujets intimes/romantiques** apparaissent dans les scènes existantes (dîners, nuits, croisements, postes techniques, ateliers) au-dessus de certains paliers (typiquement Allié+ pour les amorces, Confident+ pour les seuils décisifs).
+- Plusieurs **événements de seuil** par PNJ peuvent se déclencher selon paliers atteints — chacun défini dans le `pnjs-behavior/<pnj>.md` correspondant.
+- **Mid-acte** : pivot global (premier choix moral lourd traversant tous les liens en cours, pas spécifique à une romance).
 
-| Arc | Statut | Particularité d'écriture |
-|---|---|---|
-| **A2-romance-frank** | ✅ documenté `history.md` | Verdict basculé : Frank cherche à se racheter via Margot |
-| **A2-romance-thomas** | ✅ documenté `history.md` | Condition canon : *« Marine/Thomas : rupture visible »*. Mélancolique |
-| **A2-romance-sofia** | ✅ documenté `history.md` | Moteur éthique, pas séduction. Intrusion dans couple Sofia/Alex avec conséquences sur Alex |
-| **A2-romance-marine** | ✅ documenté `history.md` | Urgence, fragilité, livestream. Risque cascade |
-| **A2-romance-camille** | ✅ documenté `history.md` | Dark cogni-affectif. Margot retourne le profilage |
-| **A2-romance-emma** | ✅ tranché 2026-05-21 | **Fusion-confusion non consommée.** Cousines germaines avec éloignement vécu — l'absence d'histoire commune robuste surcharge les retrouvailles (intimité fantasmée par projection). Non-franchissement *cognitif* (« tu es ma moitié biographique, pas mon amante »), pas moral. Pas de variante FIN-E Emma — fins fraternelles : pacte scellé, sacrifice (FIN-C), rupture |
-| **A2-romance-alex** | ✅ tranché 2026-05-21 | **Romance refusée** (D) : alliance opérationnelle profonde + tension d'attirance jamais consommée — Sofia perçoit, n'est pas jalouse, Alex ne franchit pas. Branche **trahison opt-in** (B) verrouillée par choix joueur explicite à point de bascule : Alex bascule, Sofia très blessée *en intimité* (pas en posture pro) |
-| **A2-romance-leo** | ✅ tranché 2026-05-21 | Devient possible quand Margot perce la couche 1 (protection Emma) ou la couche 2 (coup personnel) de l'agenda Léo. Trois colorations selon la couche atteinte |
+Pas de scène spéciale « entrer en romance ». La dynamique romance/alliance/conflit émerge de l'évolution des paliers relations PNJ × des sujets choisis × des seuils franchis.
+
+> ⚠ **Pool de tensions affectives, pas menu de drague.** Initiative variable (PNJ ou Margot), motivation variable (attirance / calcul / désamorçage / besoin affectif), lisibilité variable (geste ambigu, jamais étiqueté), aboutissement non garanti. Pas d'écran « choisis ton partenaire ». Cf. `pool-romance-pas-drague`.
+
+**Verrous canon par PNJ** (extraits depuis les pnj-behaviors) :
+
+| PNJ | Verrou clé |
+|---|---|
+| Frank | Verdict basculé requis (tests intégrité) avant accès intimité |
+| Thomas | Rupture Marine/Thomas visible requise |
+| Sofia | Couple Sofia/Alex transparent — intrusion casse le couple, conséquences sur Alex |
+| Marine | Risque cascade : exposer Marine = chute immeuble |
+| Camille | Dark **cogni-affectif** uniquement, jamais d'emprise physique |
+| Emma | Fusion-confusion non consommée — fins fraternelles uniquement, **pas de FIN-E Emma** |
+| Alex | Romance refusée par défaut (verrou Sofia). Branche trahison opt-in verrouillée par `EV ≥ 4 + flag_alex_double_agent` |
+| Léo | Accès intimité possible uniquement si couche 1 ou 2 de l'agenda Léo a été percée |
 
 ### A3 — Acte III : Confrontation et basculement
 Confrontation avec Camille (retourner le profilage ?). Verdict de Frank (mission Stratom : Margot menace ou ressource ?). Tentative d'exposition partielle. Stratom déploie. Emma craque sous pression. Crédit solidaire menace. Point de bascule moral de Margot.
 
 ### A4 — Acte IV : Résolution
-Convergence vers une des 9 fins selon ratio EV/MS/PD/Mirror/Surveillance + flags.
+<!-- #25 : section étoffée pour parité avec A1/A2/A3 -->
+Convergence vers une des 9 fins selon ratio EV/MS/PD/Mirror/Surveillance + flags. La résolution s'ouvre par un NODE-charnière où Margot pose le dernier choix éditorial *(que faire des rushes ?)*, puis chaque fin déroule sa coda spécifique (1-2 NODEs : conséquence immédiate + plan moral). Aucune fin n'est « bonne » au sens absolu — chacune mesure un type de coût différent. Les fins romance (FIN-E) intègrent une coda à 2 temps : sortie effective puis épilogue 6 mois après.
+
+Beats clés : A4-01 (choix éditorial final) · A4-02-A à A4-02-I (coda spécifique à la fin atteinte).
 
 ---
 
 ## Fins canoniques (A-I)
 
-Détail complet : `history.md` lignes 660-900. Synthèse des conditions de tête :
+Détail complet : `history.md` lignes 660-900.
 
 | Fin | Nom | Conditions clé | Ton |
 |---|---|---|---|
 | **FIN-A** | La Reconstruction | EV=6 · MS=6 · Emma>+50 · micros=false · 0 trigger | Documentaire intact, Margot indemne |
 | **FIN-B** | L'Exposé | EV=6 · MS≥3 · Emma>+50 · ≥1 allié | Fin principale, victoire avec coût |
 | **FIN-C** | Le Pacte de Sang | EV=6 · Emma sacrifiée · MS=2-4 | Vérité au prix d'Emma |
-| **FIN-D** | L'Alliance Corporate | EV=4-5 · deal corpo · Sofia/Léo/Emma>+60 | Compromis politique, variantes Nexus/Memorize |
-| **FIN-E** | La Romance comme Sortie | EV=3-5 · romance active · relation PNJ ≥+60 | 5 variantes (Frank · Thomas · Sofia · Marine · Camille) + 3 à brainstormer |
+| **FIN-D** | L'Alliance Corporate | EV=4-5 · deal corpo · Sofia/Léo/Emma>+60 *(les 3 alliés des 2 corpos non-coercitives — Nexus + Memorize — qui peuvent négocier face à Stratom au nom de Margot)* <!-- #28 --> | Compromis politique, variantes Nexus/Memorize <!-- #16 --> |
+| **FIN-E** | La Romance comme Sortie | EV=3-5 · romance active · relation PNJ ≥+60 | Voir variantes ci-dessous |
 | **FIN-F** | Les Mains Propres | EV=4-5 · MS≥5 · micros=false · mains_propres=true | Intégrité, victoire partielle |
 | **FIN-G** | Le Silence | EV<4 · Witness vendu · toutes relations<+40 | Inaction comme choix |
 | **FIN-H** | La Capture | PD=6 · countdown Équipe Nettoyage=0 · Frank hostile | Game over physique |
 | **FIN-I** | Julien | MS=0 · 5/5 triggers internes | Game over thématique — Margot devient son ex |
 
+<!-- #14 : rappel des axes sous le tableau -->
+> *Axes communs aux conditions ci-dessus :* **EV** preuves (0-6), **MS** stabilité mentale (0-6), **PD** danger physique (0-∞), **Mirror** & **Surveillance** non explicitement listés mais peuvent verrouiller des branches via les seuils.
+
+<!-- v5 : variantes FIN-E refondues sur paliers + flags (modèle scenes × seuils) -->
+### Variantes FIN-E (Romance comme Sortie) — état canon
+
+Plus des arcs séparés : ce sont des **branches de la coda A4** activées si `relation:<pnj> >= Confident` au moment d'A4 + flags spécifiques.
+
+| Variante | Statut | Conditions canon |
+|---|---|---|
+| FIN-E · Frank | ✅ canon | `palier:frank ≥ Confident` · verdict basculé · `flag_frank_rachat = true` |
+| FIN-E · Thomas | ✅ canon | `palier:thomas ≥ Confident` · `flag_marine_thomas_rupture = true` |
+| FIN-E · Sofia | ✅ canon | `palier:sofia ≥ Confident` · couple Sofia/Alex brisé en conséquence |
+| FIN-E · Marine | ✅ canon | `palier:marine ≥ Confident` · cascade contenue · livestream |
+| FIN-E · Camille | ✅ canon | `palier:camille ≥ Confident` · `flag_profilage_retourne = true` |
+| FIN-E · Léo | ⚠ conditionnel | `palier:leo ≥ Confident` + couche 1 OU 2 percée — coloration selon couche |
+| FIN-E · Alex | ⚠ opt-in trahison | `palier:alex ≥ Confident` + `flag_alex_franchi = true` *(événement de seuil opt-in)* |
+| FIN-E · Emma | ❌ **exclu canon** | Fusion-confusion non consommée — fins fraternelles uniquement (cf. `pnjs-behavior/emma.md` verrous) |
+
 ---
 
 ## Topologie corporatiste
 
+<!-- #10 + #21 : diagramme augmenté avec double appartenance Alex, réaligné proprement -->
+
 ```
-                ┌─────────────────┐
-                │  STRATOM CORP   │  (couvre les 4)
-                └─────────────────┘
-                       │
-        ┌──────┬───────┼───────┬──────┐
-        ▼      ▼               ▼      ▼
-   MEMORIZE  KAIZEN          NEXUS  STRATOM
-    bleu    orange           vert    rouge
-   Emma ×   Marine ×        Sofia ×  Camille ×
-    Léo     Thomas           Alex     Frank
+                  ┌────────────────────────┐
+                  │    STRATOM CORP        │  bras armé +
+                  │ (autorité de dernière  │  autorité ultime
+                  │      instance)         │  sur les 4 corpos
+                  └────────────┬───────────┘
+                               │
+            ┌──────────┬───────┴───────┬──────────┐
+            ▼          ▼               ▼          ▼
+        MEMORIZE    KAIZEN          NEXUS      STRATOM
+         (bleu)     (orange)        (vert)     (rouge)
+            │          │               │          │
+        Emma ────  Marine ────    Sofia ────  Camille
+         ×           ×               ×           ×
+        Léo        Thomas          Alex* ──┐    Frank
+                                           │
+                                           ▼
+                                     taupe Stratom
+                                  (* Alex : Nexus public,
+                                     Stratom réel ; transparent
+                                     avec Sofia, opaque ailleurs)
 ```
 
 ### Statut canon du rassemblement
@@ -196,7 +409,7 @@ Détail complet : `history.md` lignes 660-900. Synthèse des conditions de tête
 - **N2 (institutionnel)** : *« démonstration que les 4 corpos peuvent œuvrer ensemble »* — vitrine vertueuse. Les 8 résidents sont officiellement ambassadeurs.
 - **N3 (secret)** : **Programme Nexus Social**, prototype contrôle urbain Néo-Paris 2090. Les 8 résidents sont aussi sujets d'expérience.
 
-Margot est invitée pour valider N2 ; la crise survient quand elle perce N3. Asymétrie d'information entre résidents (qui sait N3) = levier narratif majeur — détail dans `bible-jeu.md § 3`.
+Margot est invitée pour valider N2 ; la crise survient quand elle perce N3. *Asymétrie d'information entre résidents — voir [matrice dédiée](#asymétrie-dinformation-sur-n3-programme-secret).*
 
 **Saint-Michel = zone neutre** : aucune corpo n'a d'autorité juridictionnelle unilatérale → toute action contre Margot doit être négociée à 4. Cartographie d'arrondissement non tranchée, les arcs concrétiseront. Voir `bible-jeu.md § 3` (immeuble + symbolique archangélique).
 
@@ -215,43 +428,87 @@ Rivales par essence, convergées par Nexus Social. Chaque corpo apporte une briq
 
 ### Culture corpo, jobs, frictions
 
-- **Cohabitation vs travail** : les liens quotidiens ont dépassé les clivages, mais le contexte pro réactive les rancœurs corpo. Cf. `internal/design-rules/corpos-job-ordinaire.md`.
-- **Pas de missions secrètes** : les 8 PNJ font leur job ordinaire + ambitions perso. Même mémoire.
+- **Cohabitation vs travail** : les liens quotidiens ont dépassé les clivages, mais le contexte pro réactive les rancœurs corpo. Cf. `corpos-job-ordinaire`.
+- **Pas de missions secrètes** : les 8 PNJ font leur job ordinaire + ambitions perso.
 - **Frictions corpo** : Memorize ↔ Stratom (prédictif vs coercitif), Kaizen méprise Nexus, Nexus méfie Memorize, Stratom = bras armé. Détail + zones grises par corpo dans `bible-jeu.md § 4`.
 
 ---
 
 ## Notes auteur
 
-### Threads ouverts résiduels (à arbitrer avant écriture des arcs concernés)
+<!-- #6 : restructuré en 3 sous-sections nettes -->
 
-*Aucun thread narratif majeur ouvert à ce jour.* Cause de la brouille familiale Margot/Emma laissée variable libre (héritage, choix de vie, accident, conflit politique) — à arbitrer si un arc-spec a besoin de la fixer.
-
-### Threads tranchés 2026-05-21 *(historique récent — pour mémoire)*
-
-- ~~Léo — agenda caché précis~~ → **hybride à 3 couches** : esthétique publique / protection Emma / coup personnel justifié. Cf. fiche Léo.
-- ~~Alex — condition de retournement contre Stratom~~ → **acte de couple** (Sofia & Alex ensemble) ; branche trahison opt-in à point de bascule. Cf. fiche Alex.
-- ~~Margot — orientation/genre~~ → **inférée par défaut, jamais thématisée** dans CP. Pool 8 PNJ reste accessible. Cohérent avec `ExProfileManager` (ex de tout genre).
-- ~~Emma — degré de cousinage et histoire commune~~ → **germaines + éloignement vécu** (brouille familiale ancienne, peu de souvenirs partagés, reconnexion adulte tardive via Julien). A2-romance-emma = **fusion-confusion non consommée** (bascule cognitive, pas morale). Cf. fiche Emma + `bible-jeu.md § 6`.
-- ~~Pool A2-romance — statut de jeu~~ → **tensions affectives ambiguës, pas drague**. Initiative variable, motivation variable, aboutissement non garanti. Cf. `internal/design-rules/pool-romance-pas-drague.md`.
-
-### Décisions de design à respecter
+### Décisions canon (prescriptif)
 
 - **Inversion défaut Margot** : Margot terrain, PNJ acteurs. Pas de no-op silencieux dans les `[choice]`.
 - **Mirror sur action confirmée uniquement** : pas de Mirror involontaire sur pression externe acceptée sous contrainte.
-- **Failles hybrides** : déclarer `transferable`/`anchored` dans chaque arc-spec.
+- **Failles hybrides** : déclarer `transferable`/`anchored` dans chaque arc-spec. *Exemple : la dette Marine est `transferable` (utilisable dans arc Camille comme levier de profilage) ; le silence Camille/Frank est `anchored` (n'a de sens que dans le couple où il se joue).*
 - **Identité trans Sofia** : intégrée, jamais plot-point, pronoms `elle`, vocabulaire actuel, pas d'outing involontaire. Vérification persona `playtester-lgbtqia`.
 - **Camille dark = cogni-affectif** : pas d'emprise physique. Le « dark » est dans le profilage et l'asymétrie d'information.
-- **Emma A2-romance = fusion-confusion non consommée** : intensité affective surchargée par les retrouvailles tardives, bascule cognitive (« tu es ma moitié biographique »), pas franchie. Pas de FIN-E variante Emma — fins fraternelles uniquement. Cf. `pool-romance-pas-drague.md`.
-- **Pool A2-romance ≠ menu de drague** : initiative variable, motivation variable, aboutissement non garanti — règle transversale.
-- **Pas de chiffre affiché pour Mirror et Surveillance** au joueur — icônes/registres visuels (cohérence avec règle RÉSILIENCES, hérité via [[CLAUDE.md]] du repo).
-- **Tout dialogue contredisant le paradoxe éthique de Sofia est suspect** (si la romance lui fait lâcher sa posture d'autorité, personnage cassé).
+- **Emma A2-romance = fusion-confusion non consommée** : pas de FIN-E variante Emma — fins fraternelles uniquement.
+- **Pool A2-romance ≠ menu de drague** : initiative variable, motivation variable, aboutissement non garanti.
+- **Pas de chiffre affiché pour Mirror et Surveillance** au joueur — icônes/registres visuels (hérité de la règle RÉSILIENCES, [[CLAUDE.md]]).
+- **Posture éthique Sofia inattaquable en intimité romantique** : tout dialogue contredisant le paradoxe éthique de Sofia est suspect (si la romance lui fait lâcher sa posture d'autorité, personnage cassé).
+
+<!-- #11 : section anti-patterns consolidée -->
+### Anti-patterns d'écriture (red flags à refuser en review)
+
+- ❌ `[choice]` avec une option « ne rien faire » qui ne déclenche rien (viole Règle 1).
+- ❌ Mirror appliqué sur une pression externe subie (viole Règle 2).
+- ❌ Scène où un *ignorant N3* (Marine) décrit le Programme spontanément (viole asymétrie info).
+- ❌ Romance Camille avec emprise physique (viole « dark = cogni-affectif »).
+- ❌ Outing Sofia comme révélation dramatique (viole `sofia-kessler-caracterisation`).
+- ❌ PNJ secondaire qui acquiert relation ou réputation (réservé aux 17 PNJ Tier 1-2).
+- ❌ Variante FIN-E Emma (exclue canon — n'écrire que des fins fraternelles).
+- ❌ Cascade Marine déclenchée par naïveté journalistique sans préavis playtester.
 
 ### Zones de risque à surveiller
 
 - **Cascade Marine** : exposer Marine pour gagner EV déclenche la chute de tout l'immeuble. Documenter clairement dans l'arc-spec qu'il s'agit d'un *piège* — éviter qu'un playtester sympathique au journalisme la déclenche par naïveté.
 - **Asymétrie surveillance × identités queer** : la mécanique Surveillance s'applique sans biais. Vérifier qu'aucun signal `surveillance:` n'est conditionné à un trait queer du PNJ visité.
 - **Camille dark + sensitivity reader** : toute branche dark cogni-affectif doit passer `review-persona` avec `playtester-lgbtqia` ET `playtester-margot` (consentement informationnel lisible).
+
+### Threads ouverts résiduels
+
+*Aucun thread narratif majeur ouvert à ce jour.* Cause de la brouille familiale Margot/Emma laissée variable libre (héritage, choix de vie, accident, conflit politique) — à arbitrer si un arc-spec a besoin de la fixer.
+
+<!-- v5 : todos refondues pour le modèle 3 couches -->
+### Production todos
+
+| Priorité | Tâche | Owner | État |
+|---|---|---|---|
+| P0 | Spec `pnj-behavior:emma` *(POC du modèle 3 couches)* | narrative | ✅ livré |
+| P0 | Réviser canon Emma : critique utilisateur — la référence généalogique tombe à plat, à retravailler vers un mécanisme *« Emma a vu Julien donc peut voir Margot »* | narrative | ✅ livré v2 *(`pnjs-behavior/emma.md` refondu 2026-05-22)* |
+| P0 | Spec `pnj-behavior:camille` *(urgent — cliffhanger dans diner_arrivee.dtl)* | narrative | ✅ livré |
+| P0 | Spec `pnj-behavior:alex` | narrative | ✅ livré |
+| P0 | Spec `pnj-behavior:frank` | narrative | ✅ livré |
+| P0 | Spec `pnj-behavior:leo` *(arc-spec archivé disponible, 3 colorations à transposer)* | narrative | ✅ livré |
+| P0 | Spec `pnj-behavior:sofia` *(verrou force pro ≠ force intime ; coordination Alex)* | narrative | ✅ livré |
+| P0 | Spec `pnj-behavior:thomas` + `marine` *(complétion des 8 résidents — couple Kaizen)* | narrative | ✅ livré — **catalogue PNJ 8/8 complet** |
+| P0 | Définir 4-6 scene-specs récurrentes A1-A2 (dîner, nuit cellule, coursive, postes techniques, atelier Léo, salon Camille) | narrative | À faire |
+| P1 | Spec `pnj-behavior` pour les 5 autres résidents (Frank, Thomas, Marine, Sofia, Camille) | narrative | À brainstormer |
+| P1 | Refondre `decompose-arc.prompt.md` en `decompose-scene.prompt.md` | tooling | À faire |
+| P1 | Adapter `write-dtl.prompt.md` pour consommer scene-spec + pnj-behaviors | tooling | À faire |
+| P1 | Refondre `graph-audit.prompt.md` pour audit matriciel (palier × sujet × PNJ) | tooling | À faire |
+| P1 | Spec scenes A3 (verdict Frank + confrontation Camille + Stratom déploie) | narrative | À brainstormer |
+| P2 | Lint passe `dtl_linter.gd` sur tous les `.dtl` produits | dev | En cours |
+
+---
+
+## Export vers Godot — pipeline
+
+Voir doc complète : [`docs/EXPORT_PIPELINE.md`](../../docs/EXPORT_PIPELINE.md).
+
+Résumé : `scene-spec` (Markdown) → `write-scene` produit `.dtl` + stub `.tscn` → `dtl_linter` PASS → `review-persona auditeur-scene` + `dramaturge` + sensitivity → création manuelle `.tscn`/`.gd` dans Godot Editor à partir du stub → enregistrement `LocationManager`/`CharacterRegistry` → tests GUT + playtest manuel.
+
+| Couche | Format | Automatisation |
+|---|---|---|
+| Spec narrative | `.md` | 🤖 prompts (`scene-spec`, `pnj-behavior`) |
+| Timeline | `.dtl` | 🤖 `write-scene` |
+| Audits | Markdown | 🤖 `review-persona` (5+ personas) |
+| Scène Godot | `.tscn` + `.gd` | ✋ manuel (suit stub markdown) |
+| Assets | `.jpg`/`.png`/`.ogg` | 🤖 génération AI + ✋ placement |
+| Orchestration | autoloads, registries | ✋ manuel (convention claire) |
 
 ---
 
@@ -262,6 +519,15 @@ Rivales par essence, convergées par Nexus Social. Chaque corpo apporte une briq
 - snake_case strict GDScript.
 - Dialogues écrits en `.dtl` (Dialogic 2), pilotage des managers via `DialogicBridge` (10 dispatchers : relation, flag, decision, lieu, surveillance, miroir, reputation, countdown, ms, pd).
 - Linter mécanique : `scripts/tools/dtl_linter.gd` à passer en pre-LLM-review sur tout `.dtl`.
+
+<!-- #30 : workflow d'édition de l'overview -->
+### Comment éditer ce document
+
+- **Modifications canon majeures** (nouveau PNJ Tier 1-2, nouvelle FIN, nouvelle règle de design) : passage obligatoire par session `brainstorm` + acceptation `narrative` avant de toucher au fichier.
+- **Modifications canon mineures** (clarif, dédup, typo, exemple supplémentaire) : édition directe + commit.
+- **Bump de version** : incrémenter le commentaire `<!-- vN -->` en tête de fichier à chaque commit qui ajoute/modifie une suggestion structurelle (les fixes typo seuls ne bumpent pas).
+- **Archive threads tranchés** : alimenter le bloc d'archive en bas dès qu'un thread ouvert est tranché — ne jamais le supprimer (mémoire des décisions canon).
+- **Source d'autorité en cas de conflit** : `bible-jeu.md` > `history.md` > overview > arc-spec. Si une contradiction apparaît, remonter et fixer la source la plus haute.
 
 ---
 
@@ -280,14 +546,31 @@ Rivales par essence, convergées par Nexus Social. Chaque corpo apporte une briq
 
 | Mémoire interne | Rôle |
 |---|---|
-| `internal/architecture.md` | Conventions · 14 autoloads · pipeline · structure NODE |
-| `internal/api-cheatsheet.md` | Syntaxe complète DialogicBridge (10 dispatchers, exemples) |
+| `internal/api-cheatsheet.md` | Syntaxe complète DialogicBridge (10 dispatchers, exemples) |<!-- #24 : architecture.md retiré ici (déjà dans la table Documents canon ci-dessus) -->
 | `internal/code-state.md` | Snapshot du code Godot (managers, scripts) |
 | `internal/design-rules/sofia-kessler-caracterisation.md` | Règles d'écriture spécifiques Sofia (trans · vigilante éthique · couple Alex) |
 | `internal/design-rules/margot-terrain-neutre.md` | Règle centrale : défaut sans choix = PNJ mènent. Mirror = instrumentalisation subie |
 | `internal/design-rules/margot-documentariste-sincere.md` | Registre sociologique · double instrumentalisation corpos × Witness |
 | `internal/design-rules/corpos-job-ordinaire.md` | Pas de missions secrètes · agents importants · culture corpo vs cohabitation |
+| `internal/design-rules/pool-romance-pas-drague.md` | Pool A2 = tensions affectives, pas drague |
 
 ---
 
-*Overview construit le 2026-05-21. Prochaine étape : `arc-spec` sur les 8 arcs A2-romance (5 documentés + 3 à brainstormer) et A3.*
+<!-- #5 : threads tranchés déplacés en archive de bas de doc -->
+## Archive — threads tranchés 2026-05-21
+
+*Historique opérationnel conservé pour mémoire. Toutes ces décisions sont maintenant intégrées au corps du document ci-dessus.*
+
+- ~~Léo — agenda caché précis~~ → **hybride à 3 couches** : esthétique publique / protection Emma / coup personnel justifié. Cf. fiche Léo.
+- ~~Alex — condition de retournement contre Stratom~~ → **acte de couple** (Sofia & Alex ensemble) ; branche trahison opt-in à point de bascule. Cf. fiche Alex.
+- ~~Margot — orientation/genre~~ → **inférée par défaut, jamais thématisée** dans CP. Pool 8 PNJ reste accessible. Cohérent avec `ExProfileManager` (ex de tout genre).
+- ~~Margot — âge~~ → **32 ans**. <!-- #36 : mention meta « upgrade v2 » retirée -->
+- ~~Léo — âge~~ → **30 ans**. <!-- #34 -->
+- ~~Frank — âge~~ → **42 ans**. <!-- #34 -->
+- ~~Emma — degré de cousinage et histoire commune~~ → **germaines + éloignement vécu** (brouille familiale ancienne, peu de souvenirs partagés, reconnexion adulte tardive via Julien). A2-romance-emma = **fusion-confusion non consommée**. Cf. fiche Emma + `bible-jeu.md § 6`.
+- ~~Pool A2-romance — statut de jeu~~ → **tensions affectives ambiguës, pas drague**. Initiative variable, motivation variable, aboutissement non garanti.
+- ~~Variantes FIN-E~~ → **5 canon + 2 conditionnelles (Léo, Alex opt-in) + Emma exclue**. <!-- #36 : mention meta « upgrade v2 » retirée -->
+
+---
+
+*Overview v4 (upgrade 2026-05-21). Prochaine étape : `arc-spec` sur les arcs A2-romance Emma/Alex/Léo (3 à brainstormer) puis A3.*

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Présentation du projet
 
-**8-MINE** est un jeu narratif cyberpunk (Godot 4.4.1 .NET, tout en GDScript) avec deux modes de jeu :
+**8-MINE** est un jeu narratif cyberpunk (Godot 4.6 .NET, tout en GDScript) avec deux modes de jeu :
 - **Roman visuel** : dialogues Dialogic 2 avec des choix à conséquences
 - **Point-and-click** : exploration de lieux avec hotspots, PNJ et caméras de surveillance
 
@@ -139,3 +139,23 @@ Ces fichiers contiennent des règles d'écriture qui conditionnent **toute produ
 | API DialogicBridge (10 dispatchers, exemples) | `aidd_docs/memory/internal/api-cheatsheet.md` |
 | Registre des variables/flags | `aidd_docs/memory/internal/variables-register.md` |
 | Snapshot code Godot | `aidd_docs/memory/internal/code-state.md` |
+
+## Memory Management
+
+Project docs, memory, specs, and plans live in `aidd_docs/`.
+
+### Project memory
+
+<aidd_project_memory>
+@aidd_docs/memory/architecture.md
+@aidd_docs/memory/codebase-map.md
+@aidd_docs/memory/coding-assertions.md
+@aidd_docs/memory/deployment.md
+@aidd_docs/memory/project-brief.md
+@aidd_docs/memory/testing.md
+@aidd_docs/memory/vcs.md
+</aidd_project_memory>
+
+- If memory is not loaded above: run `ls -1tr aidd_docs/memory/` then read each file
+- If needed: load files from `aidd_docs/memory/external/*` when user request it
+- If needed: load files from `aidd_docs/memory/internal/*`, you have to think about it

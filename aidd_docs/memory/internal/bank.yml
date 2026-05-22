@@ -1,0 +1,93 @@
+# bank.yml — Registre des ressources 8-MINE
+# Généré par bank init · Audité par bank challenge
+# NE PAS ÉDITER MANUELLEMENT — relancer bank init après ajout d'un canon
+
+projet:
+  nom: 8-MINE
+  type: jeu-narratif-godot-dialogic
+  version: "0.9"
+  date_generation: "2026-05-22"
+
+# --- Overview projet (synthèse 400-500 lignes, source pour arc-spec) ---
+# Consommé par brainstorm/upgrade (workshop) en écriture, par arc-spec en lecture.
+overview: aidd_docs/memory/external/overview.md
+
+# --- Ressources LORE (canon narratif détaillé) ---
+lore:
+  bible: aidd_docs/memory/external/bible-jeu.md
+  history: aidd_docs/memory/external/history.md
+  pnjs_secondaires: aidd_docs/memory/external/pnjs-secondaires.md
+  nodes:
+    - aidd_docs/memory/external/nodes/01.md
+    - aidd_docs/memory/external/nodes/02.md
+  sessions:
+    - aidd_docs/memory/external/session-exemple-01.md
+
+# --- Ressources CODE (canon technique) ---
+code:
+  architecture: aidd_docs/memory/internal/architecture.md
+  api_cheatsheet: aidd_docs/memory/internal/api-cheatsheet.md
+  variables_register: aidd_docs/memory/internal/variables-register.md
+  code_state: aidd_docs/memory/internal/code-state.md
+  linter: scripts/tools/dtl_linter.gd
+  dialogic_bridge: scripts/managers/DialogicBridge.gd
+
+# --- Tracking interne (état de prod, suivi tâches, log playtests) ---
+tracking:
+  prod: aidd_docs/memory/internal/etat-prod.md
+
+# --- Design rules (règles d'écriture canoniques, toujours actives) ---
+# Chargées par CLAUDE.md du projet 8-mine pour conditionner toute écriture narrative.
+design_rules:
+  sofia: aidd_docs/memory/internal/design-rules/sofia-kessler-caracterisation.md
+  margot_terrain: aidd_docs/memory/internal/design-rules/margot-terrain-neutre.md
+  margot_documentariste: aidd_docs/memory/internal/design-rules/margot-documentariste-sincere.md
+  corpos: aidd_docs/memory/internal/design-rules/corpos-job-ordinaire.md
+  pool_romance: aidd_docs/memory/internal/design-rules/pool-romance-pas-drague.md
+
+# --- Templates (schémas de sortie consommés par les skills) ---
+templates:
+  arc_spec: aidd_docs/memory/internal/templates/arc-spec.md
+  node_spec: aidd_docs/memory/internal/templates/node-spec.md
+  review_report: aidd_docs/memory/internal/templates/review-report.md
+  scene_spec: aidd_docs/memory/internal/templates/scene-spec.md
+  pnj_behavior: aidd_docs/memory/internal/templates/pnj-behavior.md
+
+# --- Output styles (rédactionnels) ---
+# Défaut consommé par write-dtl ; variantes déclarables par node-spec.
+output_styles:
+  default: aidd_docs/memory/internal/templates/output-styles/scenario.md
+
+# Document type (utilisé par brainstorm pour adapter ses questions)
+document:
+  type: videogame   # 8-MINE = narratif Godot/Dialogic ; questions adaptées
+
+# --- Personas actives ---
+# Source de vérité = reference_documents: du YAML persona
+# Cette section est miroir, pour audit rapide
+personas:
+  dramaturge:
+    file: aidd_docs/memory/internal/personas/dramaturge.yml
+    loads: [code.architecture, lore.history, lore.bible, code.variables_register]
+  playtester-lgbtqia:
+    file: aidd_docs/memory/internal/personas/playtester-lgbtqia.yml
+    loads: [lore.bible, lore.pnjs_secondaires, code.api_cheatsheet]
+  playtester-visual-novel:
+    file: aidd_docs/memory/internal/personas/playtester-visual-novel.yml
+    loads: [lore.bible, lore.history, code.api_cheatsheet]
+  playtester-cyberpunk:
+    file: aidd_docs/memory/internal/personas/playtester-cyberpunk.yml
+    loads: [lore.bible, design_rules.corpos, code.api_cheatsheet]
+
+# --- Personas archivées (non invocables) ---
+# Fichiers préservés dans personas/_archive/ pour historique
+# _archive: margot-joueuse, auditeur-scene, coauteur-ia, critique-indie-narratif, playtester-accessibilite
+
+# --- Pipeline outputs ---
+outputs:
+  arc_specs: aidd_docs/memory/external/arcs/        # dialogic-draft arc-spec
+  node_specs: aidd_docs/memory/external/nodes/      # dialogic-draft decompose
+  scenes: aidd_docs/memory/external/scenes/         # dialogic-draft scene-spec
+  pnjs_behavior: aidd_docs/memory/external/pnjs-behavior/  # dialogic-draft pnj-behavior
+  timelines: dialogic/timelines/                    # dialogic-draft write-scene / write-dtl
+  reviews: aidd_docs/memory/external/reviews/       # dialogic-review

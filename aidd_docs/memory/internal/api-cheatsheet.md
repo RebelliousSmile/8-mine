@@ -16,6 +16,7 @@ _Pour écrire rapidement du code GDScript ou des timelines .dtl_
 [signal arg="countdown:<id>:<delta>"]
 [signal arg="ms:<delta>:<raison?>"]
 [signal arg="pd:<delta>:<raison?>"]
+[signal arg="ev:<delta>:<raison?>"]
 ```
 
 **Exemples concrets :**
@@ -30,6 +31,7 @@ _Pour écrire rapidement du code GDScript ou des timelines .dtl_
 [signal arg="countdown:equipe_nettoyage:1"]
 [signal arg="ms:-1:mensonge_emma"]
 [signal arg="pd:+1:repere_camera"]
+[signal arg="ev:+1:emma_propose_acces"]
 ```
 
 **Notes :**
@@ -37,6 +39,7 @@ _Pour écrire rapidement du code GDScript ou des timelines .dtl_
 - `delta` négatif = `untick` pour `countdown:`
 - `ms:` modifie `mental_stability` (clampé 0..MAX par le setter) — la raison est informative
 - `pd:` modifie `personal_danger` (clampé ≥ 0 par le setter) — la raison est informative
+- `ev:` modifie `evidence_collected` (clampé ≥ 0 par le setter) — la raison est informative
 - Factions valides : `stratom`, `marine`, `presse`, `police`, `activistes`, `memorize`, `nexus`, `kaizen`
 - Countdowns valides : `equipe_nettoyage` (max 14), `audit_marine` (max 15)
 

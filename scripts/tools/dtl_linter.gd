@@ -36,7 +36,7 @@ const PNJ_VALIDES := [
 const DISPATCHERS_VALIDES := [
 	"relation", "flag", "decision", "lieu",
 	"surveillance", "miroir", "reputation", "countdown",
-	"ms", "pd"
+	"ms", "pd", "ev"
 ]
 
 const VARIABLES_CANON := [
