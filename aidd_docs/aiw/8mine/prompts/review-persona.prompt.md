@@ -1,8 +1,8 @@
 ---
 name: review-persona
-description: Review d'un .dtl par un persona — mode complet ou light. Calibration /20 ancrée + tags sévérité + plafond automatique + auto-trigger persona-trainer/tone-finder sur findings.
+description: Review d'un .dtl par un persona — mode complet ou light. Calibration /20 ancrée + tags sévérité + plafond automatique + auto-trigger persona-trainer/tone-finder sur findings. Règle trigger #1 raffinée pour exclure faux positifs.
 argument-hint: <chemin .dtl> <persona-name> [--scene-spec <chemin> | --node-spec <chemin>] [--pnj-behaviors <chemin1,chemin2,...>] [--light]
-version: 1.5
+version: 1.6
 ---
 
 # Review Persona — .dtl + spec → Verbatims + Triage
@@ -280,7 +280,13 @@ Si l'un de ces patterns apparaît dans le rapport, le persona est probablement t
 
 ### Triggers persona-trainer
 
-1. **Concordance étroite ET indulgente** : si plusieurs personas en parallèle convergent à ±1 point ET le score moyen ≥ 17/20 → calibration suspecte
+1. **Concordance étroite ET indulgente** *(v1.6 raffiné — exclut faux positifs)* :
+   - convergence ±1 point entre personas en parallèle
+   - ET score moyen ≥ 17/20
+   - ET **(aucune faiblesse 🟡+ trouvée OU recherche active non explicitement déclarée)**
+
+   **Faux positif typique évité** : si tous les personas atteignent 17/20 *par plafond légitime* enclenché par 🟡 mineurs trouvés + recherche active déclarée, la concordance reflète une qualité réelle convergente, pas une indulgence partagée. Ne pas déclencher dans ce cas. *Cf. review v3 `diner_arrivee` 2026-05-22 — démonstration du faux positif et de son traitement.*
+
 2. **Plafond non enclenché malgré score ≥ 17** : si aucune faiblesse 🟠+ trouvée ET score ≥ 17 ET recherche active non explicitement déclarée → indulgence
 3. **Pattern de findings systématiquement manqués** *(rétroactif sur historique)* : si un finding 🟠+ est signalé "missed" par l'utilisateur après publication de la review → trigger sur le persona qui aurait dû le voir
 4. **Recherche active non déclarée** : si « moins de 3 faiblesses trouvées » sans déclaration explicite que la craft checklist a été testée exhaustivement

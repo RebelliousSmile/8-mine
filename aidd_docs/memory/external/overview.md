@@ -478,7 +478,7 @@ Rivales par essence, convergées par Nexus Social. Chaque corpo apporte une briq
 | Priorité | Tâche | Owner | État |
 |---|---|---|---|
 | P0 | Spec `pnj-behavior:emma` *(POC du modèle 3 couches)* | narrative | ✅ livré |
-| P0 | Réviser canon Emma : critique utilisateur — la référence généalogique tombe à plat, à retravailler vers un mécanisme *« Emma a vu Julien donc peut voir Margot »* | narrative | À trancher |
+| P0 | Réviser canon Emma : critique utilisateur — la référence généalogique tombe à plat, à retravailler vers un mécanisme *« Emma a vu Julien donc peut voir Margot »* | narrative | ✅ livré v2 *(`pnjs-behavior/emma.md` refondu 2026-05-22)* |
 | P0 | Spec `pnj-behavior:camille` *(urgent — cliffhanger dans diner_arrivee.dtl)* | narrative | ✅ livré |
 | P0 | Spec `pnj-behavior:alex` | narrative | ✅ livré |
 | P0 | Spec `pnj-behavior:frank` | narrative | ✅ livré |
