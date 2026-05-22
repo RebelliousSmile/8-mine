@@ -126,6 +126,17 @@ Suivre `pnjs-behavior/<pnj>.md` pour la définition canonique :
 | `event_leo_aveu_mutuel` | `leo.md` ✅ | *(événement central arc, 3 colorations A/B/C — atelier_leo à spec)* |
 | `event_leo_pivot_choix` | `leo.md` ✅ | *(PIVOT — 8 codas possibles selon coloration × choix Margot)* |
 | `event_emma_intercept_leo` | `leo.md` ✅ | *(automatique si flag_pacte_emma — interception boussole morale)* |
+| `event_marine_favorable` | `marine.md` ✅ | *(via [B] Witness — diner_arrivee canon)* |
+| `event_marine_dette_revelee` | `marine.md` ✅ | *(scénique, 4 canaux canon : micros A1-05 / Léo flux / Emma confidence / Camille profilage)* |
+| `event_marine_allie` | `marine.md` ✅ | *(canon `flag_marine_alliee`, ouvre canal Thomas via Marine)* |
+| `event_marine_rupture_visible_amorce` | `marine.md` ✅ | *(scénique dispute Marine/Thomas — condition canon FIN-E Thomas)* |
+| `event_marine_proche` | `marine.md` ✅ | *(masque baissé en privé — appart_marine_thomas à spec)* |
+| `event_marine_confident` | `marine.md` ✅ | *(scenes A4 — coda FIN-E Marine « Le Livestream »)* |
+| `event_thomas_favorable` | `thomas.md` ✅ | *(reconnaissance intégrité Margot — *« Toi tu sais »*)* |
+| `event_thomas_complice_silencieux` | `thomas.md` ✅ | *(scénique récurrent cap 2 — couverture par omission)* |
+| `event_thomas_proche` | `thomas.md` ✅ | *(post rupture visible Marine/Thomas — Thomas dit *« on »*)* |
+| `event_thomas_confident` | `thomas.md` ✅ | *(scenes A4 — coda FIN-E Thomas « La Révélation »)* |
+| `event_thomas_revele_par_fatigue` | `thomas.md` ✅ | *(récurrent cap 2 — Weakness Tag canon, cellule_nuit propice)* |
 | `event_camille_cliffhanger` | `camille.md` ✅ | `diner_arrivee` |
 | `event_camille_favorable` | `camille.md` ✅ | *(scenes A2 à spec)* |
 | `event_camille_allie` | `camille.md` ✅ | *(scenes A2 à spec — salon_camille, croisements)* |

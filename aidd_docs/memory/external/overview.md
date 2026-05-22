@@ -484,7 +484,7 @@ Rivales par essence, convergées par Nexus Social. Chaque corpo apporte une briq
 | P0 | Spec `pnj-behavior:frank` | narrative | ✅ livré |
 | P0 | Spec `pnj-behavior:leo` *(arc-spec archivé disponible, 3 colorations à transposer)* | narrative | ✅ livré |
 | P0 | Spec `pnj-behavior:sofia` *(verrou force pro ≠ force intime ; coordination Alex)* | narrative | ✅ livré |
-| P0 | Spec `pnj-behavior:thomas` + `marine` *(complétion des 8 résidents — couple Kaizen)* | narrative | À faire |
+| P0 | Spec `pnj-behavior:thomas` + `marine` *(complétion des 8 résidents — couple Kaizen)* | narrative | ✅ livré — **catalogue PNJ 8/8 complet** |
 | P0 | Définir 4-6 scene-specs récurrentes A1-A2 (dîner, nuit cellule, coursive, postes techniques, atelier Léo, salon Camille) | narrative | À faire |
 | P1 | Spec `pnj-behavior` pour les 5 autres résidents (Frank, Thomas, Marine, Sofia, Camille) | narrative | À brainstormer |
 | P1 | Refondre `decompose-arc.prompt.md` en `decompose-scene.prompt.md` | tooling | À faire |
