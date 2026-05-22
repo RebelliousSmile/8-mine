@@ -480,8 +480,11 @@ Rivales par essence, convergées par Nexus Social. Chaque corpo apporte une briq
 | P0 | Spec `pnj-behavior:emma` *(POC du modèle 3 couches)* | narrative | ✅ livré |
 | P0 | Réviser canon Emma : critique utilisateur — la référence généalogique tombe à plat, à retravailler vers un mécanisme *« Emma a vu Julien donc peut voir Margot »* | narrative | À trancher |
 | P0 | Spec `pnj-behavior:camille` *(urgent — cliffhanger dans diner_arrivee.dtl)* | narrative | ✅ livré |
-| P0 | Spec `pnj-behavior:alex` + `pnj-behavior:leo` *(suite POC)* | narrative | À faire |
-| P0 | Spec `pnj-behavior:frank` + `thomas` + `marine` + `sofia` *(complétion des 8 résidents)* | narrative | À faire |
+| P0 | Spec `pnj-behavior:alex` | narrative | ✅ livré |
+| P0 | Spec `pnj-behavior:frank` | narrative | ✅ livré |
+| P0 | Spec `pnj-behavior:leo` *(arc-spec archivé disponible, 3 colorations à transposer)* | narrative | À faire |
+| P0 | Spec `pnj-behavior:sofia` *(verrou force pro ≠ force intime ; coordination Alex)* | narrative | À faire |
+| P0 | Spec `pnj-behavior:thomas` + `marine` *(complétion des 8 résidents — couple Kaizen)* | narrative | À faire |
 | P0 | Définir 4-6 scene-specs récurrentes A1-A2 (dîner, nuit cellule, coursive, postes techniques, atelier Léo, salon Camille) | narrative | À faire |
 | P1 | Spec `pnj-behavior` pour les 5 autres résidents (Frank, Thomas, Marine, Sofia, Camille) | narrative | À brainstormer |
 | P1 | Refondre `decompose-arc.prompt.md` en `decompose-scene.prompt.md` | tooling | À faire |

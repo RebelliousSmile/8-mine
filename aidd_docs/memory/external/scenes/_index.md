@@ -103,6 +103,16 @@ Suivre `pnjs-behavior/<pnj>.md` pour la définition canonique :
 | `event_emma_allie` | `emma.md` ✅ | `cellule_nuit` |
 | `event_emma_confident` | `emma.md` ✅ | `cellule_nuit` |
 | `event_emma_julien_intervention` | `emma.md` ✅ | *(scenes A3/A4 à spec)* |
+| `event_alex_favorable` | `alex.md` ✅ | *(scenes A2 à spec — poste_technique_alex_sofia)* |
+| `event_alex_allie` | `alex.md` ✅ | *(poste_technique_alex_sofia à spec)* |
+| `event_alex_revelation_taupe` | `alex.md` ✅ | *(scenes A2 — 3 canaux Emma/Léo/Sofia)* |
+| `event_alex_confident` | `alex.md` ✅ | *(poste_technique_alex_sofia à spec)* |
+| `event_alex_franchi_optin` | `alex.md` ✅ | *(scénique opt-in joueur, verrouillé EV≥4 + flag_double_agent)* |
+| `event_frank_test_integrite` | `frank.md` ✅ | *(récurrent, cap 3, déclenchable dans scenes A1-A3)* |
+| `event_frank_favorable` | `frank.md` ✅ | *(zone_commune_jour à spec)* |
+| `event_frank_rencontre_nocturne` | `frank.md` ✅ | `cellule_nuit` |
+| `event_frank_verdict_a3` | `frank.md` ✅ | *(verdict_frank A3 à spec — automatique countdown ≤ 7)* |
+| `event_frank_confident` | `frank.md` ✅ | *(scenes A4 — coda FIN-E Frank)* |
 | `event_camille_cliffhanger` | `camille.md` ✅ | `diner_arrivee` |
 | `event_camille_favorable` | `camille.md` ✅ | *(scenes A2 à spec)* |
 | `event_camille_allie` | `camille.md` ✅ | *(scenes A2 à spec — salon_camille, croisements)* |
