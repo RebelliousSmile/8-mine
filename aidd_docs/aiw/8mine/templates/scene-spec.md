@@ -1,0 +1,129 @@
+# Scene Specification — `<scene_id>`
+
+> Sortie du prompt `scene-spec`. Entrée du prompt `write-dtl`.
+> Unité de scène-type réutilisable. Consomme les `pnjs-behavior/` des PNJs concernés.
+
+---
+
+## Métadonnées
+
+```yaml
+scene_id: <scene_id>           # ex: diner_arrivee, cellule_nuit, coursive_residents
+timeline: dialogic/timelines/<fichier>.dtl
+lieu: <lieu_id>                # cf. LocationManager
+recurring: true|false
+actes: [PRO|A1|A2|A3|A4]       # liste des actes où la scène peut se jouer
+output_style: scenario         # cf. templates/output-styles/
+```
+
+---
+
+## Lieu et ambiance
+
+- **Background** : `<bg_xxx.jpg>`
+- **Atmosphère** : `<2-3 lignes : palette, éclairage, sonore>`
+
+---
+
+## Jauges activables (scope déclaratif)
+
+> **Règle canon** : aucun sujet de cette scène ne peut modifier une jauge qui n'est pas listée ici. Vérification mécanique en `graph-audit`.
+
+| Jauge | Activable ? | Plage typique de delta sur la scène | Justification |
+|-------|-------------|-------------------------------------|---------------|
+| `relation:<pnj>` (par PNJ présent) | oui/non | ex. ±2 | <pourquoi> |
+| `MS` | oui/non | ex. ±1 | <pourquoi> |
+| `PD` | oui/non | ex. +0..+1 | <pourquoi> |
+| `EV` | oui/non | ex. +0..+2 | <pourquoi> |
+| `mirror` | oui/non | ex. +0..+10 | <pourquoi> |
+| `surveillance` | oui/non | ex. +0..+5 | <pourquoi> |
+| `reputation:<faction>` | oui/non | par faction | <pourquoi> |
+| `countdown:<id>` | oui/non | tick ou pas | <pourquoi> |
+
+*(Lister uniquement les jauges effectivement touchées. Les autres sont implicitement hors-scope.)*
+
+---
+
+## PNJs susceptibles d'être présents
+
+| PNJ | Condition de présence | Sprite par défaut |
+|-----|----------------------|-------------------|
+| `<pnj>` | toujours / si `flag_X` / si `palier:<pnj> ≥ Y` | `char_<pnj>_*.png` |
+
+---
+
+## Trigger d'apparition
+
+- **Conditions narratives** : `<ex. "Margot dans la cellule, cycle nuit, en A1+">`
+- **Cooldown / cap** : `<ex. "rejouable max 3 fois par run, cooldown 2 ticks">`
+
+---
+
+## Dialogues d'ambiance
+
+```
+# Intro (à l'entrée — toujours joué)
+[narrator] <description du lieu, des présences>
+[ambiance sonore]
+
+# Outro (à la sortie — toujours joué)
+[narrator] <closing>
+```
+
+---
+
+## Sujets disponibles
+
+### Sujet `<sujet_id>` — *« <libellé joueur> »*
+
+- **Condition d'apparition** : `<ex. "MS ≥ 4" ou "palier:emma ≥ Allié" ou — (toujours)>`
+- **Cible** : `<PNJ spécifique OU "tous PNJs présents" OU "Margot seule">`
+- **Effets de base** : `<jauges modifiées indépendamment du palier>`
+- **Cap** : `<unique / N fois par scène / illimité>`
+
+#### Table de réponses
+
+| Cible | Palier | Réplique (résumé) | Effets supplémentaires |
+|-------|--------|-------------------|------------------------|
+| `<pnj>` | Méfiance | <résumé> | relation:<pnj>:-1 |
+| `<pnj>` | Neutre | <résumé> | — |
+| `<pnj>` | Favorable | <résumé> | relation:<pnj>:+1 |
+| `<pnj>` | Allié | <résumé> | relation:<pnj>:+2, EV+1 |
+| `<pnj>` | Confident | <résumé> | déverrouille sujet/scène X |
+
+*(Répéter Sujet × N selon scène. 3-6 sujets typiques.)*
+
+---
+
+## Événements de seuil susceptibles de se jouer ici
+
+| Event ID | Source | Déclenchement | Effet |
+|----------|--------|---------------|-------|
+| `event_<pnj>_<palier>` | `pnj-behavior:<pnj>` | Première scène compatible après franchissement | Réaction PNJ + déverrouillage |
+
+---
+
+## Conditions de sortie
+
+- **Cap sujets par visite** : `<X>`
+- **Forced exit** : `<condition narrative qui ferme la scène>`
+
+---
+
+## Risques structurels
+
+1. `<risque 1>`
+2. `<risque 2>`
+3. `<risque 3>`
+
+---
+
+## Validation locale
+
+- [ ] Toutes les jauges mentionnées existent dans `variables-register.md`
+- [ ] Toutes les factions citées sont parmi les 8 valides
+- [ ] Tous les `pnj-behavior` référencés existent
+- [ ] Aucun sujet sans effet (cf. règle canon Margot terrain neutre)
+- [ ] Tables de réponses couvrent au moins Méfiance, Neutre, Allié, Confident pour les PNJ-cibles
+- [ ] Verrous canon des pnj-behavior respectés
+- [ ] **Tous les deltas de jauges des sujets sont couverts par la table « Jauges activables »** (aucun sujet ne modifie une jauge hors-scope)

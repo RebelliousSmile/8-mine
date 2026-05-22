@@ -1,4 +1,4 @@
-<!-- v4 (upgrade 2026-05-21 · suggestions #1-#36 appliquées) -->
+<!-- v5 (refonte architecture narrative — modèle 3 couches scenes × sujets × seuils) -->
 # 8-MINE — Overview projet
 
 > Synthèse macroscopique. Source de vérité pour `arc-spec`.
@@ -70,6 +70,64 @@
 | **Tier 1** | Pivot d'arc, présent dans plusieurs actes, fiche complète obligatoire | Emma, Thomas, Frank |
 | **Tier 2** | Romance pool ou faille structurelle exploitable, fiche complète | Léo, Marine, Sofia, Alex, Camille |
 | **Tier 3** | Cité, contextuel, non interactif | voir `pnjs-secondaires.md` |
+
+---
+
+## Architecture narrative
+
+> **À retenir** : 8-MINE ne se structure pas en arcs séquentiels mais en **scènes-types** hébergeant des **sujets** dont les choix font **évoluer les jauges**. Le franchissement de seuils (paliers de relation, autres jauges) déclenche des **événements de seuil** — réactions one-shot du PNJ qui débloquent du nouveau contenu (sujets, scènes, actions). Pas de *romance arc*, pas de *PIVOT NODE*, pas de *gateway* `A2-04`. La romance et l'intimité sont l'effet émergent de pousser un palier suffisamment haut sur un PNJ par des choix de sujets favorables.
+
+### Le modèle à 3 couches
+
+```
+1. SCÈNE
+   Lieu + PNJs présents + dialogues d'ambiance + liste de SUJETS abordables
+       │
+       └─► 2. SUJETS choisis par Margot modifient les JAUGES
+               (relation × PNJ, MS, PD, EV, Mirror, Surveillance, factions, countdowns)
+                   │
+                   └─► 3. SI une jauge franchit un SEUIL → ÉVÉNEMENT DE SEUIL
+                          • réaction scriptée one-shot du PNJ concerné
+                          • joué immédiat OU différé à la prochaine scène compatible
+                          • DÉVERROUILLE de nouveaux sujets / scènes / actions
+```
+
+Modèle inspiré des companions SWTOR et des seuils de loyauté de Life is Strange. La techno sous-jacente (`threshold_crossed`, `_thresholds_already_crossed`) **existe déjà** dans 8-MINE pour Surveillance et Mirror — il s'agit de l'étendre aux paliers de relation par PNJ et autres jauges narratives.
+
+### Unités d'écriture
+
+| Unité | Fichier | Décrit |
+|---|---|---|
+| **Scene-spec** | `scenes/<scene_id>.md` | Une scène-type réutilisable : lieu, PNJs présents, dialogues d'ambiance, sujets disponibles avec tables de réponses par palier, événements de seuil susceptibles d'y être joués |
+| **PNJ-behavior** | `pnjs-behavior/<pnj>.md` | Catalogue d'un PNJ : voix par palier, verrous canon, événements de seuil one-shot par seuil franchi, hooks scènes |
+| **Node-spec** | `nodes/<NN>.md` | Réservé aux scènes scriptées **non-réutilisables** : prologue, codas de fin. N'est pas l'unité courante. |
+
+### Ce qui remplace l'ancien modèle
+
+- **Plus d'arc-spec par PNJ** (`A2-romance-emma`, `A2-romance-alex`, etc.). Recyclés en `pnjs-behavior/<pnj>.md` + extensions des scene-specs concernées. Anciens fichiers archivés dans `_archive/`.
+- **Plus de gateway `A2-04`** ni de point d'entrée romance figé. Les sujets intimes/romantiques apparaissent dans les scènes existantes quand `relation:<pnj>` est assez haut + flags compatibles.
+- **Plus de PIVOT NODE**. Les phrases canon (ex. réplique seuil d'Emma à Confident) sont des **répliques conditionnelles** déclenchées par un événement de seuil dans une scène ordinaire.
+- **Verrous canon** (Sofia/Alex couple, Emma fusion-confusion, Alex opt-in, Camille dark cogni-affectif…) deviennent des *conditions sur sujets / répliques* dans les scene-specs et pnj-behaviors.
+- **Pool romance « 8 PNJ »** disparaît comme menu fermé. Reste la design rule canon : *initiative variable, motivation variable, aboutissement non garanti* — appliquée par le tissu de sujets et événements de seuil, pas par un pool énuméré.
+
+### Ce qui reste
+
+- Les 5 actes (CP, PRO, A1, A2, A3, A4) — **phases narratives**, pas containers fermés.
+- Les 9 fins (FIN-A à FIN-I) — conditions d'activation = combinaisons de paliers + flags au moment d'A4.
+- Toutes les jauges, autoloads, conventions code, tests GUT.
+- Les NODES déjà produits (PRO-01, PRO-02) — *scene-shaped* en pratique, conservés tels quels et migrables si nécessaire.
+- Toutes les **règles de design canon** (Margot terrain neutre, Mirror sur action confirmée, Sofia inattaquable en posture pro, Camille = cogni-affectif, etc.) — toutes valides, juste appliquées dans le nouveau modèle.
+
+### Prompts et templates
+
+| Prompt | Statut |
+|---|---|
+| `scene-spec` *(nouveau)* | Produit `scenes/<scene_id>.md` depuis l'overview + pnj-behaviors |
+| `pnj-behavior` *(nouveau)* | Produit `pnjs-behavior/<pnj>.md` depuis bible-jeu + design rules |
+| `arc-spec` *(archivé)* | Conservé pour référence dans `_archive/` ; ne pas invoquer pour nouvelle production |
+| `decompose-arc` *(à refondre)* | Sera adapté en `decompose-scene` |
+| `write-dtl` *(à adapter)* | Consommera scene-spec + pnj-behaviors concernés au lieu de node-spec |
+| `graph-audit` *(à refondre)* | Auditera la couverture matricielle (palier × sujet × PNJ) au lieu de la connexité d'arcs |
 
 ---
 
@@ -229,27 +287,30 @@ Six séquences canoniques (cf. `history.md` ch. 1-7). Margot s'installe, observe
 
 Beats clés : A1-01 (confrontation Emma/Léo) · A1-03 (dîner d'arrivée) · A1-05 (nuit d'écoute) · A1-06 (premier scan Alex). <!-- #32 : A2-01 retiré ici (appartient logiquement à A2), beat A1-06 ajouté pour parité 6 séquences -->
 
-### A2 — Acte II : Romance optionnelle + pivot
-Le NODE **A2-04** *(à spec — voir `nodes/A2-04.md` lorsque créé)* est le **point d'entrée romance** (un seul arc par run, premier PNJ atteignant relation ≥ +30 avec le bon flag). <!-- #31 : statut spec marqué -->
+### A2 — Acte II : Mise en tension + pivot
 
-Beats clés : A2-01 (rencontre Camille) · A2-04 (entrée romance) · A2-pivot (bascule moitié d'acte). <!-- #32 : A2-01 réattribué ici -->
+Margot a pris ses marques. Les jauges `relation:<pnj>` se stratifient selon ses choix de sujets dans les scènes de A1. En A2 :
 
-**Pool romance complet — 8 PNJ accessibles, intrusion conjugale assumée :**
+- Les **sujets intimes/romantiques** apparaissent dans les scènes existantes (dîners, nuits, croisements, postes techniques, ateliers) au-dessus de certains paliers (typiquement Allié+ pour les amorces, Confident+ pour les seuils décisifs).
+- Plusieurs **événements de seuil** par PNJ peuvent se déclencher selon paliers atteints — chacun défini dans le `pnjs-behavior/<pnj>.md` correspondant.
+- **Mid-acte** : pivot global (premier choix moral lourd traversant tous les liens en cours, pas spécifique à une romance).
+
+Pas de scène spéciale « entrer en romance ». La dynamique romance/alliance/conflit émerge de l'évolution des paliers relations PNJ × des sujets choisis × des seuils franchis.
 
 > ⚠ **Pool de tensions affectives, pas menu de drague.** Initiative variable (PNJ ou Margot), motivation variable (attirance / calcul / désamorçage / besoin affectif), lisibilité variable (geste ambigu, jamais étiqueté), aboutissement non garanti. Pas d'écran « choisis ton partenaire ». Cf. `pool-romance-pas-drague`.
 
-<!-- #4 : tableau A2 condensé, retrait colonne « statut » devenue uniforme -->
+**Verrous canon par PNJ** (extraits depuis les pnj-behaviors) :
 
-| Arc | Particularité d'écriture |
+| PNJ | Verrou clé |
 |---|---|
-| **A2-romance-frank** | Verdict basculé : Frank cherche à se racheter via Margot |
-| **A2-romance-thomas** | Condition canon : *« Marine/Thomas : rupture visible »*. Mélancolique |
-| **A2-romance-sofia** | Moteur éthique, pas séduction. Intrusion dans couple Sofia/Alex avec conséquences sur Alex |
-| **A2-romance-marine** | Urgence, fragilité, livestream. Risque cascade |
-| **A2-romance-camille** | Dark cogni-affectif. Margot retourne le profilage |
-| **A2-romance-emma** | **Fusion-confusion non consommée.** Bascule cognitive (« tu es ma moitié biographique, pas mon amante »), pas morale. Pas de FIN-E variante Emma — fins fraternelles uniquement |
-| **A2-romance-alex** | **Romance refusée** (D) par défaut : alliance opérationnelle profonde, tension non consommée. Branche **trahison opt-in** (B) verrouillée par choix joueur explicite |
-| **A2-romance-leo** | Devient possible quand Margot perce la couche 1 (protection Emma) ou la couche 2 (coup personnel). Trois colorations selon la couche atteinte |
+| Frank | Verdict basculé requis (tests intégrité) avant accès intimité |
+| Thomas | Rupture Marine/Thomas visible requise |
+| Sofia | Couple Sofia/Alex transparent — intrusion casse le couple, conséquences sur Alex |
+| Marine | Risque cascade : exposer Marine = chute immeuble |
+| Camille | Dark **cogni-affectif** uniquement, jamais d'emprise physique |
+| Emma | Fusion-confusion non consommée — fins fraternelles uniquement, **pas de FIN-E Emma** |
+| Alex | Romance refusée par défaut (verrou Sofia). Branche trahison opt-in verrouillée par `EV ≥ 4 + flag_alex_double_agent` |
+| Léo | Accès intimité possible uniquement si couche 1 ou 2 de l'agenda Léo a été percée |
 
 ### A3 — Acte III : Confrontation et basculement
 Confrontation avec Camille (retourner le profilage ?). Verdict de Frank (mission Stratom : Margot menace ou ressource ?). Tentative d'exposition partielle. Stratom déploie. Emma craque sous pression. Crédit solidaire menace. Point de bascule moral de Margot.
@@ -281,19 +342,21 @@ Détail complet : `history.md` lignes 660-900.
 <!-- #14 : rappel des axes sous le tableau -->
 > *Axes communs aux conditions ci-dessus :* **EV** preuves (0-6), **MS** stabilité mentale (0-6), **PD** danger physique (0-∞), **Mirror** & **Surveillance** non explicitement listés mais peuvent verrouiller des branches via les seuils.
 
-<!-- #9 : variantes FIN-E listées exhaustivement post-trancheage -->
+<!-- v5 : variantes FIN-E refondues sur paliers + flags (modèle scenes × seuils) -->
 ### Variantes FIN-E (Romance comme Sortie) — état canon
 
-| Variante | Statut | Note |
+Plus des arcs séparés : ce sont des **branches de la coda A4** activées si `relation:<pnj> >= Confident` au moment d'A4 + flags spécifiques.
+
+| Variante | Statut | Conditions canon |
 |---|---|---|
-| FIN-E · Frank | ✅ canon | Verdict basculé, sortie possible |
-| FIN-E · Thomas | ✅ canon | Mélancolique, rupture Marine/Thomas requise |
-| FIN-E · Sofia | ✅ canon | Couple Sofia/Alex brisé en conséquence |
-| FIN-E · Marine | ✅ canon | Sortie + protection cascade |
-| FIN-E · Camille | ✅ canon | Retournement profilage |
-| FIN-E · Léo | ⚠ conditionnel | Possible uniquement si couche 1 ou 2 percée — coloration variable |
-| FIN-E · Alex | ⚠ opt-in trahison | Requiert branche trahison explicite ; Sofia très blessée |
-| FIN-E · Emma | ❌ exclu | Fusion-confusion non consommée : fins fraternelles uniquement (cf. FIN-C) |
+| FIN-E · Frank | ✅ canon | `palier:frank ≥ Confident` · verdict basculé · `flag_frank_rachat = true` |
+| FIN-E · Thomas | ✅ canon | `palier:thomas ≥ Confident` · `flag_marine_thomas_rupture = true` |
+| FIN-E · Sofia | ✅ canon | `palier:sofia ≥ Confident` · couple Sofia/Alex brisé en conséquence |
+| FIN-E · Marine | ✅ canon | `palier:marine ≥ Confident` · cascade contenue · livestream |
+| FIN-E · Camille | ✅ canon | `palier:camille ≥ Confident` · `flag_profilage_retourne = true` |
+| FIN-E · Léo | ⚠ conditionnel | `palier:leo ≥ Confident` + couche 1 OU 2 percée — coloration selon couche |
+| FIN-E · Alex | ⚠ opt-in trahison | `palier:alex ≥ Confident` + `flag_alex_franchi = true` *(événement de seuil opt-in)* |
+| FIN-E · Emma | ❌ **exclu canon** | Fusion-confusion non consommée — fins fraternelles uniquement (cf. `pnjs-behavior/emma.md` verrous) |
 
 ---
 
@@ -394,17 +457,21 @@ Rivales par essence, convergées par Nexus Social. Chaque corpo apporte une briq
 
 *Aucun thread narratif majeur ouvert à ce jour.* Cause de la brouille familiale Margot/Emma laissée variable libre (héritage, choix de vie, accident, conflit politique) — à arbitrer si un arc-spec a besoin de la fixer.
 
-<!-- #15 : production todos structurées -->
+<!-- v5 : todos refondues pour le modèle 3 couches -->
 ### Production todos
 
 | Priorité | Tâche | Owner | État |
 |---|---|---|---|
-| P0 | Spec arc-spec A2-romance-emma (fusion-confusion non consommée) | narrative | À brainstormer |
-| P0 | Spec arc-spec A2-romance-alex (D par défaut + branche B opt-in) | narrative | À brainstormer |
-| P0 | Spec arc-spec A2-romance-leo (3 colorations par couche) | narrative | À brainstormer |
-| P1 | Spec A3 (verdict Frank + confrontation Camille) | narrative | À brainstormer |
-| P1 | Lint passe `dtl_linter.gd` sur tous les `.dtl` produits | dev | En cours |
-| P2 | Arbitrer cause de brouille familiale Margot/Emma (si arc le requiert) | narrative | Différé |
+| P0 | Spec `pnj-behavior:emma` *(POC du modèle 3 couches)* | narrative | En cours |
+| P0 | Réviser canon Emma : critique utilisateur — la référence généalogique tombe à plat, à retravailler vers un mécanisme *« Emma a vu Julien donc peut voir Margot »* | narrative | À trancher |
+| P0 | Spec `pnj-behavior:alex` + `pnj-behavior:leo` *(suite POC)* | narrative | À faire |
+| P0 | Définir 4-6 scene-specs récurrentes A1-A2 (dîner, nuit cellule, coursive, postes techniques, atelier Léo, salon Camille) | narrative | À faire |
+| P1 | Spec `pnj-behavior` pour les 5 autres résidents (Frank, Thomas, Marine, Sofia, Camille) | narrative | À brainstormer |
+| P1 | Refondre `decompose-arc.prompt.md` en `decompose-scene.prompt.md` | tooling | À faire |
+| P1 | Adapter `write-dtl.prompt.md` pour consommer scene-spec + pnj-behaviors | tooling | À faire |
+| P1 | Refondre `graph-audit.prompt.md` pour audit matriciel (palier × sujet × PNJ) | tooling | À faire |
+| P1 | Spec scenes A3 (verdict Frank + confrontation Camille + Stratom déploie) | narrative | À brainstormer |
+| P2 | Lint passe `dtl_linter.gd` sur tous les `.dtl` produits | dev | En cours |
 
 ---
 
