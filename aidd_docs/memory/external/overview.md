@@ -490,6 +490,23 @@ Rivales par essence, convergées par Nexus Social. Chaque corpo apporte une briq
 
 ---
 
+## Export vers Godot — pipeline
+
+Voir doc complète : [`docs/EXPORT_PIPELINE.md`](../../docs/EXPORT_PIPELINE.md).
+
+Résumé : `scene-spec` (Markdown) → `write-scene` produit `.dtl` + stub `.tscn` → `dtl_linter` PASS → `review-persona auditeur-scene` + `dramaturge` + sensitivity → création manuelle `.tscn`/`.gd` dans Godot Editor à partir du stub → enregistrement `LocationManager`/`CharacterRegistry` → tests GUT + playtest manuel.
+
+| Couche | Format | Automatisation |
+|---|---|---|
+| Spec narrative | `.md` | 🤖 prompts (`scene-spec`, `pnj-behavior`) |
+| Timeline | `.dtl` | 🤖 `write-scene` |
+| Audits | Markdown | 🤖 `review-persona` (5+ personas) |
+| Scène Godot | `.tscn` + `.gd` | ✋ manuel (suit stub markdown) |
+| Assets | `.jpg`/`.png`/`.ogg` | 🤖 génération AI + ✋ placement |
+| Orchestration | autoloads, registries | ✋ manuel (convention claire) |
+
+---
+
 ## Conventions de production
 
 - Toutes les ressources canon sont en français (variables, méthodes publiques, dialogues, commentaires) — sauf hooks Godot (`_ready`, `_input`).
