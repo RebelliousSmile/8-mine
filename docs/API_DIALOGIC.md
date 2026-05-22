@@ -21,9 +21,10 @@ Dans un fichier `.dtl`, utilise l'événement `[signal]` avec la syntaxe :
 | `decision` | `decision:<id>:<libelle>` | `GameStateManager` | `[signal arg="decision:trahison:Trahir Sam"]` |
 | `lieu` | `lieu:<id_lieu>` | `LocationManager` | `[signal arg="lieu:zone_commune_soir"]` |
 | `surveillance` | `surveillance:<delta>:<raison?>` | `SurveillanceManager` | `[signal arg="surveillance:+10:camera_repere"]` |
-| `mirror` | `mirror:<delta>:<raison?>` | `MirrorStatusManager` | `[signal arg="mirror:+5:choix_lache"]` |
-| `ms` | `ms:<delta>:<raison?>` | `MirrorStatusManager` (alias) | `[signal arg="ms:-1:mensonge_emma"]` |
+| `miroir` | `miroir:<delta>:<raison?>` | `MirrorStatusManager` | `[signal arg="miroir:+5:choix_lache"]` |
+| `ms` | `ms:<delta>:<raison?>` | `GameStateManager.mental_stability` | `[signal arg="ms:-1:mensonge_emma"]` |
 | `reputation` | `reputation:<faction>:<delta>:<raison?>` | `ReputationManager` | `[signal arg="reputation:stratom:-15:fuite_dossier"]` |
+| `countdown` | `countdown:<id>:<delta>` | `CountdownManager` | `[signal arg="countdown:equipe_nettoyage:1"]` |
 | `pd` | `pd:<delta>:<raison?>` | `GameStateManager.personal_danger` | `[signal arg="pd:+1:repere_camera"]` |
 | `ev` | `ev:<delta>:<raison?>` | `GameStateManager.evidence_value` | `[signal arg="ev:+1:preuve_enregistree"]` |
 

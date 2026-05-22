@@ -4,7 +4,7 @@
 
 Cette branche ajoute la couche systèmes du jeu 8-MINE par-dessus
 les fondations du Prompt 1 (Save/State/Relation/Location managers,
-Maaack template, Dialogic bridge).
+Dialogic bridge). Maaack Game Template a été retiré du projet.
 
 Aucun appel runtime à Dialogic. Tous les managers sont testables
 en isolation (GUT) et combinables manuellement via
@@ -44,9 +44,9 @@ en isolation (GUT) et combinables manuellement via
 
 1. **GUT migré vers 9.6.0** : migration effectuée lors du passage à
    Godot 4.6.2 (`Logger` est natif en 4.6, incompatible avec 9.3.x).
-2. **Maaack ↔ SaveManager.new_game()** : à câbler dans un prompt
-   ultérieur (le menu Maaack doit appeler `SaveManager.new_game()`
-   sur clic « Nouvelle partie »).
+2. **Menu principal → SaveManager.new_game()** : Maaack a été retiré
+   du projet — un menu de démarrage minimal devra appeler
+   `SaveManager.reset_all_for_new_game()` sur clic « Nouvelle partie ».
 3. **Migration v2 → v3 future** : prévue, non bloquante. Bumper
    `VERSION_FORMAT` + écrire `migrer_v2_vers_v3`.
 4. **Async/await contagion** : `trigger_game_over` est coroutine.

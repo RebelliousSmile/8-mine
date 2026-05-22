@@ -239,7 +239,7 @@ tests\run_tests.bat       # Windows
 
 | Symptôme | Cause probable | Fix |
 |----------|---------------|-----|
-| `dtl_linter FAIL : dispatcher inconnu` | Nouveau dispatcher utilisé dans le `.dtl` mais pas enregistré | Ajouter dans `DialogicBridge.DISPATCHERS_VALIDES` + `dtl_linter.gd` |
+| `dtl_linter FAIL : dispatcher inconnu` | Nouveau dispatcher utilisé dans le `.dtl` mais pas enregistré | Ajouter le match dans `DialogicBridge.gd` + enregistrer dans `dtl_linter.gd → DISPATCHERS_VALIDES` |
 | `auditeur-scene : jauge hors scope` | `write-scene` a émis un signal sur une jauge non déclarée par la scene-spec | Soit corriger la scene-spec *(scope incomplet)*, soit corriger le sujet *(touche jauge non prévue)* |
 | `dramaturge : fin laissée orpheline` | Une fin canon de `history.md` n'est ouverte par aucun chemin | Ajouter une branche/sujet qui l'ouvre, OU déprécier la fin dans `history.md` |
 | Sprite PNJ pas chargé en jeu | Sprite absent de `assets/characters/` ou ID mal référencé dans `CharacterRegistry` | Vérifier filename + ID Dialogic + entrée registry |
