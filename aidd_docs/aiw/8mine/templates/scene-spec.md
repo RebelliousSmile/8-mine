@@ -47,11 +47,25 @@ acces_requis:                  # cf. overview.md § Gating d'accès aux espaces 
 
 ---
 
-## PNJs susceptibles d'être présents
+## Variables PNJ (résolution de présence)
 
-| PNJ | Condition de présence | Sprite par défaut |
-|-----|----------------------|-------------------|
-| `<pnj>` | toujours / si `flag_X` / si `palier:<pnj> ≥ Y` | `char_<pnj>_*.png` |
+> **À retenir** : la présence des PNJs est une **variable de scène résolue au runtime**. Chaque PNJ candidat déclare une *règle de présence* qui détermine s'il est dans la scène lors du chargement. Les sujets ciblant un PNJ ne s'affichent que si ce PNJ est présent.
+
+### Pool de candidats
+
+| PNJ | Règle de présence | Variante absent | Sprite (si présent) |
+|-----|-------------------|------------------|---------------------|
+| `<pnj>` | `toujours` / `si flag_X = true` / `si palier:<pnj> ≥ Y` / `tirage parmi <pool>` | comportement narratif si PNJ absent *(voix off / mention / mute)* | `char_<pnj>_*.png` |
+
+### Effet sur les sujets
+
+- Sujet ciblant `<pnj>` absent → le sujet n'apparaît pas dans le menu Margot.
+- Si tous les PNJs candidats d'un sujet broadcast sont absents → le sujet est masqué.
+- Les dialogues d'ambiance peuvent référencer un PNJ absent (voix off à travers un mur, mention par un autre PNJ présent) — déclarer ces variantes en *Variante absent*.
+
+### Tirage déterministe *(si applicable)*
+
+Si la règle de présence implique un tirage *(ex. « PNJ croisé en sortie nocturne »)*, déclarer la convention déterministe : *« PNJ avec `relation:` la plus haute parmi le pool, à égalité ordre alphabétique »*. **Aucun RNG aveugle** — la résolution doit être prédictible.
 
 ---
 

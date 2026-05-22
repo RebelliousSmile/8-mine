@@ -48,14 +48,27 @@ acces_requis:
 
 ---
 
-## PNJs susceptibles d'être présents
+## Variables PNJ (résolution de présence)
 
-| PNJ | Condition de présence | Sprite par défaut |
-|-----|----------------------|-------------------|
-| `emma` | si événement de seuil `event_emma_*` déclenché → Emma frappe à la porte. Sinon : audible à travers le mur (voix off) | `char_emma_visite_nuit_*.png` *(à créer)* |
-| `frank`, `thomas`, `leo` | si Margot choisit `[D] sortir croiser quelqu'un` et tirage favorable | sprites existants |
+Margot est **seule par défaut** dans sa cellule. Les PNJs deviennent présents par injection (événement de seuil ou sortie nocturne).
 
-*Hors événements de seuil et hors sortie nocturne, Margot est seule.*
+### Pool de candidats
+
+| PNJ | Règle de présence | Variante absent *(par défaut)* | Sprite si présent |
+|-----|-------------------|--------------------------------|--------------------|
+| `emma` | présent **si** `flag_event_emma_allie_pending = true` OU `flag_event_emma_confident_pending = true` *(Emma frappe à la porte, événement injecté)* | audible à travers le mur (voix off, conversation avec Léo) | `char_emma_visite_nuit_*.png` *(à créer)* |
+| `frank` | présent **si** sujet `sortir_croiser` consommé ET tirage déterministe = `frank` *(voir convention ci-dessous)* | mention dans dialogue d'ambiance si silence Camille/Frank | `char_frank_couloir_nuit_*.png` |
+| `thomas` | présent **si** sujet `sortir_croiser` consommé ET tirage déterministe = `thomas` | audible via dispute Marine/Thomas | `char_thomas_couloir_nuit_*.png` |
+| `leo` | présent **si** sujet `sortir_croiser` consommé ET tirage déterministe = `leo` | audible via intimité Emma/Léo | `char_leo_atelier_nuit_*.png` |
+
+### Tirage déterministe pour `sortir_croiser`
+
+Convention : *PNJ avec `relation:` la plus haute parmi {frank, thomas, leo} au moment T. À égalité, ordre `frank > thomas > leo`*. Aucun RNG.
+
+### Effet sur les sujets
+
+- Sujet `frapper_chez_emma` requiert `relation:emma >= Allié` *(gating d'accès apparts)* — indépendant de la résolution de présence ci-dessus *(c'est Margot qui se déplace vers Emma, pas l'inverse)*.
+- Les sons des appartements voisins sont déclarés en *Variante absent* — ils colorient l'ambiance sans nécessiter la présence du PNJ en scène.
 
 ---
 

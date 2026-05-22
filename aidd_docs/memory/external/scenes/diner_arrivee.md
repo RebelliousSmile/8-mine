@@ -43,20 +43,22 @@ acces_requis:
 
 ---
 
-## PNJs susceptibles d'être présents
+## Variables PNJ (résolution de présence)
 
-Tous les 8 résidents sont **systématiquement présents** (premier dîner officiel) :
+**Cas spécial** : *premier* dîner d'arrivée canon → les 8 résidents sont **forcés présents** (vitrine officielle N2, voir overview Topologie). Aucune variable à résoudre. Les dîners hebdomadaires ultérieurs *(scene-spec `diner_hebdomadaire` à produire)* auront eux une vraie résolution variable.
 
-| PNJ | Condition de présence | Sprite par défaut |
-|-----|----------------------|-------------------|
-| `emma` | toujours | `char_emma_diner_*.png` |
-| `leo` | toujours | `char_leo_diner_*.png` |
-| `marine` | toujours | `char_marine_diner_*.png` |
-| `thomas` | toujours | `char_thomas_diner_*.png` |
-| `sofia` | toujours | `char_sofia_diner_*.png` |
-| `alex` | toujours | `char_alex_diner_*.png` |
-| `camille` | toujours | `char_camille_diner_*.png` |
-| `frank` | toujours | `char_frank_diner_*.png` |
+### Pool de candidats (tous forcés)
+
+| PNJ | Règle de présence | Variante absent | Sprite |
+|-----|-------------------|------------------|--------|
+| `emma` | forcé *(premier dîner)* | — *(jamais absent canon)* | `char_emma_diner_*.png` |
+| `leo` | forcé | — | `char_leo_diner_*.png` |
+| `marine` | forcé | — | `char_marine_diner_*.png` |
+| `thomas` | forcé | — | `char_thomas_diner_*.png` |
+| `sofia` | forcé | — | `char_sofia_diner_*.png` |
+| `alex` | forcé | — | `char_alex_diner_*.png` |
+| `camille` | forcé | — | `char_camille_diner_*.png` |
+| `frank` | forcé | — | `char_frank_diner_*.png` |
 
 ---
 
