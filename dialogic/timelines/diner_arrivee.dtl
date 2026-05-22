@@ -1,0 +1,270 @@
+# SCENE : diner_arrivee (Acte I — premier dîner d'arrivée)
+# Source : aidd_docs/memory/external/scenes/diner_arrivee.md
+# Modèle : scene-spec (3 couches scenes × sujets × seuils)
+# Output-style : scenario
+# Acces : public (zone commune)
+#
+# Jauges activables (scope déclaré par scene-spec) :
+#   relation:<emma|leo|marine|thomas|sofia|alex|camille|frank>, ms, pd, ev,
+#   reputation:presse, reputation:memorize, reputation:stratom
+# Hors-scope : miroir, surveillance, countdown:* (ne doivent JAMAIS être touchés ici)
+#
+# Pool PNJ : 8 résidents tous FORCÉS PRÉSENTS (vitrine N2, canon)
+# Pas de bloc de résolution de présence — exception canon premier dîner.
+#
+# Préconditions :
+#   - Sortie d'un NODE A1-01-* (micros / éthique / confrontation / stratège)
+#   - {emma_prenom} posé par PRO-01 (ask_name déjà déclenché)
+# Postconditions toutes branches :
+#   - flag_diner_presentation_choisie = true
+# Événements de seuil :
+#   - event_camille_cliffhanger en outro si presentation ∈ {[A], [C], [D]}
+
+# === SCÈNE — Zone commune, soir, premier dîner ===
+
+[signal arg="bg:bg_zone_commune_soir"]
+
+_: [i]La porte coulisse.[/i]
+
+_: Huit visages se tournent vers elle.
+
+_: [i]Margot prend sa place — entre les deux blocs, comme par accident. Memorize et Kaizen à sa gauche. Nexus et Stratom à sa droite. La géométrie compte ici. Elle le sait sans qu'on le lui ait dit.[/i]
+
+_: La table est dressée pour neuf. Pluie dehors sur la baie. La conversation reprend bas, comme une eau qui se remet à couler après l'irruption d'une pierre.
+
+# --- SUJET FORCÉ EN OUVERTURE : presentation ---
+# Cap = unique. Verrou : aucun autre sujet ne s'ouvre tant que presentation n'est pas posée.
+
+_: {emma_prenom} pose sa fourchette. Sourire bref, à toi seule. *« À toi. »*
+
+camille: Margot. Présente-toi, qu'on te connaisse un peu.
+
+[choice text="[A] Honnêteté complète — parler de Julien/Julie et de la reconstruction"]
+    [signal arg="relation:sofia:+2:honnetete_diner"]
+    [signal arg="relation:camille:+1:trauma_recolte"]
+    [signal arg="flag:flag_camille_profil_trauma:true"]
+    [signal arg="ms:+1:dire_la_verite"]
+    [signal arg="flag:flag_diner_presentation_choisie:true"]
+    [signal arg="flag:flag_diner_presentation_A:true"]
+
+    margot: Je sors d'une histoire qui m'a beaucoup pris. Quelqu'un — Julien. Julie. C'est selon les jours.
+    margot: Je me reconstruis. Ce film fait partie de ça.
+
+    sofia: [i]Sofia repose ses couverts. Regarde Margot droit dans les yeux, sans appuyer.[/i]
+    sofia: Merci de l'avoir dit ici. Pas obligée.
+
+    _: [i]Camille n'a pas bougé. Son sourire s'est élargi d'un demi-millimètre. Elle range quelque chose.[/i]
+
+[choice text="[B] Professionnalisme strict — documentaire sur le coliving"]
+    [signal arg="flag:flag_marine_veut_couverture:true"]
+    [signal arg="flag:flag_diner_presentation_choisie:true"]
+    [signal arg="flag:flag_diner_presentation_B:true"]
+
+    margot: CNC. Documentaire de 52 minutes sur les couples en coliving expérimental. Trois mois d'observation, montage à la fin. Diffusion fin d'année.
+
+    _: [i]Tu reconnais le ton. Le ton « je-sais-ce-que-je-fais-et-ne-pose-pas-de-questions ». Il marche, en général. Pas toujours ici.[/i]
+
+    marine: [i]Marine se penche, presque imperceptible.[/i] Tu vas filmer quoi exactement ?
+    marine: On peut prévoir. Si tu as besoin d'un fil rouge.
+
+[choice text="[C] Mensonge valorisant — grande mediacorp" condition="{FLAG_MOTIVATION}=='argent' or {FLAG_MOTIVATION}=='carriere'"]
+    # Vérification cachée Sofia (a accès aux productions Witness)
+    # Réussite si MS >= 3 ET PD <= 2 (proxy : crédibilité Margot)
+    [signal arg="flag:flag_diner_presentation_choisie:true"]
+    [signal arg="flag:flag_diner_presentation_C:true"]
+
+    margot: Production indépendante mais distribution sécurisée. Une chaîne européenne en lead, deux antennes intéressées.
+
+    {if {mental_stability} >= 3 and {personal_danger} <= 2}
+        # RÉUSSITE du mensonge
+        [signal arg="relation:marine:+2:mensonge_reussi"]
+        [signal arg="flag:flag_diner_mensonge_passe:true"]
+
+        marine: Ah. Tu peux me dire laquelle ?
+        margot: Pas encore. Ils n'aiment pas qu'on parle avant signature.
+        marine: [i]Marine hoche la tête. Convaincue.[/i] Logique.
+
+        _: [i]Sofia te regarde une seconde de trop. Quelque chose dans son visage. Elle ne dit rien.[/i]
+    {else}
+        # ÉCHEC — Sofia a vérifié, démasque (en privé plus tard, là juste un signal)
+        [signal arg="relation:sofia:-3:mensonge_demasque"]
+        [signal arg="flag:flag_menteuse_demasquee:true"]
+        [signal arg="pd:+1:credibilite_entamee"]
+
+        sofia: Lead européen, vraiment ?
+        sofia: [i]Sofia te regarde sans hostilité, mais sans laisser passer.[/i]
+        sofia: Je vais probablement voir tes rushes. Pas pour censurer.
+
+        _: [i]La table ne bronche pas. Marine cligne. Camille a très légèrement levé un sourcil. Elles ont toutes les deux compris.[/i]
+    {endif}
+
+[choice text="[D] Évasif — « Ça ne se résume pas »"]
+    [signal arg="relation:thomas:+1:complicite_floue"]
+    [signal arg="relation:camille:-1:frustration_intriguee"]
+    [signal arg="flag:flag_diner_presentation_evasive:true"]
+    [signal arg="flag:flag_diner_presentation_choisie:true"]
+    [signal arg="flag:flag_diner_presentation_D:true"]
+
+    margot: Ça ne se résume pas en deux phrases. C'est ce que je fais — un film. On verra où il va.
+
+    thomas: [i]Thomas relève les yeux. Pas un sourire. Un quelque-chose dans le regard.[/i]
+    thomas: Réponse honnête.
+
+    camille: [i]Camille incline la tête de deux degrés.[/i] D'accord. On a le temps.
+
+# --- MENU DES SUJETS APRÈS PRESENTATION ---
+# Cap : 2 sujets supplémentaires max.
+# Sujets disponibles : demander_role_pnj (×8 sous-cibles, cap 2 fois), evoquer_witness (si B ou D), observer_silence
+
+[label diner_menu]
+
+# Compteur de sujets consommés (2 max)
+{if {diner_sujets_consommes} < 2}
+
+    # --- Sujet demander_role_pnj : 8 sous-choix (un par PNJ présent) ---
+
+    [choice text="Demander à Emma son rôle à Memorize"]
+        [signal arg="relation:emma:+1:question_role"]
+        {if {relation_emma_palier} == "Allié" or {relation_emma_palier} == "Confident" or {relation_emma_palier} == "Proche"}
+            emma: Je peux te montrer quelque chose après le repas. Pas ici.
+            [signal arg="flag:flag_emma_propose_aparte:true"]
+            [signal arg="ev:+1:emma_propose_acces"]
+        {else}
+            emma: Analyste flux Memorize. Je passe mes journées dans des dashboards qui ressemblent à des fonds marins.
+        {endif}
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Demander à Léo son rôle"]
+        [signal arg="relation:leo:+1:question_role"]
+        leo: Design d'interfaces. Memorize. Ce que tu vois quand tu vois rien.
+        _: [i]Sourire bref. Il ne développe pas.[/i]
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Demander à Marine son rôle"]
+        [signal arg="relation:marine:+2:marine_veut_etre_vue"]
+        marine: Tu connais Kaizen Métrique ? L'application. Tu sais, la couronne d'engagement.
+        marine: Je suis l'ambassadrice publique. Quatre-vingts mille abonnés.
+        _: [i]Sourire crispé. Elle attend ta réaction.[/i]
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Demander à Thomas son rôle"]
+        [signal arg="relation:thomas:+1:question_role"]
+        thomas: J'ingénie. C'est très palpitant.
+        _: [i]Il regarde son verre. La phrase est tellement neutre qu'elle bouscule.[/i]
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Demander à Sofia son rôle"]
+        [signal arg="relation:sofia:+1:question_role"]
+        [signal arg="ev:+1:sofia_evoque_passifs"]
+        sofia: Département éthique Nexus. Je vérifie que la collecte passive reste dans le cadre.
+        sofia: [i]Pause. Elle te regarde droit.[/i] Tu sais ce que ça veut dire, *collecte passive* ?
+        margot: Vaguement.
+        sofia: On en reparlera. Ou pas.
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Demander à Alex son rôle"]
+        [signal arg="relation:alex:+1:question_role"]
+        alex: Technique. Maintenance des systèmes intégrés. Implants, scan biométrique, ce genre.
+        _: [i]Il regarde Sofia une fraction de seconde. Elle lui rend le regard. Aucun mot.[/i]
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Demander à Camille son rôle"]
+        [signal arg="relation:camille:+1:question_role"]
+        [signal arg="flag:flag_camille_a_remarque_margot:true"]
+        camille: Profilage comportemental, Stratom. Je lis les gens.
+        camille: [i]Voix chaleureuse, sans pointe.[/i] Et toi tu écris sur les gens. On a peut-être des choses à se dire.
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Demander à Frank son rôle"]
+        [signal arg="relation:frank:+1:question_role"]
+        [signal arg="flag:flag_frank_a_observe:true"]
+        frank: Sécurité.
+        _: [i]Un seul mot. Il ne te lâche pas du regard pendant trois secondes. Tu détournes les yeux la première.[/i]
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    # --- Sujet evoquer_witness (conditionnel : présentation B ou D) ---
+
+    [choice text="Mentionner ton contrat avec Witness Networks" condition="{flag_diner_presentation_B} or {flag_diner_presentation_D}"]
+        [signal arg="reputation:presse:+2:diffuseur_evoque"]
+        [signal arg="relation:sofia:+1:protection_signalee"]
+        [signal arg="relation:camille:+1:note_prise"]
+        [signal arg="relation:marine:+1:caméra_invitee"]
+        [signal arg="flag:flag_sofia_signale_protection:true"]
+        [signal arg="flag:flag_camille_a_pris_note:true"]
+
+        margot: Diffuseur Witness Networks. Contrat de couverture éditoriale. Ils prennent le risque de me suivre.
+
+        sofia: [i]Sofia hoche.[/i] Je vais probablement voir tes rushes. Pas pour censurer.
+        camille: [i]Sourire fin.[/i] Witness… intéressant choix.
+        marine: Tu peux me filmer si tu veux.
+        _: [i]Echange de regards entre Léo et Thomas. Pas de réplique frontale.[/i]
+
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    # --- Sujet observer_silence ---
+
+    [choice text="Ne rien dire, observer la table"]
+        [signal arg="ev:+1:observation_silencieuse"]
+        [signal arg="ms:-1:retrait_observateur"]
+
+        _: [i]Tu laisses la conversation continuer sans toi. Tu observes.[/i]
+
+        # Tirage déterministe d'une observation : par ordre de priorité narrative
+        {if {flag_camille_a_remarque_margot}}
+            _: [i]Camille consulte sa tablette une seconde de trop. Elle écrit quelque chose. Sur toi, probablement.[/i]
+            [signal arg="flag:flag_diner_observation_camille_scan:true"]
+        {elseif {flag_frank_a_observe}}
+            _: [i]Frank n'a pas mangé. Il a regardé chaque arrivée d'assiette comme un événement à enregistrer.[/i]
+            [signal arg="flag:flag_diner_observation_frank_silence:true"]
+        {else}
+            _: [i]Marine rit à une blague de Léo. Le rire est une demi-seconde trop long. Elle s'arrête, se reprend, repart sur autre chose.[/i]
+            [signal arg="flag:flag_diner_observation_marine_crispation:true"]
+        {endif}
+
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+{else}
+    # Cap atteint — sortie forcée par limite de sujets
+    _: [i]Le café arrive. La conversation s'éparpille en pôles parallèles. Tu n'as plus d'angle d'attaque qui ne paraisse forcé.[/i]
+    [jump label="diner_outro"]
+{endif}
+
+# --- OUTRO ---
+
+[label diner_outro]
+
+# Événement de seuil : event_camille_cliffhanger
+# Déclenchement : presentation ∈ {[A], [C], [D]} — pas si [B] (Camille trouve Margot trop lisse)
+
+{if {flag_diner_presentation_A} or {flag_diner_presentation_C} or {flag_diner_presentation_D}}
+    [signal arg="flag:flag_event_camille_cliffhanger_consomme:true"]
+    [signal arg="flag:flag_camille_cliffhanger_pose:true"]
+
+    camille: [i]Camille se cale dans sa chaise. Voix posée, presque tendre.[/i]
+    camille: Parle-nous un peu de toi. Tu viens d'où ?
+
+    _: [i]La pièce se fige. Tu entends une horloge quelque part. Tu n'avais pas entendu l'horloge avant.[/i]
+
+    [signal arg="decision:diner_cliffhanger_camille:Margot encaisse la question de Camille"]
+{else}
+    # Presentation = [B] propre, Camille n'attaque pas frontalement (pour cette fois)
+    _: [i]Le café arrive. Camille te regarde sans rien dire. Elle attend une autre occasion.[/i]
+    [signal arg="flag:flag_camille_attend_meilleure_occasion:true"]
+{endif}
+
+_: [i]Tu lèves les yeux. La pièce est moins lumineuse qu'au début. Quelqu'un a baissé l'éclairage sans que tu t'en aperçoives.[/i]
+
+[signal arg="flag:flag_diner_arrivee_consomme:true"]
+[signal arg="lieu:coursive_residents_nuit"]
+
+# === FIN SCENE diner_arrivee ===
