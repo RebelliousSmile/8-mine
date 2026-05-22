@@ -118,6 +118,8 @@ func _on_signal_event(argument: Variant) -> void:
 			_traiter_ms(morceaux)
 		"pd":
 			_traiter_pd(morceaux)
+		"ev":
+			_traiter_ev(morceaux)
 		_:
 			push_warning("DialogicBridge : commande inconnue '%s'" % morceaux[0])
 
@@ -238,6 +240,17 @@ func _traiter_pd(morceaux: PackedStringArray) -> void:
 	var delta: int = int(morceaux[1])
 	if delta != 0:
 		GameStateManager.personal_danger += delta
+
+
+func _traiter_ev(morceaux: PackedStringArray) -> void:
+	# ev:<delta>:<raison?>
+	# Modifie evidence_collected (clampé >= 0 par le setter de GameStateManager).
+	# La raison reste informative dans la timeline et n'est pas persistée ici.
+	if morceaux.size() < 2:
+		return
+	var delta: int = int(morceaux[1])
+	if delta != 0:
+		GameStateManager.evidence_collected += delta
 
 
 ## Convertit un texte en bool/int/float si possible, sinon le laisse en String.

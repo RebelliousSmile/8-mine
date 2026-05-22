@@ -128,9 +128,9 @@ Aucun nouvel autoload requis.
 
 | Variable | Usage | Initialisation |
 |----------|-------|----------------|
-| `diner_sujets_consommes` | compteur de sujets joués (cap = 2) | doit être initialisé à 0 dans `_init.gd` ou au démarrage de la timeline |
+| `diner_sujets_consommes` | compteur de sujets joués (cap = 2) | initialisée à 0 par `[set var="..." value="0"]` en début de timeline |
 
-À ajouter dans `aidd_docs/memory/internal/variables-register.md` section *Variables Dialogic*.
+✅ **Enregistrée dans `aidd_docs/memory/internal/variables-register.md § Variables de scènes`** (fix audit 2026-05-22).
 
 ## Tests à prévoir
 

@@ -111,3 +111,9 @@ Toute valeur posée via `set_flag()` est automatiquement pushée dans `Dialogic.
 | `frank_prenom` | "Frank" | `frank` |
 | `sofia_prenom` | "Sofia" | `sofia` |
 | `ex_prenom` | (ExProfileManager) | — |
+
+**Variables de scènes (compteurs locaux) :**
+
+| Var | Type | Default | Scène propriétaire | Description |
+|-----|------|---------|---------------------|-------------|
+| `diner_sujets_consommes` | int | 0 | `diner_arrivee` | Compteur de sujets joués au dîner d'arrivée (cap = 2). Initialisé au `_ready()` de la scène. |

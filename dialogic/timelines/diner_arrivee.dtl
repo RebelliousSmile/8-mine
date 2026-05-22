@@ -24,6 +24,9 @@
 
 [signal arg="bg:bg_zone_commune_soir"]
 
+# Initialisation compteur cap sujets (cf. variables-register.md § Variables de scènes)
+[set var="diner_sujets_consommes" value="0"]
+
 _: [i]La porte coulisse.[/i]
 
 _: Huit visages se tournent vers elle.
@@ -125,7 +128,7 @@ camille: Margot. Présente-toi, qu'on te connaisse un peu.
 
     [choice text="Demander à Emma son rôle à Memorize"]
         [signal arg="relation:emma:+1:question_role"]
-        {if {relation_emma_palier} == "Allié" or {relation_emma_palier} == "Confident" or {relation_emma_palier} == "Proche"}
+        {if {relation_emma_palier} == "Favorable" or {relation_emma_palier} == "Allié" or {relation_emma_palier} == "Proche" or {relation_emma_palier} == "Confident" or {relation_emma_palier} == "Fusionnel"}
             emma: Je peux te montrer quelque chose après le repas. Pas ici.
             [signal arg="flag:flag_emma_propose_aparte:true"]
             [signal arg="ev:+1:emma_propose_acces"]
