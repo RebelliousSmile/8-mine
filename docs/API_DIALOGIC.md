@@ -1,49 +1,31 @@
-# API Dialogic — couche 4a
+# API Dialogic — DialogicBridge
 
-> **Cette couche n'intègre pas Dialogic.** Le pont
-> `DialogicBridge.gd` (Prompt 1) est en place pour les Custom Events
-> futurs (Prompt 4c) mais n'est pas étendu ici.
+> Pont entre les timelines Dialogic (`.dtl`) et les managers 8-MINE.
+> Tous les dispatchers listés ci-dessous sont **implémentés** dans
+> `scripts/managers/DialogicBridge.gd`.
 
-## Pourquoi pas d'intégration ici
+## Syntaxe universelle
 
-L'objectif de 4a est d'avoir une **couche de systèmes testable en
-isolation**, sans dépendance runtime à un plugin externe. Les
-managers 8-MINE doivent pouvoir tourner :
-
-- En tests GUT headless (pas d'autoload Dialogic chargé)
-- Dans `SystemsDebugScene` (UI native Godot, pas de timeline)
-- Dans un futur portage console / mobile où Dialogic ne serait pas
-  installé
-
-## Comment Dialogic appellera ces managers (futur Prompt 4c)
-
-Quand un Custom Event Dialogic sera créé, il aura accès aux
-autoloads et pourra :
-
-```gdscript
-# Custom Event Dialogic exemple : "augmenter surveillance"
-extends DialogicEvent
-
-@export var amount: int = 10
-@export var raison: String = ""
-
-func _execute() -> void:
-    SurveillanceManager.increase(amount, raison)
-    finish()
-```
-
-Le pont actuel (`DialogicBridge`) supporte déjà la syntaxe textuelle
-universelle :
+Dans un fichier `.dtl`, utilise l'événement `[signal]` avec la syntaxe :
 
 ```
-[signal arg="surveillance:+10:traversee_rue_filmee"]
-[signal arg="mirror:+5:choix_lache"]
-[signal arg="reputation:stratom:-15:fuite_dossier"]
+[signal arg="<dispatcher>:<arg1>:<arg2>:<raison?>"]
 ```
 
-À implémenter dans `DialogicBridge._on_signal_event` quand 4c sera
-joué. Voir le code actuel pour les patterns `relation:`, `flag:`,
-`decision:`, `lieu:`.
+## Dispatchers disponibles
+
+| Dispatcher | Signature | Manager cible | Exemple |
+|---|---|---|---|
+| `relation` | `relation:<pnj_id>:<delta>` | `RelationManager` | `[signal arg="relation:emma:+10:confidence"]` |
+| `flag` | `flag:<cle>:<valeur>` | `GameStateManager` | `[signal arg="flag:flag_emma_a_reveele:true"]` |
+| `decision` | `decision:<id>:<libelle>` | `GameStateManager` | `[signal arg="decision:trahison:Trahir Sam"]` |
+| `lieu` | `lieu:<id_lieu>` | `LocationManager` | `[signal arg="lieu:zone_commune_soir"]` |
+| `surveillance` | `surveillance:<delta>:<raison?>` | `SurveillanceManager` | `[signal arg="surveillance:+10:camera_repere"]` |
+| `mirror` | `mirror:<delta>:<raison?>` | `MirrorStatusManager` | `[signal arg="mirror:+5:choix_lache"]` |
+| `ms` | `ms:<delta>:<raison?>` | `MirrorStatusManager` (alias) | `[signal arg="ms:-1:mensonge_emma"]` |
+| `reputation` | `reputation:<faction>:<delta>:<raison?>` | `ReputationManager` | `[signal arg="reputation:stratom:-15:fuite_dossier"]` |
+| `pd` | `pd:<delta>:<raison?>` | `GameStateManager.personal_danger` | `[signal arg="pd:+1:repere_camera"]` |
+| `ev` | `ev:<delta>:<raison?>` | `GameStateManager.evidence_value` | `[signal arg="ev:+1:preuve_enregistree"]` |
 
 ## Variables Dialogic exposées
 
@@ -58,13 +40,19 @@ joué. Voir le code actuel pour les patterns `relation:`, `flag:`,
 Les conditions dans les timelines peuvent donc lire ces variables :
 `{chapitre_1_cle_volee == true}`. Les autres managers (relations,
 réputation, mirror, surveillance, ex profile) **ne sont pas**
-exposés automatiquement — un futur prompt ajoutera des `getter`
-Dialogic dédiés.
+exposés automatiquement — utiliser les dispatchers ci-dessus pour
+les modifier depuis une timeline.
 
-## Hors-scope assumé
+## Sécurité et dégradation gracieuse
 
-- Aucun fichier `.dtl` créé dans cette phase
-- Aucun appel à `Dialogic.start()` ou `Dialogic.VAR.*` depuis les
-  nouveaux managers
-- `DialogicBridge.gd` (Prompt 1) reste autoload : il ne casse rien
-  si Dialogic n'est pas installé (warning push + no-op)
+- `DialogicBridge.gd` reste autoload : il ne casse rien si Dialogic
+  n'est pas installé (warning `push_warning` + no-op).
+- Un dispatcher inconnu émet un warning et est ignoré silencieusement.
+- Le linter `scripts/tools/dtl_linter.gd` valide les dispatchers avant
+  tout review — seuls les dispatchers de `DISPATCHERS_VALIDES` sont
+  acceptés.
+
+## Référence rapide complète
+
+Voir `aidd_docs/memory/internal/api-cheatsheet.md` pour des exemples
+complets par scénario d'usage.

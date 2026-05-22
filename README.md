@@ -8,8 +8,7 @@ exploration de lieux, sauvegarde multi-slots.
 
 | Brique | Rôle | Statut |
 |---|---|---|
-| **Godot 4 .NET** (4.3+) | Moteur | À installer |
-| **Maaack's Game Template** | Menu principal, options, écran titre, save UI | À installer (asset library) |
+| **Godot 4.6 .NET** | Moteur | À installer |
 | **Dialogic 2** | Système de dialogue (timelines, personnages, conditions) | À installer (asset library) |
 | **GDScript custom** | Relations, état narratif, lieux, pont Dialogic | Inclus dans ce dépôt |
 
@@ -46,26 +45,11 @@ godot --editor --path .
 Aucun warning n'est attendu côté autoloads (ils sont déjà déclarés
 dans `project.godot`).
 
-### 3. Installer Maaack's Game Template
+### 3. Activer Dialogic 2 (déjà inclus dans `addons/`)
 
 Dans l'éditeur :
-- **AssetLib** (onglet en haut) → chercher `Maaack's Game Template`
-- Télécharger → installer dans `addons/maaacks_game_template/`
-- Suivre l'assistant : il propose de générer une scène titre +
-  options menu. Acceptez ; choisissez de placer la scène de menu
-  dans `scenes/core/MainMenu.tscn`.
-
-Branchez le bouton « Nouvelle partie » du menu Maaack sur
-`scenes/core/Main.tscn` (ou directement
-`LocationManager.aller_a("template")`).
-
-### 4. Installer Dialogic 2
-
-Dans l'éditeur :
-- **AssetLib** → chercher `Dialogic` → version 2.x
-- Télécharger → installer dans `addons/dialogic/`
-- **Projet > Paramètres du projet > Extensions** : activer
-  `Dialogic`. Cela ajoute automatiquement un autoload `Dialogic`.
+- **Projet > Paramètres du projet > Extensions** : activer `Dialogic`.
+  Cela ajoute automatiquement un autoload `Dialogic`.
 - **Réordonner les autoloads** (Projet > Paramètres > Autoload) pour
   que `DialogicBridge` soit **après** `Dialogic`.
 
@@ -192,16 +176,16 @@ print(SaveManager.meta_slot(0))
 - **Pas de référence directe inter-manager dans `_ready()`** :
   on utilise `call_deferred` ou `get_node_or_null` pour éviter
   les courses d'init.
-- **Branche de dev** : `claude/godot-narrative-framework-m2BGL`.
+- **Branche principale** : `main`.
 
 ## Pièges connus
 
 - **Dialogic non installé** → `DialogicBridge` affiche un warning au
   démarrage mais le projet tourne. Les hotspots avec une `timeline`
   configurée seront simplement inertes.
-- **Maaack non installé** → pas de menu principal, le jeu démarre
-  directement sur `Main.tscn`. Pour brancher Maaack, remplacez
-  `run/main_scene` dans `project.godot` par votre `MainMenu.tscn`.
+- **Pas de menu principal** → le jeu démarre directement sur `Main.tscn`
+  (Maaack's Game Template a été retiré du projet pour éviter des erreurs
+  de parse au démarrage).
 - **Ordre des autoloads** → si vous voyez « autoload not found »
   au démarrage, vérifiez que `Dialogic` est listé **avant**
   `DialogicBridge`.

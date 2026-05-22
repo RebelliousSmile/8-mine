@@ -42,8 +42,8 @@ en isolation (GUT) et combinables manuellement via
 
 ## Risques résiduels acceptés
 
-1. **GUT 9.3.0 figé** : pas de mise à jour automatique tant que
-   Godot 4.5+ n'est pas standard.
+1. **GUT migré vers 9.6.0** : migration effectuée lors du passage à
+   Godot 4.6.2 (`Logger` est natif en 4.6, incompatible avec 9.3.x).
 2. **Maaack ↔ SaveManager.new_game()** : à câbler dans un prompt
    ultérieur (le menu Maaack doit appeler `SaveManager.new_game()`
    sur clic « Nouvelle partie »).

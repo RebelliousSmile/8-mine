@@ -18,7 +18,8 @@ signal transition_en_cours(progres: float)   ## 0.0 → 1.0
 ## Le projet d'exemple ne fournit que le template ; les vrais lieux
 ## hériteront de Location_Template.tscn.
 const LIEUX := {
-	"template": "res://scenes/locations/Location_Template.tscn",
+	"template":          "res://scenes/locations/Location_Template.tscn",
+	"zone_commune_soir": "res://scenes/acte1/diner_arrivee.tscn",
 }
 
 const DUREE_FONDU := 0.4

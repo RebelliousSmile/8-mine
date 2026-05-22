@@ -63,7 +63,7 @@
    - Vérifier que leurs fiches `pnjs-behavior/<pnj>.md` existent
    - Si fiche manquante : **STOP** ou marquer dépendance comme risque structurel
 
-3. **Application du template** `aidd_docs/aiw/8mine/templates/scene-spec.md` :
+3. **Application du template** `aidd_docs/memory/internal/templates/scene-spec.md` :
    - Métadonnées (YAML)
    - **Scope jauges déclaratif** *(verrou : aucun sujet ne pourra toucher hors-scope)*
    - **Variables PNJ** *(résolution de présence runtime — pool de candidats, règles, variantes absentes)*
@@ -110,7 +110,7 @@
    - Vérifier comment ce PNJ est mentionné dans les autres `pnjs-behavior/<autre>.md § Coordination cross-PNJ`
    - Identifier les attentes mécaniques *(flags posés, événements référencés)*
 
-3. **Application du template** `aidd_docs/aiw/8mine/templates/pnj-behavior.md` :
+3. **Application du template** `aidd_docs/memory/internal/templates/pnj-behavior.md` :
    - Métadonnées (YAML)
    - **Verrous canon (sacrés)** — au minimum 5, idéalement 7+, alignés avec sources
    - **Voix par palier** — 9 paliers couverts (Ennemi juré → Fusionnel), marquer explicitement inaccessibles avec justification canon

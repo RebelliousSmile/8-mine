@@ -79,15 +79,16 @@
 |------|--------------|--------|--------|
 | Backgrounds | `assets/backgrounds/bg_<lieu>.jpg` | 1920x1080 JPG | génération AI (prompts cf. `nodes/02.md`) puis placement manuel |
 | Sprites PNJ | `assets/characters/char_<pnj>_<expression>.png` | PNG transparent | génération AI puis placement |
-| Audio | `assets/audio/<categorie>/<id>.ogg` | OGG Vorbis | composition/captation, placement manuel |
+| Audio musique | `assets/music/<id>.ogg` | OGG Vorbis | pistes d'ambiance, placement manuel |
+| Audio effets | `assets/sfx/<id>.ogg` | OGG Vorbis | sons d'interaction, placement manuel |
 
 ### Couche 5 — Orchestration (autoloads + registries)
 
 | Manager | Fichier | Action requise quand on ajoute |
 |---------|---------|--------------------------------|
-| `LocationManager` | `scripts/managers/location_manager.gd` | nouveau lieu → ajouter l'ID dans la liste connue et son background |
-| `CharacterRegistry` | `scripts/managers/character_registry.gd` | nouveau PNJ → enregistrer ID Dialogic + prénom par défaut + sprite_set |
-| `DialogicBridge` | `scripts/managers/dialogic_bridge.gd` | nouveau dispatcher → ajouter à `DISPATCHERS_VALIDES` *(et au registre `dtl_linter.gd`)* |
+| `LocationManager` | `scripts/managers/LocationManager.gd` | nouveau lieu → ajouter l'ID dans la liste connue et son background |
+| `CharacterRegistry` | `scripts/managers/CharacterRegistry.gd` | nouveau PNJ → enregistrer ID Dialogic + prénom par défaut + sprite_set |
+| `DialogicBridge` | `scripts/managers/DialogicBridge.gd` | nouveau dispatcher → ajouter à `DISPATCHERS_VALIDES` *(et au registre `dtl_linter.gd`)* |
 | `Main.tscn` | scène racine | nouveau point d'entrée → router depuis le menu |
 | `project.godot [autoload]` | config | nouveau manager autoload → ajouter en respectant l'ordre canon (cf. CLAUDE.md) |
 
@@ -172,11 +173,11 @@ Suivre le `<scene_id>.tscn.stub.md` :
 ### Étape 6 — Enregistrement orchestration
 
 Si le lieu est nouveau :
-- Ajouter l'ID dans `LocationManager` *(scripts/managers/location_manager.gd)*
+- Ajouter l'ID dans `LocationManager` *(scripts/managers/LocationManager.gd)*
 - Référencer le background dans `LocationManager._backgrounds`
 
 Si un PNJ est nouveau :
-- Ajouter l'ID dans `CharacterRegistry` *(scripts/managers/character_registry.gd)*
+- Ajouter l'ID dans `CharacterRegistry` *(scripts/managers/CharacterRegistry.gd)*
 - Ajouter `DISPATCHERS_VALIDES` et `PNJ_VALIDES` dans `scripts/tools/dtl_linter.gd` si nouveau dispatcher ou PNJ
 
 Si un nouveau seuil est introduit :

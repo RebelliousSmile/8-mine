@@ -4,13 +4,13 @@
 
 | Outil | Version | Source |
 |---|---|---|
-| Godot Engine | 4.4.1 stable (standard, pas .NET) | [godotengine.org/download](https://godotengine.org/download) |
-| GUT (Godot Unit Test) | **9.3.0** | `addons/gut/`, voir `GUT_VERSION.txt` |
+| Godot Engine | 4.6.x stable (.NET) | [godotengine.org/download](https://godotengine.org/download) |
+| GUT (Godot Unit Test) | **9.6.0** | `addons/gut/`, voir `GUT_VERSION.txt` |
 | OS de test | Linux x86_64 headless | CI ou local |
 
-> Note : GUT 9.6+ exige Godot 4.5+ (référence à `EditorDock`). On
-> fixe 9.3.0 pour rester compatible Godot 4.4. Documenté dans
-> `GUT_VERSION.txt`.
+> Note : GUT 9.6.0 est compatible Godot 4.5+. Le projet a migré vers
+> Godot 4.6.2 — `Logger` est devenu une classe native Godot 4.6,
+> incompatible avec GUT 9.3.x. Documenté dans `GUT_VERSION.txt`.
 
 ## Lancer la suite
 
@@ -156,9 +156,16 @@ tests/
 ├── test_reputation_manager.gd
 ├── test_ex_profile_manager.gd
 ├── test_relation_manager_extended.gd
+├── test_relation_8mine_residents.gd
 ├── test_save_manager_v2.gd
 ├── test_game_over_handler.gd
-└── test_surveillance_hud_logic.gd
+├── test_surveillance_hud_logic.gd
+├── test_surveillance_zones.gd
+├── test_hotspot_world.gd
+├── test_npc_world.gd
+├── test_character_registry.gd
+├── test_game_state_8mine.gd
+└── test_pro_arrivee_init.gd
 ```
 
 Une méthode = un comportement. Nom au format
@@ -178,5 +185,5 @@ Une méthode = un comportement. Nom au format
 |---|---|---|
 | `GutUtils not declared` | cache class_name absent | `rm -rf .godot && ./tests/run_tests.sh` |
 | Tests timeout (>60 s) | coroutine non awaitée | vérifier que les tests sur méthodes coroutines sont `await`-és |
-| `EditorDock not found` | GUT trop récent | rester sur GUT 9.3.0 jusqu'à Godot 4.5+ |
+| `Logger class already declared` | GUT 9.3.x avec Godot 4.6 (Logger est natif 4.6) | mettre à jour GUT vers 9.6.0 |
 | Parse error sur autoload | stub absent ou non enregistré | vérifier ordre `[autoload]` dans `project.godot` |

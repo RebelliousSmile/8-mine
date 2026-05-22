@@ -72,7 +72,7 @@ N/A : `demo.tscn` n'existe pas (Prompt 3 hors-scope sur ce repo).
 ## Procédure de validation manuelle (humain devant l'éditeur)
 
 1. Lancer `./tests/run_tests.sh` — doit afficher `All tests passed!`.
-2. Ouvrir Godot 4.4, charger le projet (un scan d'éditeur s'effectue
+2. Ouvrir Godot 4.6, charger le projet (un scan d'éditeur s'effectue
    à la première ouverture).
 3. Ouvrir `scenes/core/SystemsDebugScene.tscn`, F6 (Run scene).
 4. Parcourir les boutons dans l'ordre EX1 → EX5, H1 → H8, G1 → G7.
@@ -85,5 +85,5 @@ N/A : `demo.tscn` n'existe pas (Prompt 3 hors-scope sur ce repo).
 - Validateur auto : Claude (Opus 4.7) headless
 - Cas auto-validés : **11 / 30** (VAL-API)
 - Cas VAL-UI restants : **19 / 30** — à cocher en local par un humain
-- Version Godot : 4.4.1 stable
-- Version GUT : 9.3.0
+- Version Godot : 4.6.x stable (.NET)
+- Version GUT : 9.6.0
