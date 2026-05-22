@@ -1,0 +1,401 @@
+# SCENE : cellule_nuit (recurring · A1/A2/A3)
+# Source : aidd_docs/memory/external/scenes/cellule_nuit.md
+# Modèle : scene-spec (3 couches scenes × sujets × seuils)
+# Output-style : scenario
+# Acces : public (cellule Margot — espace privé à elle)
+#
+# Jauges activables (scope déclaratif scene-spec) :
+#   relation:emma + autres (limité aux PNJs croisés), ms, pd, ev, mirror,
+#   surveillance, countdown:equipe_nettoyage
+# Hors-scope : reputation:<faction>
+#
+# Pool PNJ : Margot SEULE par défaut. PNJs injectés via :
+#   - événements de seuil Emma (frappe à la porte si conditions)
+#   - sortie nocturne (Frank/Thomas/Léo selon tirage déterministe)
+#
+# Préconditions :
+#   - flag_diner_arrivee_consomme = true (au moins 1ère nuit après dîner)
+#   - {emma_prenom} posé par PRO-01
+# Postconditions :
+#   - cellule_nuit_<N>_consomme = true (compteur de cycles)
+#   - flag_pacte_emma / flag_emma_distance / flag_emma_blessee si event_emma_confident joué
+#   - flag_emma_couverture_active si event_emma_allie + acceptation
+# Événements de seuil susceptibles d'y jouer :
+#   - event_emma_allie (Emma frappe à la porte)
+#   - event_emma_confident (Emma intime + référence Julien)
+#   - event_frank_rencontre_nocturne (sortie + tirage frank)
+#   - event_seuil_surveillance_75 (natif code, automatique)
+
+# === SCÈNE — Cellule Margot, cycle nuit ===
+
+[signal arg="bg:bg_cellule_margot_nuit"]
+
+# Initialisation compteurs (idempotent — premier appel pose 0)
+[set var="cellule_nuit_sujets_consommes" value="0"]
+
+# Détermination du cycle de nuit courant (incrémenté à chaque visite)
+# Géré côté Godot par scripts/acte1/cellule_nuit.gd._ready() qui incrémente
+# Dialogic.VAR.cellule_nuit_cycle_courant
+
+# --- AMBIANCE D'ENTRÉE (variantes selon cycle) ---
+
+{if {cellule_nuit_cycle_courant} == 1}
+    _: [i]23h. Cellule. Premier soir.[/i]
+    _: [i]Les murs sont fins. Plus fins que tu pensais.[/i]
+{else}
+    _: [i]23h. Cellule. La routine du soir.[/i]
+{endif}
+
+# Bruit ambiant des appartements voisins (canon a1_nuit.dtl)
+_: [i]Marine et Thomas, à travers la cloison à gauche : voix étouffées, courtes. Une dispute qui ne se laisse pas entendre clairement.[/i]
+_: [i]Emma et Léo, à droite : intimité audible, ni démonstrative ni masquée. Un rire d'Emma, bref.[/i]
+_: [i]Sofia et Alex, plus loin : conversation à voix basse, tension calme, registre couple.[/i]
+_: [i]Camille et Frank : rien. Silence total.[/i]
+
+# --- INJECTION ÉVÉNEMENTS DE SEUIL EMMA (si pending) ---
+
+{if {flag_event_emma_confident_pending}}
+    [jump label="emma_frappe_confident"]
+{elseif {flag_event_emma_allie_pending} and {cellule_nuit_cycle_courant} >= 2}
+    [jump label="emma_frappe_allie"]
+{endif}
+
+# --- MENU DES SUJETS (cap 2) ---
+
+[label nuit_menu]
+
+{if {cellule_nuit_sujets_consommes} < 2}
+
+    [choice text="Coller l'oreille au mur et noter"]
+        # Sujet écouter_activement — mirror +5 (instrumentalisation conscient)
+        [signal arg="mirror:+5:ecoute_voyeuriste"]
+        [signal arg="ms:-1:voyeurisme"]
+
+        {if {flag_micros_poses}}
+            # Flux audio clair, pas de vérif
+            [signal arg="ev:+1:ecoute_microphone"]
+            _: [i]Tu actives les micros que tu as posés. Le signal arrive net.[/i]
+
+            {if {cellule_nuit_cycle_courant} == 1}
+                _: [i]Marine au téléphone, voix basse mais nette : *« Tu sais combien je dois… quarante-cinq… non, je peux pas dire ça aux autres… »*[/i]
+                [signal arg="flag:flag_marine_dette_entendue:true"]
+                [signal arg="ev:+1:marine_dette_canal_micros"]
+            {else}
+                _: [i]Bribes de conversations dispersées. Rien d'exploitable cette nuit.[/i]
+            {endif}
+        {else}
+            # Vérification cachée selon PD courant
+            {if {personal_danger} <= 2}
+                # Réussite
+                [signal arg="ev:+1:ecoute_attentive"]
+
+                {if {cellule_nuit_cycle_courant} == 1}
+                    _: [i]Tu colles l'oreille. Marine : « Tu sais combien… » — la suite échappe. Une dispute, ou une supplication. Tu n'arrives pas à trancher.[/i]
+                    [signal arg="flag:flag_marine_dispute_entendue:true"]
+                {else}
+                    _: [i]Tu colles l'oreille. Quelque chose chez Sofia/Alex — une phrase de Sofia : *« Tu ne mentiras pas à Margot, n'est-ce pas. »* — Alex ne répond pas tout de suite.[/i]
+                    [signal arg="flag:flag_sofia_protege_margot:true"]
+                {endif}
+            {else}
+                # Échec
+                _: [i]Tu colles l'oreille. Fragments confus. Rien de clair.[/i]
+            {endif}
+        {endif}
+
+        [set var="cellule_nuit_sujets_consommes" value="{cellule_nuit_sujets_consommes} + 1"]
+        [jump label="nuit_menu"]
+
+    [choice text="Mettre les écouteurs, ne pas écouter"]
+        # Sujet mettre_ecouteurs — MS +1, maintient FIN-F/A accessibles
+        [signal arg="ms:+1:retrait_ethique"]
+
+        _: [i]Tu mets tes écouteurs. Tu choisis de pas faire ça.[/i]
+        _: [i]Tu te demandes si Julien aurait fait la même chose. Tu sais que non. C'est pour ça que tu le fais.[/i]
+
+        [signal arg="flag:flag_nuit_<cellule_nuit_cycle_courant>_ecart_ethique:true"]
+
+        [set var="cellule_nuit_sujets_consommes" value="{cellule_nuit_sujets_consommes} + 1"]
+        [jump label="nuit_menu"]
+
+    [choice text="Écouter sans documenter, juste comprendre" condition="{relation_emma_palier} == 'Favorable' or {relation_emma_palier} == 'Allié' or {relation_emma_palier} == 'Proche' or {relation_emma_palier} == 'Confident' or {relation_emma_palier} == 'Fusionnel' or {relation_sofia_palier} == 'Favorable' or {relation_sofia_palier} == 'Allié' or {relation_sofia_palier} == 'Proche' or {relation_sofia_palier} == 'Confident' or {relation_marine_palier} == 'Favorable' or {relation_marine_palier} == 'Allié' or {relation_marine_palier} == 'Proche' or {relation_marine_palier} == 'Confident'"]
+        # Sujet écouter_comprendre — pas de mirror (intention non-instrumentale)
+        _: [i]Tu écoutes. Pas pour noter. Pas pour utiliser. Juste pour comprendre dans quoi tu vis.[/i]
+
+        # Tirage déterministe : PNJ avec palier le plus haut entendu
+        # (simplification : prioriser Emma, sinon Sofia, sinon Marine)
+        {if {relation_emma_palier} == 'Allié' or {relation_emma_palier} == 'Proche' or {relation_emma_palier} == 'Confident'}
+            _: [i]Tu entends Emma rire — un rire normal, jamais entendu en plein jour à Saint-Michel. Avec Léo. Tu comprends qu'ils s'aiment, vraiment. Tu retiens ça.[/i]
+            [signal arg="flag:flag_emma_audible_rire:true"]
+        {elseif {relation_sofia_palier} == 'Allié' or {relation_sofia_palier} == 'Proche'}
+            _: [i]Tu entends Sofia, à voix basse : *« Je sais ce que tu fais quand je dors. »* Alex ne répond pas tout de suite. Quand il répond, il dit : *« Je sais que tu sais. »* Pas de dispute. Quelque chose entre eux que tu n'imaginais pas.[/i]
+            [signal arg="flag:flag_sofia_alex_couple_dense:true"]
+        {else}
+            _: [i]Tu entends Marine pleurer. Cinq secondes. Puis silence. Thomas n'a pas réagi — soit il dormait, soit il n'a plus rien à offrir. Tu ne sais pas lequel est pire.[/i]
+            [signal arg="flag:flag_marine_pleure_entendue:true"]
+        {endif}
+
+        [signal arg="flag:flag_nuit_<cellule_nuit_cycle_courant>_ecoute_comprehensive:true"]
+
+        [set var="cellule_nuit_sujets_consommes" value="{cellule_nuit_sujets_consommes} + 1"]
+        [jump label="nuit_menu"]
+
+    [choice text="Descendre, croiser quelqu'un d'éveillé" condition="{mental_stability} >= 3"]
+        # Sujet sortir_croiser — vérif PD, tirage déterministe PNJ
+        {if {personal_danger} <= 3}
+            # Réussite — tirage déterministe (canon cellule_nuit.md)
+            # Convention : PNJ avec relation la plus haute parmi {frank, thomas, leo}
+            # À égalité : ordre alphabétique frank > leo > thomas
+            [jump label="sortir_tirage"]
+        {else}
+            # Échec — caméra détecte
+            [signal arg="pd:+1:repere_couloir"]
+            [signal arg="surveillance:+5:detection_couloir_nocturne"]
+            _: [i]Tu sors. Trois pas. Le boîtier rouge de la caméra clignote. Tu rentres.[/i]
+            [set var="cellule_nuit_sujets_consommes" value="{cellule_nuit_sujets_consommes} + 1"]
+            [jump label="nuit_menu"]
+        {endif}
+
+    [choice text="Aller frapper chez Emma" condition="({relation_emma_palier} == 'Allié' or {relation_emma_palier} == 'Proche' or {relation_emma_palier} == 'Confident') and {cellule_nuit_cycle_courant} >= 2"]
+        # Sujet frapper_chez_emma — vérif passage caméra couloir
+        {if {personal_danger} <= 4}
+            _: [i]Tu sors. Passes devant la caméra du couloir. Trois portes. La sienne.[/i]
+            [jump label="frapper_emma_arrivee"]
+        {else}
+            [signal arg="pd:+1:repere_couloir"]
+            _: [i]Tu vas pour sortir. Ta main hésite sur la poignée. Tu sais que tu es suivie ce soir. Tu rentres.[/i]
+            [set var="cellule_nuit_sujets_consommes" value="{cellule_nuit_sujets_consommes} + 1"]
+            [jump label="nuit_menu"]
+        {endif}
+
+{else}
+    # Cap atteint
+    _: [i]Tu fermes les yeux. La cellule continue à respirer autour de toi.[/i]
+    [jump label="nuit_outro"]
+{endif}
+
+# === SOUS-SCÈNES (sortie nocturne, frapper chez emma, événements seuil emma) ===
+
+# --- Sortie nocturne : tirage PNJ rencontré ---
+
+[label sortir_tirage]
+
+# Tirage déterministe simplifié (à raffiner en GD côté Godot avec comparaisons)
+# Priorité : Frank > Léo > Thomas (canon scene-spec)
+{if {relation_frank_palier} == 'Favorable' or {relation_frank_palier} == 'Allié' or {relation_frank_palier} == 'Proche'}
+    [jump label="sortir_frank"]
+{elseif {relation_leo_palier} == 'Favorable' or {relation_leo_palier} == 'Allié' or {relation_leo_palier} == 'Proche'}
+    [jump label="sortir_leo"]
+{else}
+    [jump label="sortir_thomas"]
+{endif}
+
+[label sortir_frank]
+
+# event_frank_rencontre_nocturne (cf. pnj-behavior:frank)
+_: [i]Tu descends. Le hall est éclairé en veilleuse. Frank est là, debout, dos à la verrière. Il t'a vue arriver.[/i]
+frank: [i]Frank te regarde. Il ne sourit pas.[/i] Sinclair.
+margot: Frank.
+
+{if {flag_frank_tests_reussis} >= 1}
+    frank: T'avances.
+    _: [i]Pas une question. Un constat.[/i]
+    [signal arg="relation:frank:+5:reconnaissance_silencieuse"]
+{else}
+    frank: Tu cherches quoi à cette heure ?
+    margot: Pas dormir.
+    frank: [i]Frank hoche. Sans valider.[/i] Hmm.
+{endif}
+
+[signal arg="flag:flag_rencontre_nocturne_frank:true"]
+_: [i]Vous restez là, dans le hall, à ne rien dire. Trois minutes. Puis tu remontes.[/i]
+
+[set var="cellule_nuit_sujets_consommes" value="{cellule_nuit_sujets_consommes} + 1"]
+[jump label="nuit_menu"]
+
+[label sortir_leo]
+
+_: [i]Tu descends. Tu vois la lumière dans l'atelier de Léo, à demi cachée derrière une cloison. Tu pousses la porte.[/i]
+leo: [i]Léo lève les yeux. Stylet en main. Surpris une seconde, puis pas.[/i] Margot.
+
+{if {flag_acces_flux_leo}}
+    leo: Tu veux voir quelque chose, là, qu'on n'est pas censé voir ?
+    margot: Si tu insistes.
+    _: [i]Vous regardez ensemble un écran de flux vidéo. Léo te montre où sont les angles morts.[/i]
+    [signal arg="ev:+1:angles_morts_appris"]
+    [signal arg="relation:leo:+5:complicite_technique"]
+{else}
+    leo: Tu ne dors pas non plus ?
+    margot: Pas envie.
+    leo: [i]Léo te regarde, garde le silence quelques secondes.[/i] Ferme la porte derrière toi en sortant. Les capteurs.
+    _: [i]Tu ne sais pas si c'est de l'attention ou un test.[/i]
+    [signal arg="relation:leo:+3:croisement_nocturne"]
+{endif}
+
+[signal arg="flag:flag_rencontre_nocturne_leo:true"]
+
+[set var="cellule_nuit_sujets_consommes" value="{cellule_nuit_sujets_consommes} + 1"]
+[jump label="nuit_menu"]
+
+[label sortir_thomas]
+
+_: [i]Tu descends. La cuisine commune est allumée. Thomas est là, café à la main, cernes plus profondes qu'au dîner.[/i]
+thomas: [i]Il te regarde sans changer d'expression.[/i] Tu fais quoi.
+margot: Pas dormir.
+thomas: J'ai compris ça. Mais qu'est-ce que tu *cherches*.
+margot: [i]Margot ne répond pas tout de suite.[/i] Je sais pas, Thomas. Comprendre, peut-être.
+thomas: [i]Thomas hoche, lent.[/i] Comprendre. OK.
+
+{if {flag_marine_thomas_rupture_visible}}
+    thomas: [i]Pause. Il regarde son café.[/i] Marine dort. Enfin. Elle dormait pas avant. Plus de trois nuits.
+    [signal arg="ev:+1:thomas_revele_marine_par_fatigue"]
+    [signal arg="flag:flag_thomas_partage_marine:true"]
+{endif}
+
+[signal arg="relation:thomas:+5:croisement_nocturne"]
+[signal arg="flag:flag_rencontre_nocturne_thomas:true"]
+
+_: [i]Vous buvez le café en silence. Cinq minutes. Tu remontes.[/i]
+
+[set var="cellule_nuit_sujets_consommes" value="{cellule_nuit_sujets_consommes} + 1"]
+[jump label="nuit_menu"]
+
+# --- Frapper chez Emma ---
+
+[label frapper_emma_arrivee]
+
+emma: [i]{emma_prenom} ouvre. Robe de chambre. Pas surprise. Léo dort dans l'autre pièce.[/i]
+emma: Margot. Tu rentres ?
+
+{if {relation_emma_palier} == 'Confident' or {relation_emma_palier} == 'Proche'}
+    margot: Tu commençais à espérer que je vienne ?
+    emma: [i]Sourire bref.[/i] Peut-être.
+{else}
+    margot: Une minute.
+{endif}
+
+_: [i]Tu entres. Cuisine. {emma_prenom} prépare du thé sans demander.[/i]
+
+# Si conditions pour event_emma_confident, le déclencher ici
+{if {flag_event_emma_confident_pending}}
+    [jump label="emma_frappe_confident_contenu"]
+{else}
+    # Variante simple : conversation discrète sans seuil franchi
+    emma: Tu peux pas dormir.
+    margot: Toi non plus.
+    emma: [i]Elle pose deux tasses.[/i] Léo dort. Il dort toujours. J'envie ça.
+
+    [signal arg="relation:emma:+5:visite_nocturne"]
+    [signal arg="ms:+1:moment_apaise"]
+
+    _: [i]Vous buvez. Vous parlez de rien. Vingt minutes. Tu remontes.[/i]
+{endif}
+
+[set var="cellule_nuit_sujets_consommes" value="{cellule_nuit_sujets_consommes} + 1"]
+[jump label="nuit_menu"]
+
+# --- Événement de seuil : event_emma_allie (Emma frappe à la porte) ---
+
+[label emma_frappe_allie]
+
+_: [i]23h22. Un coup discret à ta porte. Tu reconnais le rythme.[/i]
+
+emma: [i]{emma_prenom} entre, robe de chambre. Elle referme derrière elle. Tu sens qu'elle est venue dire quelque chose, pas qu'elle a oublié quelque chose.[/i]
+emma: Margot. J'ai pas longtemps.
+
+emma: Je peux te donner deux semaines de plus avant qu'ils ne te voient. Pas trois. Je couvre dans les rapports. Si tu veux.
+
+# Choix Margot
+[choice text="Accepter — laisser Emma me couvrir"]
+    [signal arg="flag:flag_emma_couverture_active:true"]
+    [signal arg="countdown:equipe_nettoyage:-2"]
+    [signal arg="relation:emma:+10:acceptation_protection"]
+    [signal arg="flag:flag_event_emma_allie_consomme:true"]
+    [signal arg="flag:flag_event_emma_allie_pending:false"]
+
+    margot: Oui. Merci.
+    emma: [i]Elle hoche.[/i] Ne me remercie pas.
+
+[choice text="Refuser — ne pas la mettre en danger"]
+    [signal arg="ms:+1:refus_protection"]
+    [signal arg="relation:emma:+5:respect_refus"]
+    [signal arg="flag:flag_event_emma_allie_consomme:true"]
+    [signal arg="flag:flag_event_emma_allie_pending:false"]
+
+    margot: Non. Je vais me débrouiller. Ne fais pas ça pour moi.
+    emma: [i]Pause.[/i] Tu es sûre.
+    margot: Sûre.
+    emma: [i]Elle hoche. Plus sérieusement cette fois.[/i] D'accord.
+
+_: [i]Elle sort. Tu ne sais pas si tu as fait le bon choix.[/i]
+[jump label="nuit_outro"]
+
+# --- Événement de seuil : event_emma_confident (CANON v2 REFONTE — partage Julien) ---
+
+[label emma_frappe_confident]
+
+_: [i]23h17. {emma_prenom} frappe. Trois coups, mesurés. Tu sais que ce n'est pas une visite ordinaire.[/i]
+
+[jump label="emma_frappe_confident_contenu"]
+
+[label emma_frappe_confident_contenu]
+
+emma: [i]{emma_prenom} entre. Elle s'assoit sur le bord du lit. Tu remarques qu'elle n'a rien apporté — pas de thé, pas de prétexte. Elle est juste là.[/i]
+emma: Margot. Je voulais te dire quelque chose. Sur Julien.
+
+_: [i]Tu sens la pièce changer.[/i]
+
+emma: [i]Elle prend son temps. Pas tendue — simplement précise.[/i]
+emma: Quand il commençait à faire ce qu'il faisait, il avait un schéma. Toujours le même. Il posait une question banale — *« tu as bien dormi ? »* — et il *écoutait*. Pas la réponse. Le ton. L'hésitation. Il cherchait l'ouverture.
+emma: Puis il proposait quelque chose. Anodin. Tu y entrais sans le voir. Et après, il avait son point d'appui.
+
+_: [i]{emma_prenom} te regarde droit.[/i]
+emma: Je te dis ça parce que tu es ma cousine. Pas pour te faire peur. Pas pour te diagnostiquer. Juste — pour que tu saches que je l'ai vu.
+
+emma: [i]Pause longue.[/i] Tu fais ce que tu fais ici. Mais s'il faut que je te dise, je te dirai.
+
+# Pose du flag canonique v2 — Emma a partagé sa lecture de Julien
+[signal arg="flag:flag_julien_reference_partagee:true"]
+[signal arg="flag:flag_emma_boussole:true"]
+[signal arg="flag:flag_event_emma_confident_consomme:true"]
+[signal arg="flag:flag_event_emma_confident_pending:false"]
+[signal arg="relation:emma:+10:partage_julien"]
+[signal arg="ms:+1:reference_partagee"]
+[signal arg="reputation:memorize:+0"]
+
+# Choix Margot : recevoir ou esquiver le partage
+[choice text="Tu peux me dire si tu vois quelque chose ?"]
+    margot: D'accord. Si tu vois quelque chose. Dis-le-moi.
+    emma: [i]Elle hoche.[/i] Je le ferai.
+    [signal arg="flag:flag_margot_accepte_boussole:true"]
+
+[choice text="Je ne te demande pas ça"]
+    margot: Emma. Tu n'as pas à me surveiller.
+    emma: [i]Elle hoche, mais elle ne retire pas la proposition.[/i] D'accord. Mais je suis là. Si.
+    [signal arg="flag:flag_margot_refuse_boussole_partiel:true"]
+
+_: [i]{emma_prenom} se lève. Pose sa main sur ton épaule, brièvement. Sort.[/i]
+
+[jump label="nuit_outro"]
+
+# === OUTRO ===
+
+[label nuit_outro]
+
+# Variantes selon état final
+{if {mental_stability} > {mental_stability_avant_scene}}
+    _: [i]Tu éteins la lumière. Quelque chose s'est calmé.[/i]
+{elseif {mental_stability} < {mental_stability_avant_scene}}
+    _: [i]Tu éteins la lumière. Quelque chose pèse.[/i]
+{else}
+    _: [i]Tu éteins la lumière. La nuit continue.[/i]
+{endif}
+
+# Variante si EV gagné cette nuit
+{if {evidence_collected} > {evidence_collected_avant_scene}}
+    _: [i]Tu ferme ton carnet. Pas vide, ce soir.[/i]
+{endif}
+
+[signal arg="flag:flag_cellule_nuit_<cellule_nuit_cycle_courant>_consomme:true"]
+[signal arg="lieu:zone_commune_jour"]
+
+# === FIN SCENE cellule_nuit ===
