@@ -119,6 +119,13 @@ Suivre `pnjs-behavior/<pnj>.md` pour la définition canonique :
 | `event_sofia_confident` | `sofia.md` ✅ | *(scenes A4 — coda FIN-E Sofia « L'Acte éthique »)* |
 | `event_sofia_blessee_intime` | `sofia.md` ✅ | *(automatique post `event_alex_franchi_optin` — scene matin obligatoire)* |
 | `event_sofia_alliance_frank_visible` | `sofia.md` ✅ | *(récurrent ambiance — zone_commune_jour, verdict_frank avec Sofia/Frank co-présents)* |
+| `event_leo_favorable` | `leo.md` ✅ | *(via sabotage stylé — atelier_leo ou cellule_nuit)* |
+| `event_leo_acces_flux` | `leo.md` ✅ | *(scénique, pose flag_acces_flux_leo canon)* |
+| `event_leo_couche_1_aperçue` | `leo.md` ✅ | *(scénique, 2 canaux : A1-01-confrontation [D] ou A2-01B)* |
+| `event_leo_couche_2_percee` | `leo.md` ✅ | *(scénique, requiert EV ≥ 3 + flux examinés)* |
+| `event_leo_aveu_mutuel` | `leo.md` ✅ | *(événement central arc, 3 colorations A/B/C — atelier_leo à spec)* |
+| `event_leo_pivot_choix` | `leo.md` ✅ | *(PIVOT — 8 codas possibles selon coloration × choix Margot)* |
+| `event_emma_intercept_leo` | `leo.md` ✅ | *(automatique si flag_pacte_emma — interception boussole morale)* |
 | `event_camille_cliffhanger` | `camille.md` ✅ | `diner_arrivee` |
 | `event_camille_favorable` | `camille.md` ✅ | *(scenes A2 à spec)* |
 | `event_camille_allie` | `camille.md` ✅ | *(scenes A2 à spec — salon_camille, croisements)* |
