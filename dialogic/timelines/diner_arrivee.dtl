@@ -35,6 +35,16 @@ _: [i]Margot prend sa place — entre les deux blocs, comme par accident. Memori
 
 _: La table est dressée pour neuf. Pluie dehors sur la baie. La conversation reprend bas, comme une eau qui se remet à couler après l'irruption d'une pierre.
 
+# --- Référence PRO-02 (signal Emma) — fix audit VN 2026-05-22 ---
+# Emma reconnaît implicitement le choix micros/refus de Margot.
+# Verrou : pas plus subtil (Emma est cousine + sait ce que Margot fait)
+
+{if {flag_micros_poses}}
+    _: [i]{emma_prenom} croise ton regard. Une seconde. Elle ne dit rien — mais tu sais qu'elle voit que tu as bien installé ce qu'il fallait dans ta cellule. Sourire imperceptible.[/i]
+{elseif {flag_refus_micros}}
+    _: [i]{emma_prenom} croise ton regard. Une seconde. Elle hoche très légèrement la tête. Elle voit que tu as choisi de pas le faire. C'est entendu entre vous, sans un mot.[/i]
+{endif}
+
 # --- SUJET FORCÉ EN OUVERTURE : presentation ---
 # Cap = unique. Verrou : aucun autre sujet ne s'ouvre tant que presentation n'est pas posée.
 
@@ -42,7 +52,7 @@ _: {emma_prenom} pose sa fourchette. Sourire bref, à toi seule. *« À toi. »*
 
 camille: Margot. Présente-toi, qu'on te connaisse un peu.
 
-[choice text="[A] Honnêteté complète — parler de Julien/Julie et de la reconstruction"]
+[choice text="[A] Honnêteté complète — parler de l'ex et de la reconstruction"]
     [signal arg="relation:sofia:+2:honnetete_diner"]
     [signal arg="relation:camille:+1:trauma_recolte"]
     [signal arg="flag:flag_camille_profil_trauma:true"]
@@ -50,7 +60,10 @@ camille: Margot. Présente-toi, qu'on te connaisse un peu.
     [signal arg="flag:flag_diner_presentation_choisie:true"]
     [signal arg="flag:flag_diner_presentation_A:true"]
 
-    margot: Je sors d'une histoire qui m'a beaucoup pris. Quelqu'un — Julien. Julie. C'est selon les jours.
+    # Fix audit LGBTQIA+ 2026-05-22 : prénom paramétré via ExProfileManager
+    # « selon les jours » conservé — référence au tiraillement intérieur de Margot
+    # post-rupture (pas à l'identité de l'ex)
+    margot: Je sors d'une histoire qui m'a beaucoup pris. {ex_prenom}. Quelqu'un que j'arrive pas à dire au passé tous les jours.
     margot: Je me reconstruis. Ce film fait partie de ça.
 
     sofia: [i]Sofia repose ses couverts. Regarde Margot droit dans les yeux, sans appuyer.[/i]
@@ -115,86 +128,23 @@ camille: Margot. Présente-toi, qu'on te connaisse un peu.
 
     camille: [i]Camille incline la tête de deux degrés.[/i] D'accord. On a le temps.
 
-# --- MENU DES SUJETS APRÈS PRESENTATION ---
+# --- MENU DES SUJETS APRÈS PRESENTATION (hiérarchique — fix audit VN 2026-05-22) ---
 # Cap : 2 sujets supplémentaires max.
-# Sujets disponibles : demander_role_pnj (×8 sous-cibles, cap 2 fois), evoquer_witness (si B ou D), observer_silence
+# 3 options visibles au menu principal au lieu de 10 :
+#   1. « Parler à quelqu'un en particulier » → sous-menu 8 PNJ
+#   2. « Mentionner Witness » (conditionnel)
+#   3. « Observer la table »
 
 [label diner_menu]
 
 # Compteur de sujets consommés (2 max)
 {if {diner_sujets_consommes} < 2}
 
-    # --- Sujet demander_role_pnj : 8 sous-choix (un par PNJ présent) ---
+    # --- Option 1 : sous-menu PNJ ---
+    [choice text="Parler à quelqu'un en particulier"]
+        [jump label="diner_menu_pnj"]
 
-    [choice text="Demander à Emma son rôle à Memorize"]
-        [signal arg="relation:emma:+1:question_role"]
-        {if {relation_emma_palier} == "Favorable" or {relation_emma_palier} == "Allié" or {relation_emma_palier} == "Proche" or {relation_emma_palier} == "Confident" or {relation_emma_palier} == "Fusionnel"}
-            emma: Je peux te montrer quelque chose après le repas. Pas ici.
-            [signal arg="flag:flag_emma_propose_aparte:true"]
-            [signal arg="ev:+1:emma_propose_acces"]
-        {else}
-            emma: Analyste flux Memorize. Je passe mes journées dans des dashboards qui ressemblent à des fonds marins.
-        {endif}
-        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
-        [jump label="diner_menu"]
-
-    [choice text="Demander à Léo son rôle"]
-        [signal arg="relation:leo:+1:question_role"]
-        leo: Design d'interfaces. Memorize. Ce que tu vois quand tu vois rien.
-        _: [i]Sourire bref. Il ne développe pas.[/i]
-        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
-        [jump label="diner_menu"]
-
-    [choice text="Demander à Marine son rôle"]
-        [signal arg="relation:marine:+2:marine_veut_etre_vue"]
-        marine: Tu connais Kaizen Métrique ? L'application. Tu sais, la couronne d'engagement.
-        marine: Je suis l'ambassadrice publique. Quatre-vingts mille abonnés.
-        _: [i]Sourire crispé. Elle attend ta réaction.[/i]
-        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
-        [jump label="diner_menu"]
-
-    [choice text="Demander à Thomas son rôle"]
-        [signal arg="relation:thomas:+1:question_role"]
-        thomas: J'ingénie. C'est très palpitant.
-        _: [i]Il regarde son verre. La phrase est tellement neutre qu'elle bouscule.[/i]
-        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
-        [jump label="diner_menu"]
-
-    [choice text="Demander à Sofia son rôle"]
-        [signal arg="relation:sofia:+1:question_role"]
-        [signal arg="ev:+1:sofia_evoque_passifs"]
-        sofia: Département éthique Nexus. Je vérifie que la collecte passive reste dans le cadre.
-        sofia: [i]Pause. Elle te regarde droit.[/i] Tu sais ce que ça veut dire, *collecte passive* ?
-        margot: Vaguement.
-        sofia: On en reparlera. Ou pas.
-        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
-        [jump label="diner_menu"]
-
-    [choice text="Demander à Alex son rôle"]
-        [signal arg="relation:alex:+1:question_role"]
-        alex: Technique. Maintenance des systèmes intégrés. Implants, scan biométrique, ce genre.
-        _: [i]Il regarde Sofia une fraction de seconde. Elle lui rend le regard. Aucun mot.[/i]
-        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
-        [jump label="diner_menu"]
-
-    [choice text="Demander à Camille son rôle"]
-        [signal arg="relation:camille:+1:question_role"]
-        [signal arg="flag:flag_camille_a_remarque_margot:true"]
-        camille: Profilage comportemental, Stratom. Je lis les gens.
-        camille: [i]Voix chaleureuse, sans pointe.[/i] Et toi tu écris sur les gens. On a peut-être des choses à se dire.
-        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
-        [jump label="diner_menu"]
-
-    [choice text="Demander à Frank son rôle"]
-        [signal arg="relation:frank:+1:question_role"]
-        [signal arg="flag:flag_frank_a_observe:true"]
-        frank: Sécurité.
-        _: [i]Un seul mot. Il ne te lâche pas du regard pendant trois secondes. Tu détournes les yeux la première.[/i]
-        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
-        [jump label="diner_menu"]
-
-    # --- Sujet evoquer_witness (conditionnel : présentation B ou D) ---
-
+    # --- Option 2 : Witness (conditionnel) ---
     [choice text="Mentionner ton contrat avec Witness Networks" condition="{flag_diner_presentation_B} or {flag_diner_presentation_D}"]
         [signal arg="reputation:presse:+2:diffuseur_evoque"]
         [signal arg="relation:sofia:+1:protection_signalee"]
@@ -213,8 +163,7 @@ camille: Margot. Présente-toi, qu'on te connaisse un peu.
         [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
         [jump label="diner_menu"]
 
-    # --- Sujet observer_silence ---
-
+    # --- Option 3 : observer silence ---
     [choice text="Ne rien dire, observer la table"]
         [signal arg="ev:+1:observation_silencieuse"]
         [signal arg="ms:-1:retrait_observateur"]
@@ -237,10 +186,90 @@ camille: Margot. Présente-toi, qu'on te connaisse un peu.
         [jump label="diner_menu"]
 
 {else}
-    # Cap atteint — sortie forcée par limite de sujets
+    # Cap atteint — sortie forcée
     _: [i]Le café arrive. La conversation s'éparpille en pôles parallèles. Tu n'as plus d'angle d'attaque qui ne paraisse forcé.[/i]
     [jump label="diner_outro"]
 {endif}
+
+# --- SOUS-MENU PNJ (hiérarchique) ---
+# Affiché uniquement si le joueur a sélectionné « Parler à quelqu'un en particulier ».
+# 8 cibles + option retour.
+
+[label diner_menu_pnj]
+
+    [choice text="Emma"]
+        [signal arg="relation:emma:+1:question_role"]
+        {if {relation_emma_palier} == "Favorable" or {relation_emma_palier} == "Allié" or {relation_emma_palier} == "Proche" or {relation_emma_palier} == "Confident" or {relation_emma_palier} == "Fusionnel"}
+            emma: Je peux te montrer quelque chose après le repas. Pas ici.
+            [signal arg="flag:flag_emma_propose_aparte:true"]
+            [signal arg="ev:+1:emma_propose_acces"]
+        {else}
+            emma: Analyste flux Memorize. Je passe mes journées dans des dashboards qui ressemblent à des fonds marins.
+        {endif}
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Léo"]
+        [signal arg="relation:leo:+1:question_role"]
+        leo: Design d'interfaces. Memorize. Ce que tu vois quand tu vois rien.
+        _: [i]Sourire bref. Il ne développe pas.[/i]
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Marine"]
+        [signal arg="relation:marine:+2:marine_veut_etre_vue"]
+        marine: Tu connais Kaizen Métrique ? L'application. Tu sais, la couronne d'engagement.
+        marine: Je suis l'ambassadrice publique. Quatre-vingts mille abonnés.
+        _: [i]Sourire crispé. Elle attend ta réaction.[/i]
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Thomas"]
+        [signal arg="relation:thomas:+1:question_role"]
+        thomas: J'ingénie. C'est très palpitant.
+        _: [i]Il regarde son verre. La phrase est tellement neutre qu'elle bouscule.[/i]
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Sofia"]
+        [signal arg="relation:sofia:+1:question_role"]
+        [signal arg="ev:+1:sofia_evoque_passifs"]
+        sofia: Département éthique Nexus. Je vérifie que la collecte passive reste dans le cadre.
+        sofia: [i]Pause. Elle te regarde droit.[/i] Tu sais ce que ça veut dire, *collecte passive* ?
+        margot: Vaguement.
+        sofia: On en reparlera. Ou pas.
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Alex"]
+        # Fix audit cyberpunk 2026-05-22 : porter le coût du scan biométrique permanent
+        # via détail somatique (clignement plus lent, comme si la donnée mettait
+        # une demi-seconde à passer). Verrou canon : Alex regarde toujours Sofia.
+        [signal arg="relation:alex:+1:question_role"]
+        alex: Technique. Maintenance des systèmes intégrés. Implants, scan biométrique, ce genre.
+        _: [i]Une pause. Il cligne — un peu plus lentement que la moyenne. Comme si la donnée mettait une demi-seconde à passer. Puis il regarde Sofia une fraction de seconde. Elle lui rend le regard. Aucun mot.[/i]
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Camille"]
+        [signal arg="relation:camille:+1:question_role"]
+        [signal arg="flag:flag_camille_a_remarque_margot:true"]
+        camille: Profilage comportemental, Stratom. Je lis les gens.
+        camille: [i]Voix chaleureuse, sans pointe.[/i] Et toi tu écris sur les gens. On a peut-être des choses à se dire.
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Frank"]
+        [signal arg="relation:frank:+1:question_role"]
+        [signal arg="flag:flag_frank_a_observe:true"]
+        frank: Sécurité.
+        _: [i]Un seul mot. Il ne te lâche pas du regard pendant trois secondes. Tu détournes les yeux la première.[/i]
+        [set var="diner_sujets_consommes" value="{diner_sujets_consommes} + 1"]
+        [jump label="diner_menu"]
+
+    [choice text="Retour au menu principal"]
+        # Pas de consommation de sujet — le joueur revient choisir
+        [jump label="diner_menu"]
 
 # --- OUTRO ---
 

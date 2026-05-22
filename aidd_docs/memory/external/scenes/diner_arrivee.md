@@ -30,16 +30,20 @@ acces_requis:
 
 ## Jauges activables (scope déclaratif)
 
-| Jauge | Activable ? | Plage typique de delta | Justification |
-|-------|-------------|------------------------|---------------|
-| `relation:emma`, `relation:leo`, `relation:marine`, `relation:thomas`, `relation:sofia`, `relation:alex`, `relation:camille`, `relation:frank` | **oui** | ±2 par sujet | Premier contact officiel — initialisation des paliers |
-| `MS` | **oui** | ±1 | Dire la vérité allège (+1) ; mentir/observer pèse (-1) |
-| `PD` | **oui** | +0..+1 | Mensonge démasqué → PD+1 |
-| `EV` | **oui** | +0..+1 | Observer en silence capte du sous-texte |
-| `mirror` | **non** | — | Pas d'acte de manipulation explicite à ce stade ; les sujets sociaux n'instrumentalisent personne |
-| `surveillance` | **non** | — | Scène publique encadrée, pas d'augmentation surveillance |
-| `reputation:presse`, `reputation:memorize`, `reputation:stratom` | **oui** | ±2 | Évoquer Witness module la presse ; les corpos prennent note |
+> **Déterminisme** *(fix audit dramaturge 2026-05-22)* : chaque sujet déclare ses deltas de manière **fixe et déterministe**, sans variabilité aléatoire. Cap par sujet × cap par scène = budget jauge maximal déterministe.
+
+| Jauge | Activable ? | Plage typique de delta | Justification + déterminisme |
+|-------|-------------|------------------------|------------------------------|
+| `relation:emma`, `relation:leo`, `relation:marine`, `relation:thomas`, `relation:sofia`, `relation:alex`, `relation:camille`, `relation:frank` | **oui** | ±2 par sujet, ±1 par interaction question_role | **Déterministe** : `demander_role_pnj` pose `+1` fixe par cible, cap 1 par PNJ par scène. `presentation [A]` pose `relation:sofia:+2` fixe. Pas de RNG. |
+| `MS` | **oui** | ±1 | Déterministe par branche : `presentation [A]` = +1 ; `observer_silence` = -1. Pas de cumul aléatoire. |
+| `PD` | **oui** | +0..+1 | Déterministe : `presentation [C] échec` = +1, sinon 0. |
+| `EV` | **oui** | +0..+1 par sujet, cap +3 cumulé sur la scène | Déterministe : `observer_silence` = +1 ; `demander_role:emma palier ≥ Favorable` = +1 ; `demander_role:sofia` = +1 (Sofia évoque collecte passive). Cap cumulé +3 pour empêcher accumulation excessive. |
+| `mirror` | **non** | — | Pas d'acte de manipulation explicite à ce stade |
+| `surveillance` | **non** | — | Scène publique encadrée |
+| `reputation:presse`, `reputation:memorize`, `reputation:stratom` | **oui** | déterministe par sujet | `evoquer_witness` = `reputation:presse:+2` fixe. `presentation [C] échec` = note implicite Stratom *(via Camille)*. |
 | `countdown:*` | **non** | — | Aucun countdown ne tick à ce dîner |
+
+**Règle de déterminisme canon** : si Margot pose 2 fois le même sujet *(impossible mécaniquement via cap, mais doctrinal)*, le delta serait appliqué 2 fois. Aucun delta n'est conditionné à un tirage aléatoire — uniquement à des paliers/flags vérifiés au runtime.
 
 ---
 
