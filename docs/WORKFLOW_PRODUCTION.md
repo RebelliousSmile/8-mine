@@ -203,9 +203,17 @@
 
 ---
 
-### Workflow F — Amélioration data-driven d'un persona *(persona-trainer)*
+### Workflow F — Amélioration data-driven d'un persona *(persona-trainer · AUTO-DÉCLENCHÉ)*
 
-**Quand** : un persona *(reviewer)* a déjà été utilisé sur plusieurs `.dtl` / fiches, et on identifie des **issues qu'il aurait dû détecter mais qu'il a manqué** *(retour playtester humain, bug découvert tardivement, etc.)*. Boucle d'apprentissage.
+**Quand** : déclenché **automatiquement** par `review-persona.prompt.md` Step 8 si une des 4 conditions est vraie *(cf. section ci-dessous)*. Plus besoin d'invocation manuelle — le persona-trainer est chaîné depuis la review.
+
+**Conditions de déclenchement automatique** *(review-persona.prompt.md v1.5 Step 8)* :
+1. **Concordance étroite ET indulgente** : 4 personas convergent à ±1 point + score moyen ≥ 17/20
+2. **Plafond non enclenché malgré score ≥ 17** : aucune faiblesse 🟠+ trouvée ET recherche active non explicitement déclarée
+3. **Pattern de findings systématiquement manqués** *(rétroactif sur historique utilisateur)*
+4. **Recherche active non déclarée** : « moins de 3 faiblesses » sans démonstration d'exhaustivité
+
+Cf. également `aidd_docs/aiw/8mine/auto-triggers-demonstration-*.md` pour exemples concrets historisés.
 
 **Étapes** *(suit `persona-trainer.prompt.md` workshop AIW)* :
 
@@ -216,12 +224,30 @@
 5. **Bump la version** du YAML *(v1.0 → v1.1, etc.)* + documenter les modifications dans le YAML *(commentaire `# persona-trainer 2026-XX-XX : ajout ...`)*
 
 **À utiliser quand** :
-- Un `playtester-lgbtqia` n'a pas détecté un trope subtil
-- Un `dramaturge` n'a pas vu une violation de scope jauges
-- Un `playtester-visual-novel` a noté 18/20 un dialogue exposé
+- Un `playtester-lgbtqia` n'a pas détecté un trope subtil → auto-trigger condition #3
+- Un `dramaturge` n'a pas vu une violation de scope jauges → auto-trigger condition #1 ou #4
+- Un `playtester-visual-novel` a noté 18/20 un dialogue exposé → auto-trigger condition #2
 - Etc.
 
-**Pas encore utilisé** *(2026-05-22)* — premières reviews à venir. Sera invocable à la première itération de feedback significatif.
+**Première démonstration** *(2026-05-22)* — auto-trigger #1 détecté rétroactivement sur review v1 *(scores 17.75 ± 0.7)*, confirmant le signal utilisateur « scores trop bons pour un premier passage ». Cf. `aidd_docs/aiw/8mine/auto-triggers-demonstration-2026-05-22.md`.
+
+---
+
+### Workflow G — Amélioration data-driven d'un output-style *(tone-finder · AUTO-DÉCLENCHÉ)*
+
+**Quand** : déclenché **automatiquement** par `write-scene.prompt.md` Step 12 *(post-linter PASS)* OU par `review-persona.prompt.md` Step 9 *(post-review)* si une des 4 conditions est vraie.
+
+**Conditions de déclenchement automatique** :
+1. **Output-style atteint son 3ème `.dtl` produit** *(seuil échantillon statistique)*
+2. **Reviewer flag linguistique** : `voix uniforme`, `prose redondante`, `rythme uniforme`, `sur-utilisation de X`, `sous-utilisation de Y`
+3. **Output-style non revu depuis > 5 `.dtl`** produits
+4. **Pattern lexical détecté automatiquement** : grep mécanique *(narrator italique > 70%, répétitions tournures > 3, variabilité longueur σ < 15)*
+
+**Différence avec workflow F (persona-trainer)** : workflow F corrige *la performance d'un reviewer* *(quelles issues il rate)*. Workflow G corrige *la prose elle-même* *(le style narratif appliqué dans les `.dtl`)*.
+
+**Pas encore déclenché** *(2026-05-22)* — seuil échantillon `scenario.md` à 1 `.dtl` produit *(diner_arrivee)*. Trigger #1 attendu au 3ème `.dtl` produit. Trigger #2 possible si reviewer flag linguistique au prochain passage.
+
+---
 
 **Différence avec workflow E (upgrade)** : workflow E corrige *la forme* du catalogue *(redondances, indexes, glossaire, normalisation)*. Workflow F corrige *la performance* d'un persona *(quelles issues il rate, quelles checklist items renforcer)*.
 

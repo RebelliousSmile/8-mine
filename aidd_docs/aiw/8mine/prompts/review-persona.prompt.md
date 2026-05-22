@@ -1,8 +1,8 @@
 ---
 name: review-persona
-description: Review d'un .dtl par un persona — mode complet ou light. Calibration /20 ancrée + tags sévérité par finding + plafond automatique. Supporte scene-spec (nouveau modèle 3 couches) et node-spec (legacy).
+description: Review d'un .dtl par un persona — mode complet ou light. Calibration /20 ancrée + tags sévérité + plafond automatique + auto-trigger persona-trainer/tone-finder sur findings.
 argument-hint: <chemin .dtl> <persona-name> [--scene-spec <chemin> | --node-spec <chemin>] [--pnj-behaviors <chemin1,chemin2,...>] [--light]
-version: 1.4
+version: 1.5
 ---
 
 # Review Persona — .dtl + spec → Verbatims + Triage
@@ -271,3 +271,80 @@ Si l'un de ces patterns apparaît dans le rapport, le persona est probablement t
 - Score ≥ 18/20 + faiblesses listées en bullets *(sans tag sévérité)* → invalide, relancer avec tags
 - Score ≥ 19/20 + critères tous ≥ 17 → improbable sur premier passage ; déclarer concordance suspecte
 - 4 personas concordent à ±1 point → invoquer `persona-trainer` sur le persona dominant le moins discriminant
+
+---
+
+## Step 8 — Auto-invocation persona-trainer *(chaînage obligatoire)*
+
+À la fin de la review, **évaluer les triggers persona-trainer**. Si UNE des conditions est vraie :
+
+### Triggers persona-trainer
+
+1. **Concordance étroite ET indulgente** : si plusieurs personas en parallèle convergent à ±1 point ET le score moyen ≥ 17/20 → calibration suspecte
+2. **Plafond non enclenché malgré score ≥ 17** : si aucune faiblesse 🟠+ trouvée ET score ≥ 17 ET recherche active non explicitement déclarée → indulgence
+3. **Pattern de findings systématiquement manqués** *(rétroactif sur historique)* : si un finding 🟠+ est signalé "missed" par l'utilisateur après publication de la review → trigger sur le persona qui aurait dû le voir
+4. **Recherche active non déclarée** : si « moins de 3 faiblesses trouvées » sans déclaration explicite que la craft checklist a été testée exhaustivement
+
+### Action chaînée
+
+Si trigger activé, **enchaîner immédiatement** *(dans le même rapport ou en post-script)* :
+
+```
+## ⚙ Auto-trigger persona-trainer : <persona-id>
+
+**Raison du trigger** : <condition activée>
+
+**Findings manqués à ancrer dans la craft checklist** :
+- <finding 1 + suggestion de check item à ajouter>
+- <finding 2 + suggestion>
+- ...
+
+**Modifications proposées au YAML persona** :
+- Ajout craft checklist : `<nouvelle ligne>`
+- Renforcement scoring_anchors : `<précision sur ancrage>`
+- Ajout avocat du diable risque type : `<nouveau pattern à chasser>`
+
+**Bump version** : `persona-name v<X.Y> → v<X.Y+1>` *(commit dédié recommandé)*
+```
+
+Le persona patché doit être **commité séparément** du rapport de review pour traçabilité.
+
+---
+
+## Step 9 — Auto-invocation tone-finder *(chaînage conditionnel)*
+
+À la fin de la review, **évaluer les triggers tone-finder** sur l'output-style consommé par le `.dtl`.
+
+### Triggers tone-finder
+
+1. **Output-style atteint son 3ème `.dtl` produit** : compter `dialogic/timelines/*.dtl` qui utilisent l'output-style cité. Si ≥ 3, déclencher.
+2. **Flag linguistique de reviewer** : si un persona signale dans ses findings *« voix uniforme »*, *« prose redondante »*, *« rythme uniforme »*, *« sur-utilisation de X »*, *« sous-utilisation de Y »* → déclencher.
+3. **Output-style non revu depuis > 5 `.dtl`** : vérifier le timestamp/version. Si stale, déclencher préventivement.
+4. **Pattern lexical détecté** *(automatique)* : grep des `.dtl` pour overuse de tournures *(`_:` italique narrator > 80% des lignes, ou répétitions de tournures)*.
+
+### Action chaînée
+
+Si trigger activé, **enchaîner immédiatement** :
+
+```
+## 🎨 Auto-trigger tone-finder : <output-style>
+
+**Raison du trigger** : <condition activée>
+
+**Échantillon analysé** : <liste des .dtl utilisés pour l'analyse>
+
+**Patterns lexicaux détectés** :
+- <pattern 1 : « tournure X » répétée N fois sur M .dtl>
+- <pattern 2 : sous-utilisation de tournures Y>
+- ...
+
+**Modifications proposées à l'output-style** :
+- Ajout lexique à BANNIR : `<terme>`
+- Ajout lexique à PRIVILÉGIER : `<terme>`
+- Précision typographie : `<règle>`
+- Renforcement règle existante : `<règle>`
+
+**Bump version** : `<output-style>.md v<X.Y> → v<X.Y+1>`
+```
+
+L'output-style patché doit être **commité séparément** du rapport de review pour traçabilité.

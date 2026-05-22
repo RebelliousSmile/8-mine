@@ -1,8 +1,8 @@
 ---
 name: write-scene
-description: Génère une timeline Dialogic .dtl à partir d'une scene-spec + pnj-behaviors. Linter PASS obligatoire en sortie.
+description: Génère une timeline Dialogic .dtl à partir d'une scene-spec + pnj-behaviors. Linter PASS obligatoire. Auto-trigger tone-finder si seuil échantillon atteint.
 argument-hint: <chemin scene-spec.md> [--feedback "<correctif>"]
-version: 1.0
+version: 1.1
 ---
 
 # Write Scene — Scene-spec → Timeline Dialogic
@@ -224,11 +224,46 @@ Si `FAIL` :
 
 **Aucun `.dtl` ne sort de ce prompt en statut `FAIL`.**
 
+### Step 12 — Auto-invocation tone-finder *(chaînage conditionnel post-linter)*
+
+Après linter PASS, **évaluer les triggers tone-finder** sur l'output-style consommé.
+
+### Triggers tone-finder *(write-scene side)*
+
+1. **Output-style atteint son 3ème `.dtl` produit** : `find dialogic/timelines/ -name "*.dtl" -exec grep -l "output_style: <style>" {} \;` → si compte ≥ 3, déclencher
+2. **Output-style non revu depuis > 5 `.dtl`** : vérifier version output-style vs nombre de `.dtl` produits depuis dernier bump
+3. **Pattern lexical détecté automatiquement** *(grep mécanique)* :
+   - `_:` italique narrator > 70% des lignes du `.dtl` produit
+   - Répétitions de tournures *(« sourire bref », « regard prolongé », etc.)* > 3 fois dans le `.dtl`
+   - Variabilité longueur de répliques faible *(σ < 15 caractères entre lignes)*
+
+### Action chaînée
+
+Si trigger activé après linter PASS, **enchaîner immédiatement** :
+
+```
+## 🎨 Auto-trigger tone-finder : <output-style>
+
+**Raison du trigger** : <condition activée>
+
+**Patterns lexicaux détectés** :
+- <pattern 1 + fréquence>
+- <pattern 2>
+
+**Modifications proposées à l'output-style** :
+- Lexique à BANNIR : `<terme>`
+- Lexique à PRIVILÉGIER : `<terme>`
+- Précision typographie : `<règle>`
+
+**Bump version** : `<output-style>.md v<X.Y> → v<X.Y+1>` *(commit dédié recommandé)*
+```
+
 ## Output
 
 - `dialogic/timelines/<scene_id>.dtl` (fichier principal)
 - `dialogic/timelines/<scene_id>.tscn.stub.md` *(si point-and-click — instructions de finalisation manuelle)*
 - Log linter en stdout
+- **Patch tone-finder en post-script si trigger** *(à commit séparément)*
 
 ## Rules
 
