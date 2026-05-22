@@ -103,7 +103,12 @@ Suivre `pnjs-behavior/<pnj>.md` pour la définition canonique :
 | `event_emma_allie` | `emma.md` ✅ | `cellule_nuit` |
 | `event_emma_confident` | `emma.md` ✅ | `cellule_nuit` |
 | `event_emma_julien_intervention` | `emma.md` ✅ | *(scenes A3/A4 à spec)* |
-| `event_camille_cliffhanger` | `camille.md` *(à spec)* | `diner_arrivee` |
+| `event_camille_cliffhanger` | `camille.md` ✅ | `diner_arrivee` |
+| `event_camille_favorable` | `camille.md` ✅ | *(scenes A2 à spec)* |
+| `event_camille_allie` | `camille.md` ✅ | *(scenes A2 à spec — salon_camille, croisements)* |
+| `event_camille_demasquee_test` | `camille.md` ✅ | *(scene `confrontation_camille` A3 à spec)* |
+| `event_camille_dark_proposition` | `camille.md` ✅ | *(scene `salon_camille` à spec)* |
+| `event_camille_obsession` | `camille.md` ✅ | *(scenes A3+ à spec)* |
 | `event_seuil_surveillance_75` | code natif `SurveillanceManager` | `cellule_nuit` |
 
 ---
