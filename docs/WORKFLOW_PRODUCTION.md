@@ -185,7 +185,7 @@
 
 ---
 
-### Workflow E — Upgrade d'un catalogue *(meta-workflow)*
+### Workflow E — Upgrade d'un catalogue *(meta-workflow structurel)*
 
 **Quand** : un catalogue *(scenes, pnj-behavior, prompts)* contient ≥ 5 artefacts et mérite une revue de cohérence globale.
 
@@ -197,7 +197,33 @@
 4. **Appliquer les suggestions structurantes** *(les plus utiles pour la maintenance — typiquement créer un `_index.md`, normaliser typographie, glossaire)*
 5. **Documenter dans le commit** quelles suggestions ont été appliquées et lesquelles restent ouvertes
 
-**Exemple récent** *(2026-05-22)* : upgrade catalogue PNJ → création `pnjs-behavior/_index.md` avec synoptique, matrice cross-PNJ, glossaire, anti-patterns consolidés. Score initial 17/20 → post-upgrade ~18.5/20 *(reste #2 enregistrement variables + #7 intégration anti-patterns)*.
+**Exemple récent** *(2026-05-22)* : upgrade catalogue PNJ → création `pnjs-behavior/_index.md` avec synoptique, matrice cross-PNJ, glossaire, anti-patterns consolidés. Score initial 17/20 → post-upgrade ~18.5/20.
+
+**Différence avec workflow F (`persona-trainer`)** : upgrade est *structurel/cosmétique* à un instant T *(forme, redondance, index)*. Persona-trainer est *data-driven* — il améliore l'efficacité d'un persona basé sur les *issues qu'il a manquées* dans des reviews précédentes. Les deux sont complémentaires : upgrade pour la forme, persona-trainer pour la pertinence.
+
+---
+
+### Workflow F — Amélioration data-driven d'un persona *(persona-trainer)*
+
+**Quand** : un persona *(reviewer)* a déjà été utilisé sur plusieurs `.dtl` / fiches, et on identifie des **issues qu'il aurait dû détecter mais qu'il a manqué** *(retour playtester humain, bug découvert tardivement, etc.)*. Boucle d'apprentissage.
+
+**Étapes** *(suit `persona-trainer.prompt.md` workshop AIW)* :
+
+1. **Collecter le feedback** sur le persona à améliorer *(retours utilisateur, issues missed dans des reviews antérieures)*
+2. **Identifier les patterns récurrents** dans ce que le persona manque systématiquement
+3. **Renforcer ses `expectations`** dans le YAML *(must-haves, deal-breakers, Craft Checklist items)*
+4. **Tester la version améliorée** sur un cas connu *(régression check : ne perd-elle pas une force ?)*
+5. **Bump la version** du YAML *(v1.0 → v1.1, etc.)* + documenter les modifications dans le YAML *(commentaire `# persona-trainer 2026-XX-XX : ajout ...`)*
+
+**À utiliser quand** :
+- Un `playtester-lgbtqia` n'a pas détecté un trope subtil
+- Un `dramaturge` n'a pas vu une violation de scope jauges
+- Un `playtester-visual-novel` a noté 18/20 un dialogue exposé
+- Etc.
+
+**Pas encore utilisé** *(2026-05-22)* — premières reviews à venir. Sera invocable à la première itération de feedback significatif.
+
+**Différence avec workflow E (upgrade)** : workflow E corrige *la forme* du catalogue *(redondances, indexes, glossaire, normalisation)*. Workflow F corrige *la performance* d'un persona *(quelles issues il rate, quelles checklist items renforcer)*.
 
 ---
 

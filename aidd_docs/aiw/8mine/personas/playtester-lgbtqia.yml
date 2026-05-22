@@ -10,6 +10,11 @@ reference_documents:
   - aidd_docs/memory/external/bible-jeu.md
   - aidd_docs/memory/external/pnjs-secondaires.md
   - aidd_docs/memory/internal/api-cheatsheet.md
+  # Design-rules canon — chargés en référence pour audit représentation :
+  - aidd_docs/memory/internal/design-rules/sofia-kessler-caracterisation.md
+  - aidd_docs/memory/internal/design-rules/pool-romance-pas-drague.md
+  # Catalogue PNJ (verrous par PNJ disponibles depuis index) :
+  - aidd_docs/memory/external/pnjs-behavior/_index.md
 ---
 
 # Persona Playtester LGBTQIA+

@@ -164,16 +164,20 @@ Lecture : ligne → fiche source ; colonne → PNJ référencé. Cellule indique
 
 ## Sensitivity readers par PNJ
 
-| PNJ | Reviewer obligatoire | Quand |
-|-----|---------------------|-------|
-| `sofia` | `playtester-lgbtqia` + `sofia-kessler-caracterisation` | **À chaque scène** Sofia |
-| `emma` | `playtester-lgbtqia` + `dramaturge` + `playtester-margot` | À chaque event_emma_* ≥ Allié |
-| `camille` | `playtester-margot` + `playtester-lgbtqia` | À chaque event_camille_* ≥ Favorable *(dark cogni-affectif)* |
-| `alex` *(branche opt-in)* | `playtester-lgbtqia` + `sofia-kessler-caracterisation` + `dramaturge` | À chaque scène déclenchée par `event_alex_franchi_optin` |
-| `marine` | `playtester-accessibilite` + `dramaturge` | Piège dette = mécanique opaque, vérifier lisibilité |
+> **Note** : `sofia-kessler-caracterisation.md` et `pool-romance-pas-drague.md` sont des **design-rules canon** chargées automatiquement par `playtester-lgbtqia` *(reference_documents YAML)*. Ce ne sont pas des reviewers séparés. Cap personas total = 4 actifs *(dramaturge, playtester-lgbtqia, playtester-visual-novel, playtester-cyberpunk)*.
+
+| PNJ | Reviewer(s) | Quand |
+|-----|-------------|-------|
+| `sofia` | `playtester-lgbtqia` *(charge auto sofia-kessler)* | **À chaque scène** Sofia |
+| `emma` | `playtester-lgbtqia` + `dramaturge` | À chaque event_emma_* ≥ Allié *(fusion-confusion non consommée à vérifier)* |
+| `camille` | `playtester-lgbtqia` + `dramaturge` | À chaque event_camille_* ≥ Favorable *(dark cogni-affectif jamais physique)* |
+| `alex` *(branche opt-in)* | `playtester-lgbtqia` + `dramaturge` | À chaque scène déclenchée par `event_alex_franchi_optin` *(verrou Sofia force pro ≠ intime)* |
+| `marine` | `dramaturge` + `playtester-visual-novel` | Piège dette = mécanique opaque, vérifier lisibilité du risque |
 | `leo` | `dramaturge` | Sur les 3 colorations (non-aplatissement) |
 | `frank` | `dramaturge` | Cohérence couple Camille/Frank, économie verbale |
 | `thomas` | `dramaturge` | Cohérence couple Marine/Thomas, cynisme désarmant (pas méchant) |
+| *(tous PNJ — review qualitative)* | `playtester-visual-novel` | Pacing, choix significatifs, sous-texte, voix Margot |
+| *(tous PNJ — review worldbuilding)* | `playtester-cyberpunk` | Cohérence corpos, surveillance vécue, anti cyber-jargon |
 
 ---
 

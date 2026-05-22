@@ -40,14 +40,14 @@ Supporte les deux modèles :
 @aidd_docs/memory/external/pnjs-behavior/<pnj>.md       (par PNJ, si --pnj-behaviors)
 ```
 
-**Personas disponibles :**
-- `margot-joueuse` — voix de la joueuse cible (crédibilité, sous-texte, choix non punitifs)
-- `dramaturge` — structure (préconditions, postconditions, jauges, fins, beats) — **adapté scene-spec en v1.1**
-- `auditeur-scene` — **NOUVEAU** : audit spécifique modèle 3 couches (scope jauges, verrous pnj-behavior, présence runtime, événements de seuil, gating)
-- `playtester-lgbtqia` — représentation, pronoms, tropes, verrous pnj-behavior Sofia/Emma/Camille
-- `critique-indie-narratif` — densité prose, choix significatifs, voix d'auteur·rice
-- `coauteur-ia` — anti-patterns IA, concret > abstrait
-- `playtester-accessibilite` — longueur de blocs, libellés, charge cognitive
+**Personas disponibles** *(4 actifs au total — cap design)*:
+- `dramaturge` — structure (préconditions, postconditions, scope jauges, verrous canon, fins, beats). **Adapté scene-spec en v1.1** et absorbe le rôle ex-auditeur-scene *(strict mécanique)*.
+- `playtester-lgbtqia` — représentation, pronoms, tropes, verrous pnj-behavior Sofia/Emma/Camille. **Charge automatiquement** `sofia-kessler-caracterisation.md` + `pool-romance-pas-drague.md` en référence.
+- `playtester-visual-novel` — pacing, choix significatifs, PNJ mémoire active, sous-texte, voix Margot. Référence VN/LiS/Disco Elysium. *(Absorbe le rôle ex-margot-joueuse — voix Margot couverte dans son scoring 10%.)*
+- `playtester-cyberpunk` — worldbuilding cohérent, corpos distinctes, surveillance vécue, anti cyber-jargon, cyberpunk de l'intime. Référence Gibson / Cyberpunk 2077 / Citizen Sleeper.
+
+> **Personas archivés** *(dans `personas/_archive/`)* — non invocables, conservés pour référence :
+> `margot-joueuse` *(rôle absorbé par playtester-visual-novel)* · `auditeur-scene` *(rôle absorbé par dramaturge v1.1)* · `coauteur-ia` *(anti-patterns IA — peu invoqué)* · `critique-indie-narratif` *(densité prose — chevauche playtester-visual-novel)* · `playtester-accessibilite` *(charge cognitive — couvert par playtester-visual-novel)*.
 
 **Ressources canon : lues automatiquement via `reference_documents:` du YAML** (loading_strategy `from_bank_yml`). Ne pas hardcoder ici.
 
